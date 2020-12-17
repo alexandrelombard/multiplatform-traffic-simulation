@@ -65,6 +65,25 @@ class QuadTree<T>(
     }
 
     /**
+     * Removes a value from the quad-tree
+     * @return <code>true</code> if the value has been successfully removed, <code>false</code> otherwise
+     */
+    fun remove(value: T): Boolean {
+        if(this.isLeaf()) {
+            return this.content.remove(value)
+        }
+
+        val valuePosition = position(value)
+        var child = children[selectChild(valuePosition)]
+
+        while (!child.isLeaf()) {
+            child = child.children[child.selectChild(valuePosition)]
+        }
+
+        return child.remove(value)
+    }
+
+    /**
      * Tells whether this is a leaf or not
      * @return <code>true</code> if this is a leaf, <code>false</code> otherwise
      */

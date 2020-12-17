@@ -84,6 +84,16 @@ class QuadTree<T>(
     }
 
     /**
+     * Fetches all the elements within the given bounding box
+     * @return the elements inside the bounding box
+     */
+    fun fetchElements(boundingBox: AxisAlignedBoundingBox2D): List<T> {
+        val results = ArrayList<T>()
+
+        return results
+    }
+
+    /**
      * Tells whether this is a leaf or not
      * @return <code>true</code> if this is a leaf, <code>false</code> otherwise
      */

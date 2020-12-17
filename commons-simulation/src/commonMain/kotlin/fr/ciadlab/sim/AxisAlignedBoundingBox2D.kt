@@ -1,6 +1,7 @@
 package fr.ciadlab.sim
 
 import fr.ciadlab.sim.math.geometry.Vector2D
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -17,8 +18,11 @@ data class AxisAlignedBoundingBox2D(
     private val maxX: Double by lazy { max(firstPoint.x, secondPoint.x) }
     private val maxY: Double by lazy { max(firstPoint.y, secondPoint.y) }
 
-    private val xExtent: Double by lazy { (maxX - minX) / 2.0 }
-    private val yExtent: Double by lazy { (maxY - minY) / 2.0 }
+    private val xExtent: Double by lazy { width / 2.0 }
+    private val yExtent: Double by lazy { height / 2.0 }
+
+    val width: Double by lazy { maxX - minX }
+    val height: Double by lazy { maxY - minY }
 
     /**
      * The center of the axis-aligned bounding-box
@@ -40,6 +44,17 @@ data class AxisAlignedBoundingBox2D(
 
     override fun contains(point: Vector2D) =
         point.x in minX..maxX && point.y in minY..maxY
+
+    /**
+     * Finds if there is an intersection between this bounding and another one
+     * @param other the other bounding box
+     * @return <code>true</code> if there is an intersection between this bounding box
+     *         and the one given as parameter
+     */
+    fun intersects(other: AxisAlignedBoundingBox2D): Boolean {
+        return abs(this.center.x - other.center.x) * 2.0 <= (this.width + other.width) &&
+                abs(this.center.y - other.center.y) * 2.0 <= (this.height + other.height)
+    }
 
     fun divide(): Array<AxisAlignedBoundingBox2D> {
         return arrayOf(

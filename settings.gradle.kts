@@ -3,6 +3,7 @@ rootProject.name = "multiplatform-traffic-simulation"
 include("commons-math")
 include("commons-utils")
 include("commons-physics")
+include("commons-simulation")
 // Traffic simulation models
 include("infrastructure-model")
 include("car-model")

@@ -13,6 +13,7 @@ http://alexandrelombard.github.io
 - commons-utils: utility classes for multiplatform projects
 - commons-math: general utilities for geometry
 - commons-physics: general utilities for physics
+- commons-simulation: general utilities for simulation (kd-tree, etc.)
 
 ### Traffic simulation
 

@@ -10,3 +10,4 @@ include("car-behavior")
 include("traffic-simulation")
 // View projects
 include("view-javafx")
+include("view-js")

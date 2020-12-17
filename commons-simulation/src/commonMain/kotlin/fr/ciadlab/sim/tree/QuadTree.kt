@@ -22,6 +22,10 @@ class QuadTree<T>(
     val capacity: Int = DEFAULT_CAPACITY,
     val position: (T)->Vector2D) {
 
+    /**
+     * Add a value to the quad-tree, eventually recreating children nodes if required
+     * @return <code>true</code> if the value has been added, <code>false</code> if it is out of the scope of this tree
+     */
     fun add(value: T): Boolean {
         val valuePosition = position(value)
 
@@ -61,7 +65,16 @@ class QuadTree<T>(
     }
 
     /**
+     * Tells whether this is a leaf or not
+     * @return <code>true</code> if this is a leaf, <code>false</code> otherwise
+     */
+    fun isLeaf(): Boolean {
+        return this.children.isEmpty()
+    }
+
+    /**
      * Computes and returns the number of leaves of the tree
+     * @return the number of leaves of the tree
      */
     fun countLeaves(): Int {
         return if(this.children.isEmpty()) {

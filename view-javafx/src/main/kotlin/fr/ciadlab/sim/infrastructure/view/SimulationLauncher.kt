@@ -18,7 +18,12 @@ import fr.ciadlab.sim.physics.unit
 import fr.ciadlab.sim.vehicle.Vehicle
 import javafx.application.Platform
 import javafx.event.EventHandler
-import tornadofx.*
+import tornadofx.View
+import tornadofx.stackpane
+import tornadofx.group
+import tornadofx.Stylesheet
+import tornadofx.App
+import tornadofx.launch
 import kotlin.concurrent.fixedRateTimer
 import kotlin.math.*
 import kotlin.system.exitProcess

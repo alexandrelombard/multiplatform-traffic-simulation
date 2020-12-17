@@ -2,6 +2,10 @@
 
 Multiplatform Traffic Simulation environment. Intended to train Machine Learning models.
 
+The algorithms and models included in this repository have a live demo, just here:
+
+http://alexandrelombard.github.io
+
 ## Modules
 
 ### Commons
@@ -20,6 +24,7 @@ Multiplatform Traffic Simulation environment. Intended to train Machine Learning
 ### View
 
 - view-javafx: viewer for simulations using JavaFX
+- view-js: viewer for simulations using a JS canvas, to embed in a web-page
 
 ## Try it
 

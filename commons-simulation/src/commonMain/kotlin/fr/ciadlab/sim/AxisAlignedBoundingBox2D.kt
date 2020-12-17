@@ -18,6 +18,11 @@ data class AxisAlignedBoundingBox2D(
     private val maxY: Double by lazy { max(firstPoint.y, secondPoint.y) }
 
     /**
+     * The center of the axis-aligned bounding-box
+     */
+    val center: Vector2D by lazy { (firstPoint + secondPoint) * 0.5 }
+
+    /**
      * Builds a square axis-aligned bounding-box
      * @param center the center of the box
      * @param extent half the size of the box

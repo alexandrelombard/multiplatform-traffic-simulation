@@ -16,6 +16,7 @@ kotlin {
             dependencies {
                 implementation("no.tornado:tornadofx:1.7.20")
 
+                implementation(project(":commons-utils"))
                 implementation(project(":commons-math"))
                 implementation(project(":commons-physics"))
                 implementation(project(":infrastructure-model"))

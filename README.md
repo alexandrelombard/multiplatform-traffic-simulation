@@ -20,3 +20,8 @@ Multiplatform Traffic Simulation environment. Intended to train Machine Learning
 ### View
 
 - view-javafx: viewer for simulations using JavaFX
+
+## Try it
+
+Clone the project, let gradle configure it for you, then go to the view-javafx module and run the main function of
+_SimulationLauncher.kt_

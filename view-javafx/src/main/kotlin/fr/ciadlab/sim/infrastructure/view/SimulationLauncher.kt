@@ -115,7 +115,7 @@ class SimulationView : View() {
             currentRoad = eightShapedRoadNetworkModel.roads[0],
             currentLaneIndex = 0,
             maximumSpeed = 50.0 unit KilometersPerHour,
-            goal = eightShapedRoadNetworkModel.roads[0].end())
+            goal = eightShapedRoadNetworkModel.roads[0].end(), leaders = listOf())
 
     init {
         // Close when the main stage is closed
@@ -125,8 +125,8 @@ class SimulationView : View() {
         fixedRateTimer(period = 50) {
             val period = 50.0 unit Milliseconds
 //            vehicle = vehicle.update(0.0, 0.01, 0.05)
-            vehicle = vehicle.reachGoalBehavior(driverBehavioralState).apply(period)
-            java.lang.Math.multiplyExact(5.0, 10.0)
+            val action = vehicle.reachGoalBehavior(driverBehavioralState).apply(period)
+            vehicle = vehicle.update(action.targetAcceleration, action.targetWheelAngle, period)
         }
     }
 
@@ -161,3 +161,7 @@ class SimulationView : View() {
 
 class Styles : Stylesheet()
 class TestApp : App(SimulationView::class, Styles::class)
+
+fun main(args: Array<String>) {
+    launch<TestApp>(args)
+}

@@ -2,6 +2,7 @@ package fr.ciadlab.sim.tree
 
 import fr.ciadlab.sim.AxisAlignedBoundingBox2D
 import fr.ciadlab.sim.math.geometry.Vector2D
+import kotlin.math.exp
 
 const val NORTH_EAST = 0
 const val NORTH_WEST = 1
@@ -88,7 +89,23 @@ class QuadTree<T>(
      * @return the elements inside the bounding box
      */
     fun fetchElements(boundingBox: AxisAlignedBoundingBox2D): List<T> {
+        if(this.isLeaf()) {
+            return this.content.filter { boundingBox.contains(position(it)) }
+        }
+
         val results = ArrayList<T>()
+        val explorationList = ArrayDeque<QuadTree<T>>()
+
+        explorationList.addAll(this.children.filter { it.boundingBox.intersects(boundingBox) })
+
+        while(explorationList.isNotEmpty()) {
+            val element = explorationList.removeFirst()
+            if(element.isLeaf()) {
+                results.addAll(element.content.filter { boundingBox.contains(position(it)) })
+            } else {
+                explorationList.addAll(element.children.filter { it.boundingBox.intersects(boundingBox) })
+            }
+        }
 
         return results
     }

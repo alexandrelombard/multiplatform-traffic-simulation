@@ -10,11 +10,16 @@ import fr.ciadlab.sim.infrastructure.IntersectionBuilder.ConnectedSide
 import fr.ciadlab.sim.infrastructure.view.network.intersectionView
 import fr.ciadlab.sim.infrastructure.view.network.roadNetworkView
 import fr.ciadlab.sim.infrastructure.view.network.roadView
+import fr.ciadlab.sim.infrastructure.view.simulation.spawnerView
+import fr.ciadlab.sim.infrastructure.view.simulation.trafficSimulationView
 import fr.ciadlab.sim.infrastructure.view.vehicle.vehicleView
 import fr.ciadlab.sim.math.geometry.*
 import fr.ciadlab.sim.physics.Units.KilometersPerHour
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit
+import fr.ciadlab.sim.traffic.Spawner
+import fr.ciadlab.sim.traffic.spawner
+import fr.ciadlab.sim.traffic.trafficSimulation
 import fr.ciadlab.sim.vehicle.Vehicle
 import javafx.application.Platform
 import javafx.event.EventHandler
@@ -76,6 +81,18 @@ class SimulationView : View() {
         }
     }
 
+    val simpleIntersectionTrafficSimulation = trafficSimulation {
+        roadNetwork = simpleIntersectionRoadNetworkModel
+
+        spawner<Vehicle> {
+            position = Vector2D(0.0, 0.0)
+            direction = Vector2D(1.0, 0.0)
+            generation = {
+                Vehicle(position, Vector2D(0.0, 0.0), 0.0, Vector2D(0.0, 0.0), 0.0, 5.0, 4.0)
+            }
+        }
+    }
+
     val eightShapedRoadNetworkModel = roadNetwork {
         val eightShapedRoad = road {
             points = listOf(
@@ -117,10 +134,10 @@ class SimulationView : View() {
 
     private val driverBehavioralState =
         DriverBehavioralState(
-            currentRoad = eightShapedRoadNetworkModel.roads[0],
+            currentRoad = simpleIntersectionRoadNetworkModel.roads[0],
             currentLaneIndex = 0,
             maximumSpeed = 50.0 unit KilometersPerHour,
-            goal = eightShapedRoadNetworkModel.roads[0].end(), leaders = listOf())
+            goal = simpleIntersectionRoadNetworkModel.roads[0].end(), leaders = listOf())
 
     init {
         // Close when the main stage is closed
@@ -140,10 +157,12 @@ class SimulationView : View() {
         scaleY = 5.0
 
         group {
-            roadNetworkView(eightShapedRoadNetworkModel) {
-                laneWidth = 3.5
-                roadNetwork.roads.forEach { roadView(it, debug = true) }
-                roadNetwork.intersections.forEach { intersectionView(it) }
+//            roadNetworkView(simpleIntersectionRoadNetworkModel) {
+//                laneWidth = 3.5
+//                roadNetwork.roads.forEach { roadView(it, debug = true) }
+//                roadNetwork.intersections.forEach { intersectionView(it) }
+//            }
+            trafficSimulationView(simpleIntersectionTrafficSimulation) {
             }
 
             vehicleView(vehicle)

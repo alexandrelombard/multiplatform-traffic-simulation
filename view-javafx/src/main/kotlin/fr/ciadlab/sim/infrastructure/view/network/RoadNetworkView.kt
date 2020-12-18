@@ -7,5 +7,5 @@ import tornadofx.opcr
 
 class RoadNetworkView(var roadNetwork: RoadNetwork, var laneWidth: Double = 3.5) : Group()
 
-fun Parent.roadNetworkView(roadNetwork: RoadNetwork, op : RoadNetworkView.() -> Unit) =
+fun Parent.roadNetworkView(roadNetwork: RoadNetwork, op : RoadNetworkView.() -> Unit = {}) =
         opcr(this, RoadNetworkView(roadNetwork), op)

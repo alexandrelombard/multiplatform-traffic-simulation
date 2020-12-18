@@ -9,7 +9,7 @@ import javafx.scene.shape.StrokeLineJoin
 import javafx.scene.shape.StrokeType
 import tornadofx.*
 
-fun RoadNetworkView.roadView(road: Road, debug: Boolean = false) : Unit {
+fun RoadNetworkView.roadView(road: Road, debug: Boolean = false) {
     val defaultLineColor = Color.WHITE
 
     // Background line

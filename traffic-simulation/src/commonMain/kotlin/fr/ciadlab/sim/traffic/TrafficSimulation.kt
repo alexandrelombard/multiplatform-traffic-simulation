@@ -7,9 +7,10 @@ class TrafficSimulation(
     val exitAreas: MutableList<ExitArea> = arrayListOf(),
     var roadNetwork: RoadNetwork = RoadNetwork())
 
-fun trafficSimulation(op: TrafficSimulation.() -> Unit) {
+fun trafficSimulation(op: TrafficSimulation.() -> Unit): TrafficSimulation {
     val trafficSimulation = TrafficSimulation()
     op.invoke(trafficSimulation)
+    return trafficSimulation
 }
 
 fun TrafficSimulation.roadNetwork(op: RoadNetwork.() -> Unit) {

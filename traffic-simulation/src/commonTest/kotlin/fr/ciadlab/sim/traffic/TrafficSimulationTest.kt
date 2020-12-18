@@ -2,9 +2,11 @@ package fr.ciadlab.sim.traffic
 
 import fr.ciadlab.sim.math.geometry.Vector2D
 import fr.ciadlab.sim.vehicle.Vehicle
+import kotlin.test.Test
 
 class TrafficSimulationTest {
 
+    @Test
     fun defineTrafficSimulation() {
         trafficSimulation {
             spawner<Vehicle> {

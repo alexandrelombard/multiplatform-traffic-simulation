@@ -6,6 +6,8 @@ The algorithms and models included in this repository have a live demo, just her
 
 http://alexandrelombard.github.io
 
+![Simulator screenshot](https://raw.githubusercontent.com/alexandrelombard/multiplatform-traffic-simulation/master/images/img.png)
+
 ## Modules
 
 ### Commons

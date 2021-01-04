@@ -32,6 +32,7 @@ fun Parent.trafficSimulationView(trafficSimulation: TrafficSimulation<*>, op : T
     }
 
     // Draw the vehicles
+    // FIXME This function is not regularly called
     trafficSimulation.spawnedObjects.forEach {
         if(it is Vehicle) {
             vehicleView(it)

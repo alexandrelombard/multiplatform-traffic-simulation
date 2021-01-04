@@ -15,6 +15,9 @@ class TrafficSimulation<VehicleType>(
     fun step(deltaTime: Double) {
         // Calls the spawning strategies
         spawners.forEach { it.strategy?.invoke(deltaTime) }
+
+        // TODO Run the agents
+        // TODO Update the objects
     }
 }
 

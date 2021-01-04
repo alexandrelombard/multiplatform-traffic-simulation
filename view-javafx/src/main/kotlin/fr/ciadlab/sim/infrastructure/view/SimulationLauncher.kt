@@ -1,26 +1,16 @@
 package fr.ciadlab.sim.infrastructure.view
 
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
-import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
-import fr.ciadlab.sim.car.behavior.lateral.purePursuit
-import fr.ciadlab.sim.car.behavior.lateral.stanleyLateralControl
 import fr.ciadlab.sim.car.behavior.reachGoalBehavior
 import fr.ciadlab.sim.infrastructure.*
 import fr.ciadlab.sim.infrastructure.IntersectionBuilder.ConnectedSide
-import fr.ciadlab.sim.infrastructure.view.network.intersectionView
-import fr.ciadlab.sim.infrastructure.view.network.roadNetworkView
-import fr.ciadlab.sim.infrastructure.view.network.roadView
-import fr.ciadlab.sim.infrastructure.view.simulation.spawnerView
 import fr.ciadlab.sim.infrastructure.view.simulation.trafficSimulationView
 import fr.ciadlab.sim.infrastructure.view.vehicle.vehicleView
 import fr.ciadlab.sim.math.geometry.*
 import fr.ciadlab.sim.physics.Units.KilometersPerHour
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit
-import fr.ciadlab.sim.traffic.Spawner
-import fr.ciadlab.sim.traffic.exitArea
-import fr.ciadlab.sim.traffic.spawner
-import fr.ciadlab.sim.traffic.trafficSimulation
+import fr.ciadlab.sim.traffic.*
 import fr.ciadlab.sim.vehicle.Vehicle
 import javafx.application.Platform
 import javafx.event.EventHandler
@@ -32,6 +22,7 @@ import tornadofx.App
 import tornadofx.launch
 import kotlin.concurrent.fixedRateTimer
 import kotlin.math.*
+import kotlin.random.Random
 import kotlin.system.exitProcess
 
 class SimulationView : View() {
@@ -82,14 +73,19 @@ class SimulationView : View() {
         }
     }
 
-    val simpleIntersectionTrafficSimulation = trafficSimulation {
+    val simpleIntersectionTrafficSimulation = trafficSimulation<Vehicle> {
         roadNetwork = simpleIntersectionRoadNetworkModel
 
-        spawner<Vehicle> {
+        spawner {
             position = Vector2D(0.0, 0.0)
             direction = Vector2D(1.0, 0.0)
             generation = {
                 Vehicle(position, Vector2D(0.0, 0.0), 0.0, Vector2D(0.0, 0.0), 0.0, 5.0, 4.0)
+            }
+            strategy = {
+                if(Random.nextFloat() < 0.05) {
+                    spawn()
+                }
             }
         }
 

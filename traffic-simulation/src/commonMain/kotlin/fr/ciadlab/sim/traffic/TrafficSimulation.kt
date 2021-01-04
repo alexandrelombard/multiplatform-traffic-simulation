@@ -1,13 +1,12 @@
 package fr.ciadlab.sim.traffic
 
 import fr.ciadlab.sim.infrastructure.RoadNetwork
-import fr.ciadlab.sim.vehicle.Vehicle
 
-class TrafficSimulation(
-    val spawners: MutableList<Spawner<*>> = arrayListOf(),
+class TrafficSimulation<VehicleType>(
+    val spawners: MutableList<Spawner<VehicleType>> = arrayListOf(),
     val exitAreas: MutableList<ExitArea> = arrayListOf(),
     var roadNetwork: RoadNetwork = RoadNetwork(),
-    val spawnedObjects: MutableSet<Any> = hashSetOf()
+    val spawnedObjects: MutableSet<VehicleType> = hashSetOf()
 ) {
     /**
      * Run a simulation step
@@ -19,20 +18,19 @@ class TrafficSimulation(
     }
 }
 
-fun trafficSimulation(op: TrafficSimulation.() -> Unit): TrafficSimulation {
-    val trafficSimulation = TrafficSimulation()
+fun <VehicleType>trafficSimulation(op: TrafficSimulation<VehicleType>.() -> Unit): TrafficSimulation<VehicleType> {
+    val trafficSimulation = TrafficSimulation<VehicleType>()
     op.invoke(trafficSimulation)
 
     // Add an event handler to register the spawned elements
     trafficSimulation.spawners.forEach {
-//        it.onGeneration.add({ obj -> trafficSimulation.spawnedObjects.add(obj) })
-        // TODO
+        it.onGeneration.add { obj -> trafficSimulation.spawnedObjects.add(obj) }
     }
 
     return trafficSimulation
 }
 
-fun TrafficSimulation.roadNetwork(op: RoadNetwork.() -> Unit) {
+fun <VehicleType>TrafficSimulation<VehicleType>.roadNetwork(op: RoadNetwork.() -> Unit) {
     val roadNetwork = RoadNetwork()
     op.invoke(roadNetwork)
 

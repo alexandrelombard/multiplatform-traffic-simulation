@@ -9,7 +9,7 @@ class ExitArea(
      * if it's within a 10m radius */
     var isInside: (Vector2D) -> Boolean = { it.distance(position) < radius })
 
-fun TrafficSimulation.exitArea(op: ExitArea.() -> Unit): ExitArea {
+fun TrafficSimulation<*>.exitArea(op: ExitArea.() -> Unit): ExitArea {
     val dslExitArea = ExitArea()
     op.invoke(dslExitArea)
     exitAreas.add(dslExitArea)

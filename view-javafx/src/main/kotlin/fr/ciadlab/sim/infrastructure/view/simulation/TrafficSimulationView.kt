@@ -9,9 +9,9 @@ import javafx.scene.Group
 import javafx.scene.Parent
 import tornadofx.opcr
 
-class TrafficSimulationView(val trafficSimulation: TrafficSimulation) : Group()
+class TrafficSimulationView(val trafficSimulation: TrafficSimulation<*>) : Group()
 
-fun Parent.trafficSimulationView(trafficSimulation: TrafficSimulation, op : TrafficSimulationView.() -> Unit = {}) {
+fun Parent.trafficSimulationView(trafficSimulation: TrafficSimulation<*>, op : TrafficSimulationView.() -> Unit = {}) {
     roadNetworkView(trafficSimulation.roadNetwork) {
         laneWidth = 3.5
         roadNetwork.roads.forEach { roadView(it, debug = true) }

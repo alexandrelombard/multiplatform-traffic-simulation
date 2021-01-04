@@ -18,6 +18,7 @@ import fr.ciadlab.sim.physics.Units.KilometersPerHour
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit
 import fr.ciadlab.sim.traffic.Spawner
+import fr.ciadlab.sim.traffic.exitArea
 import fr.ciadlab.sim.traffic.spawner
 import fr.ciadlab.sim.traffic.trafficSimulation
 import fr.ciadlab.sim.vehicle.Vehicle
@@ -90,6 +91,10 @@ class SimulationView : View() {
             generation = {
                 Vehicle(position, Vector2D(0.0, 0.0), 0.0, Vector2D(0.0, 0.0), 0.0, 5.0, 4.0)
             }
+        }
+
+        exitArea {
+            position = Vector2D(1000.0, 50.0)
         }
     }
 

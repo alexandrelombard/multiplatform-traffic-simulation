@@ -12,17 +12,17 @@ import tornadofx.opcr
 class TrafficSimulationView(val trafficSimulation: TrafficSimulation) : Group()
 
 fun Parent.trafficSimulationView(trafficSimulation: TrafficSimulation, op : TrafficSimulationView.() -> Unit = {}) {
+    roadNetworkView(trafficSimulation.roadNetwork) {
+        laneWidth = 3.5
+        roadNetwork.roads.forEach { roadView(it, debug = true) }
+        roadNetwork.intersections.forEach { intersectionView(it) }
+    }
+
     trafficSimulation.spawners.forEach {
         spawnerView(it)
     }
 
     trafficSimulation.exitAreas.forEach {
         exitAreaView(it)
-    }
-
-    roadNetworkView(trafficSimulation.roadNetwork) {
-        laneWidth = 3.5
-        roadNetwork.roads.forEach { roadView(it, debug = true) }
-        roadNetwork.intersections.forEach { intersectionView(it) }
     }
 }

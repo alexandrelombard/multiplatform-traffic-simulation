@@ -89,6 +89,19 @@ class SimulationView : View() {
             }
         }
 
+        spawner {
+            position = Vector2D(653.5, 400.0)
+            direction = Vector2D(0.0, -1.0)
+            generation = {
+                Vehicle(position, Vector2D(0.0, 0.0), 0.0, Vector2D(0.0, 0.0), 0.0, 5.0, 4.0)
+            }
+            strategy = {
+                if(Random.nextFloat() < 0.05) {
+                    spawn()
+                }
+            }
+        }
+
         exitArea {
             radius = 5.0
             position = Vector2D(1000.0, 50.0)

@@ -94,6 +94,7 @@ class SimulationView : View() {
         }
 
         exitArea {
+            radius = 5.0
             position = Vector2D(1000.0, 50.0)
         }
     }
@@ -137,12 +138,15 @@ class SimulationView : View() {
             Vector2D(1.0, 0.0),
             0.0, 3.5, 5.0)
 
+    private val simulation = simpleIntersectionTrafficSimulation
+    private val roadNetworkModel = simpleIntersectionRoadNetworkModel
+
     private val driverBehavioralState =
         DriverBehavioralState(
-            currentRoad = simpleIntersectionRoadNetworkModel.roads[0],
+            currentRoad = roadNetworkModel.roads[0],
             currentLaneIndex = 0,
             maximumSpeed = 50.0 unit KilometersPerHour,
-            goal = simpleIntersectionRoadNetworkModel.roads[0].end(), leaders = listOf())
+            goal = roadNetworkModel.roads[0].end(), leaders = listOf())
 
     init {
         // Close when the main stage is closed
@@ -154,6 +158,8 @@ class SimulationView : View() {
 //            vehicle = vehicle.update(0.0, 0.01, 0.05)
             val action = vehicle.reachGoalBehavior(driverBehavioralState).apply(period)
             vehicle = vehicle.update(action.targetAcceleration, action.targetWheelAngle, period)
+
+            simulation.step(period)
         }
     }
 

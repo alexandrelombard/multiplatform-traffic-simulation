@@ -90,11 +90,7 @@ class SimulationView : View() {
             generation = {
                 Vehicle(position, Vector2D(0.0, 0.0), 0.0, Vector2D(0.0, 0.0), 0.0, 5.0, 4.0)
             }
-            strategy = {
-                if(Random.nextFloat() < 0.05) {
-                    spawn()
-                }
-            }
+            strategy = { if(Random.nextFloat() < 0.01) { spawn() } }
         }
 
         spawner {
@@ -103,11 +99,7 @@ class SimulationView : View() {
             generation = {
                 Vehicle(position, Vector2D(0.0, 0.0), 0.0, Vector2D(0.0, 0.0), 0.0, 5.0, 4.0)
             }
-            strategy = {
-                if(Random.nextFloat() < 0.05) {
-                    spawn()
-                }
-            }
+            strategy = { if(Random.nextFloat() < 0.01) { spawn() } }
         }
 
         exitArea {

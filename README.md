@@ -2,6 +2,12 @@
 
 Multiplatform Traffic Simulation environment. Intended to train Machine Learning models.
 
+Why another traffic simulation platform?
+This one is:
+- Multiplatform: can be run on the JVM, or can be compiled into Javascript to run in your browser; being written in Kotlin,
+  it could theoretically be compiled to native code
+- Provide a simulation DSL: this allows to describe the simulation environments and scenario with a convenient language
+
 The algorithms and models included in this repository have a live demo, just here:
 
 http://alexandrelombard.github.io

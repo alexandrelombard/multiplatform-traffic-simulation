@@ -21,7 +21,7 @@ class RadarPerceptionProvider(
      * Performs the radar detection and returns the coordinates of obstacles relatively to the radar position and
      * orientation. The direction of the radar is the y-axis of the frame of the radar (right-handed frame).
      */
-    fun performRadarDetection(sourcePosition: Vector2D, direction: Vector2D, vehicles: List<Vehicle>): List<RadarData> {
+    fun performRadarDetection(sourcePosition: Vector2D, direction: Vector2D, vehicles: Collection<Vehicle>): List<RadarData> {
         return vehicles.filter {
             // Filter according to the distance
             (it.position - sourcePosition).norm < range

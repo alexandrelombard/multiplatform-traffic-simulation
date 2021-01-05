@@ -2,6 +2,7 @@ package fr.ciadlab.sim.infrastructure.view
 
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
 import fr.ciadlab.sim.car.behavior.reachGoalBehavior
+import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider
 import fr.ciadlab.sim.infrastructure.*
 import fr.ciadlab.sim.infrastructure.IntersectionBuilder.ConnectedSide
 import fr.ciadlab.sim.infrastructure.view.simulation.trafficSimulationView
@@ -78,6 +79,10 @@ class SimulationView : View() {
         roadNetwork = simpleIntersectionRoadNetworkModel
 
         vehicleBehavior = { vehicle, deltaTime ->
+            // Compute perceptions
+            val radar = RadarPerceptionProvider()
+            val radarData = radar.performRadarDetection(vehicle.position, vehicle.direction, this.vehicles)
+            // Execute the behavior
             vehicle.reachGoalBehavior(driverBehavioralState).apply(deltaTime)
         }
 

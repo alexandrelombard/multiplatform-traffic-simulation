@@ -30,9 +30,12 @@ class Spawner<Object>(
 }
 
 fun <Object> TrafficSimulation<Object>.spawner(op: Spawner<Object>.() -> Unit): Spawner<Object> {
+    // Build the spawner object
     val spawner = Spawner<Object>()
     op.invoke(spawner)
+    // Register the spawner in the simulation object
     this.spawners.add(spawner)
+    spawner.onGeneration.add(this.onSpawn)
     return spawner
 }
 

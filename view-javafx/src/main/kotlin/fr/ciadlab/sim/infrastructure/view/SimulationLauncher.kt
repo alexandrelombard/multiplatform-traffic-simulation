@@ -76,6 +76,18 @@ class SimulationView : View() {
     val simpleIntersectionTrafficSimulation = trafficSimulation<Vehicle> {
         roadNetwork = simpleIntersectionRoadNetworkModel
 
+        onSpawn = {
+            //
+        }
+
+        vehicleBehavior = { vehicle, deltaTime ->
+            vehicle.reachGoalBehavior(driverBehavioralState).apply(deltaTime)
+        }
+
+        vehicleUpdate = { vehicle, action, deltaTime ->
+            vehicle.update(action.targetAcceleration, action.targetWheelAngle, deltaTime)
+        }
+
         spawner {
             position = Vector2D(0.0, 0.0)
             direction = Vector2D(1.0, 0.0)

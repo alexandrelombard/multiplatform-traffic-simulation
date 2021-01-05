@@ -1,12 +1,23 @@
 package fr.ciadlab.sim.traffic
 
+import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.infrastructure.RoadNetwork
 
 class TrafficSimulation<VehicleType>(
+    /** The list of spawners */
     val spawners: MutableList<Spawner<VehicleType>> = arrayListOf(),
+    /** The list of exit areas */
     val exitAreas: MutableList<ExitArea> = arrayListOf(),
+    /** The road network */
     var roadNetwork: RoadNetwork = RoadNetwork(),
-    val spawnedObjects: MutableSet<VehicleType> = hashSetOf()
+    /** The vehicle behavior */
+    var vehicleBehavior: (VehicleType, Double)->DriverBehavioralAction = { _, _ -> DriverBehavioralAction(0.0, 0.0) },
+    /** The function called to update a vehicle */
+    var vehicleUpdate: (VehicleType, DriverBehavioralAction, Double)->VehicleType = { v, _, _ -> v },
+    /** The function called when a vehicle is spawned */
+    var onSpawn: (VehicleType)->Unit = {  },
+    /** The set of spawned vehicles */
+    var spawnedObjects: MutableSet<VehicleType> = hashSetOf()
 ) {
     /**
      * Run a simulation step
@@ -16,8 +27,15 @@ class TrafficSimulation<VehicleType>(
         // Calls the spawning strategies
         spawners.forEach { it.strategy?.invoke(deltaTime) }
 
-        // TODO Run the agents
-        // TODO Update the objects
+        // Run the behaviors and update the vehicles
+        val updatedObjects = spawnedObjects.map {
+            // Compute the action from the behavior
+            val action = vehicleBehavior.invoke(it, deltaTime)
+            // Apply the action to get an updated vehicle
+            vehicleUpdate.invoke(it, action, deltaTime)
+        }
+
+        spawnedObjects = updatedObjects.toMutableSet()
     }
 }
 

@@ -17,7 +17,7 @@ class TrafficSimulation<VehicleType>(
     /** The function called when a vehicle is spawned */
     val onSpawn: MutableList<(VehicleType)->Unit> = arrayListOf(),
     /** The set of spawned vehicles */
-    val vehicles: MutableSet<VehicleType> = hashSetOf()
+    var vehicles: MutableSet<VehicleType> = hashSetOf()
 ) {
     /**
      * Run a simulation step

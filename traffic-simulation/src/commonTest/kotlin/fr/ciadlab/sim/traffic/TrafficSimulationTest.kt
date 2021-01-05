@@ -8,7 +8,7 @@ class TrafficSimulationTest {
 
     @Test
     fun defineTrafficSimulation() {
-        trafficSimulation {
+        trafficSimulation<Vehicle> {
             spawner<Vehicle> {
                 position = Vector2D(0.0, 0.0)
                 generation {

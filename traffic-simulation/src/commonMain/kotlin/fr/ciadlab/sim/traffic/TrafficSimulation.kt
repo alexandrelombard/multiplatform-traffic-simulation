@@ -15,9 +15,9 @@ class TrafficSimulation<VehicleType>(
     /** The function called to update a vehicle */
     var vehicleUpdate: (VehicleType, DriverBehavioralAction, Double)->VehicleType = { v, _, _ -> v },
     /** The function called when a vehicle is spawned */
-    var onSpawn: (VehicleType)->Unit = {  },
+    val onSpawn: MutableList<(VehicleType)->Unit> = arrayListOf(),
     /** The set of spawned vehicles */
-    var spawnedObjects: MutableSet<VehicleType> = hashSetOf()
+    var vehicles: MutableSet<VehicleType> = hashSetOf()
 ) {
     /**
      * Run a simulation step
@@ -28,14 +28,14 @@ class TrafficSimulation<VehicleType>(
         spawners.forEach { it.strategy?.invoke(deltaTime) }
 
         // Run the behaviors and update the vehicles
-        val updatedObjects = spawnedObjects.map {
+        val updatedObjects = vehicles.map {
             // Compute the action from the behavior
             val action = vehicleBehavior.invoke(it, deltaTime)
             // Apply the action to get an updated vehicle
             vehicleUpdate.invoke(it, action, deltaTime)
         }
 
-        spawnedObjects = updatedObjects.toMutableSet()
+        vehicles = updatedObjects.toMutableSet()
     }
 }
 
@@ -45,7 +45,7 @@ fun <VehicleType>trafficSimulation(op: TrafficSimulation<VehicleType>.() -> Unit
 
     // Add an event handler to register the spawned elements
     trafficSimulation.spawners.forEach {
-        it.onGeneration.add { obj -> trafficSimulation.spawnedObjects.add(obj) }
+        it.onGeneration.add { obj -> trafficSimulation.vehicles.add(obj) }
     }
 
     return trafficSimulation

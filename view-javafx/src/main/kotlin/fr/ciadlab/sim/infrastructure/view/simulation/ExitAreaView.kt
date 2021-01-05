@@ -8,7 +8,7 @@ import tornadofx.circle
 
 class ExitAreaView (val exitArea: ExitArea)
 
-fun Parent.exitAreaView(exitArea: ExitArea, op : ExitAreaView.() -> Unit = {}) {
+fun Parent.exitAreaView(exitArea: ExitArea, op : ExitAreaView.() -> Unit = {}): Parent {
     circle {
         centerX = exitArea.position.x
         centerY = exitArea.position.y
@@ -17,4 +17,5 @@ fun Parent.exitAreaView(exitArea: ExitArea, op : ExitAreaView.() -> Unit = {}) {
         strokeWidth = 1.0
         stroke = Color.BLACK
     }
+    return this
 }

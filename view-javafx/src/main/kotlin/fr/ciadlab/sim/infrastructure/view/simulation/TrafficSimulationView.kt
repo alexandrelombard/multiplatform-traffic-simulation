@@ -1,6 +1,5 @@
 package fr.ciadlab.sim.infrastructure.view.simulation
 
-import fr.ciadlab.sim.infrastructure.view.network.RoadNetworkView
 import fr.ciadlab.sim.infrastructure.view.network.intersectionView
 import fr.ciadlab.sim.infrastructure.view.network.roadNetworkView
 import fr.ciadlab.sim.infrastructure.view.network.roadView
@@ -9,11 +8,14 @@ import fr.ciadlab.sim.traffic.TrafficSimulation
 import fr.ciadlab.sim.vehicle.Vehicle
 import javafx.scene.Group
 import javafx.scene.Parent
-import tornadofx.opcr
+import tornadofx.add
 
-class TrafficSimulationView(val trafficSimulation: TrafficSimulation<*>) : Group()
+class TrafficSimulationView(val trafficSimulation: TrafficSimulation<Vehicle>) : Group()
 
-fun Parent.trafficSimulationView(trafficSimulation: TrafficSimulation<*>, op : TrafficSimulationView.() -> Unit = {}) {
+fun Parent.trafficSimulationView(trafficSimulation: TrafficSimulation<Vehicle>, op : TrafficSimulationView.() -> Unit = {}) {
+    // Register a listener to on spawn to re-create the vehicle views
+//    trafficSimulation.onSpawn.add { vehicleView(it) }
+
     // Draw the road network
     roadNetworkView(trafficSimulation.roadNetwork) {
         laneWidth = 3.5
@@ -33,7 +35,7 @@ fun Parent.trafficSimulationView(trafficSimulation: TrafficSimulation<*>, op : T
 
     // Draw the vehicles
     // FIXME This function is not regularly called
-    trafficSimulation.spawnedObjects.forEach {
+    trafficSimulation.vehicles.forEach {
         if(it is Vehicle) {
             vehicleView(it)
         }

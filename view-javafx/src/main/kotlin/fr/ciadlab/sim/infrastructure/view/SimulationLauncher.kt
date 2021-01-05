@@ -76,10 +76,6 @@ class SimulationView : View() {
     val simpleIntersectionTrafficSimulation = trafficSimulation<Vehicle> {
         roadNetwork = simpleIntersectionRoadNetworkModel
 
-        onSpawn = {
-            //
-        }
-
         vehicleBehavior = { vehicle, deltaTime ->
             vehicle.reachGoalBehavior(driverBehavioralState).apply(deltaTime)
         }
@@ -195,6 +191,10 @@ class SimulationView : View() {
 //                roadNetwork.intersections.forEach { intersectionView(it) }
 //            }
             trafficSimulationView(simpleIntersectionTrafficSimulation) {
+            }
+
+            simpleIntersectionTrafficSimulation.vehicles.forEach {
+                vehicleView(it)
             }
 
             vehicleView(vehicle)

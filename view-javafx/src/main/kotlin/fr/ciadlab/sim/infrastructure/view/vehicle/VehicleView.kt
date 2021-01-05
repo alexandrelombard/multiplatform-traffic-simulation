@@ -1,26 +1,16 @@
 package fr.ciadlab.sim.infrastructure.view.vehicle
 
-import fr.ciadlab.sim.infrastructure.Intersection
-import fr.ciadlab.sim.math.geometry.MonotoneChain
-import fr.ciadlab.sim.math.geometry.Vector2D
-import fr.ciadlab.sim.math.geometry.Vector3D
 import fr.ciadlab.sim.vehicle.Vehicle
 import javafx.scene.Parent
 import javafx.scene.image.Image
-import javafx.scene.paint.Color
 import tornadofx.imageview
-
-import kotlin.jvm.javaClass
-
-import tornadofx.polygon
-import javax.imageio.ImageIO
 import kotlin.math.atan2
 
 class VehicleView(val vehicle: Vehicle) {
 
 }
 
-fun Parent.vehicleView(vehicle: Vehicle) {
+fun Parent.vehicleView(vehicle: Vehicle): Parent {
     val imageView = imageview {
        image = Image("/car_up_right.png")
 
@@ -36,4 +26,6 @@ fun Parent.vehicleView(vehicle: Vehicle) {
         imageView.y = it.position.y - imageView.fitHeight / 2.0
         imageView.rotate = Math.toDegrees(atan2(it.direction.y, it.direction.x))
     }
+
+    return this
 }

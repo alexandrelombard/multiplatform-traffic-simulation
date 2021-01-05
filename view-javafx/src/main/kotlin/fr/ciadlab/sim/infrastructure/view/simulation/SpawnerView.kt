@@ -9,7 +9,7 @@ import tornadofx.line
 
 class SpawnerView (val spawner: Spawner<*>)
 
-fun Parent.spawnerView(spawner: Spawner<*>, op : SpawnerView.() -> Unit = {}) {
+fun Parent.spawnerView(spawner: Spawner<*>, op : SpawnerView.() -> Unit = {}): Parent {
     circle {
         centerX = spawner.position.x
         centerY = spawner.position.y
@@ -22,4 +22,5 @@ fun Parent.spawnerView(spawner: Spawner<*>, op : SpawnerView.() -> Unit = {}) {
         endX = spawner.position.x + spawner.direction.x * 5.0
         endY = spawner.position.y + spawner.direction.y * 5.0
     }
+    return this
 }

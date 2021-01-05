@@ -1,5 +1,6 @@
 package fr.ciadlab.sim.math.geometry
 
+import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.util.MathArrays
 import kotlin.math.PI
 import kotlin.math.atan2

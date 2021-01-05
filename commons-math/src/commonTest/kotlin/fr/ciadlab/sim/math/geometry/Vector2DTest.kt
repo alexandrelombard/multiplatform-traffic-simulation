@@ -1,5 +1,6 @@
 package fr.ciadlab.sim.math.geometry
 
+import fr.ciadlab.sim.math.algebra.Vector2D
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

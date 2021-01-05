@@ -1,6 +1,7 @@
 package fr.ciadlab.sim.math.geometry
 
 
+import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.util.Precision
 import kotlin.math.abs
 

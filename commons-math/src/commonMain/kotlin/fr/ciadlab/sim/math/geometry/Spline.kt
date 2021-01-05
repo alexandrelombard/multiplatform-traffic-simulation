@@ -1,5 +1,7 @@
 package fr.ciadlab.sim.math.geometry
 
+import fr.ciadlab.sim.math.algebra.Vector3D
+import fr.ciadlab.sim.math.algebra.times
 import kotlin.math.pow
 
 /**
@@ -32,9 +34,9 @@ fun hermiteSpline(vararg points: Vector3D, steps: Int = 10): List<Vector3D> {
 fun hermiteSpline(p0: Vector3D, t0: Vector3D, p1: Vector3D, t1: Vector3D, steps: Int = 10): List<Vector3D> {
     var points = arrayListOf<Vector3D>()
 
-    val h00 = {t: Double -> 2 * t.pow(3) - 3 * t.pow(2) + 1}
-    val h10 = {t: Double -> t.pow(3) - 2 * t.pow(2) + t}
-    val h01 = {t: Double -> -2 * t.pow(3) + 3 * t.pow(2)}
+    val h00 = {t: Double -> 2.0 * t.pow(3) - 3 * t.pow(2) + 1}
+    val h10 = {t: Double -> t.pow(3) - 2.0 * t.pow(2) + t}
+    val h01 = {t: Double -> -2.0 * t.pow(3) + 3.0 * t.pow(2)}
     val h11 = {t: Double -> t.pow(3) - t.pow(2)}
 
     return (0..steps).map {

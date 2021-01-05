@@ -1,5 +1,7 @@
 package fr.ciadlab.sim.math.geometry
 
+import fr.ciadlab.sim.math.algebra.Vector2D
+
 /**
  * Abstract base class for convex hull generators in the two-dimensional euclidean space.
  * Inspired by commons-math:3.6.1

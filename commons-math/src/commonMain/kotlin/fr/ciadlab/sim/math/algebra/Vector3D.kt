@@ -1,4 +1,4 @@
-package fr.ciadlab.sim.math.geometry
+package fr.ciadlab.sim.math.algebra
 
 /**
  * Represents an immutable Vector3D

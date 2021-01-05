@@ -1,4 +1,4 @@
-package fr.ciadlab.sim.math.geometry
+package fr.ciadlab.sim.math.algebra
 
 import kotlin.math.acos
 import kotlin.math.atan2

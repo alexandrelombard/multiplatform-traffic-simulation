@@ -1,5 +1,7 @@
 package fr.ciadlab.sim.math.geometry
 
+import fr.ciadlab.sim.math.algebra.Vector3D
+import fr.ciadlab.sim.math.algebra.project
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertTrue

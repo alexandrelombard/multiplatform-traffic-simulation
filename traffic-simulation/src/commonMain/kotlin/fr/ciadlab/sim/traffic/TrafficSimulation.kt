@@ -2,6 +2,7 @@ package fr.ciadlab.sim.traffic
 
 import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.infrastructure.RoadNetwork
+import fr.ciadlab.sim.tree.QuadTree
 
 class TrafficSimulation<VehicleType>(
     /** The list of spawners */

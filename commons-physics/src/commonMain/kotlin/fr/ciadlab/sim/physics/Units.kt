@@ -20,7 +20,17 @@ infix fun Float.unit(factor: Double) = this * factor
 infix fun Double.unit(factor: Double) = this * factor
 
 object Units {
+    // Velocity
     val KilometersPerHour = 1.0 / 3.6
+    val MetersPerSecond = 1.0
+    // Time
     val Milliseconds = 1.0 / 1000.0
+    val Seconds = 1.0
+    // Angles
     val Degrees = PI / 180.0
+    val Radians = 1.0
+    // Distances
+    val Kilometers = 1000.0
+    val Meters = 1.0
+    val Millimeters = 1.0 / 1000.0
 }

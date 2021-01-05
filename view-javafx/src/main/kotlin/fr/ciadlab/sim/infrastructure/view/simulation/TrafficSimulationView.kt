@@ -6,6 +6,7 @@ import fr.ciadlab.sim.infrastructure.view.network.roadView
 import fr.ciadlab.sim.infrastructure.view.vehicle.vehicleView
 import fr.ciadlab.sim.traffic.TrafficSimulation
 import fr.ciadlab.sim.vehicle.Vehicle
+import javafx.application.Platform
 import javafx.scene.Group
 import javafx.scene.Parent
 import tornadofx.add
@@ -14,7 +15,7 @@ class TrafficSimulationView(val trafficSimulation: TrafficSimulation<Vehicle>) :
 
 fun Parent.trafficSimulationView(trafficSimulation: TrafficSimulation<Vehicle>, op : TrafficSimulationView.() -> Unit = {}) {
     // Register a listener to on spawn to re-create the vehicle views
-//    trafficSimulation.onSpawn.add { vehicleView(it) }
+    trafficSimulation.onSpawn.add { Platform.runLater { vehicleView(it) } }
 
     // Draw the road network
     roadNetworkView(trafficSimulation.roadNetwork) {

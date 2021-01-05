@@ -16,7 +16,7 @@ import fr.ciadlab.sim.infrastructure.viewjs.network.background
 import fr.ciadlab.sim.infrastructure.viewjs.network.intersectionView
 import fr.ciadlab.sim.infrastructure.viewjs.network.road
 import fr.ciadlab.sim.infrastructure.viewjs.network.roadNetworkView
-import fr.ciadlab.sim.math.geometry.*
+import fr.ciadlab.sim.math.algebra.*
 import fr.ciadlab.sim.physics.Units
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit

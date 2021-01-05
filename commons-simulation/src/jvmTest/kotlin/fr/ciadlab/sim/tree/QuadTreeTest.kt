@@ -1,7 +1,7 @@
 package fr.ciadlab.sim.tree
 
 import fr.ciadlab.sim.AxisAlignedBoundingBox2D
-import fr.ciadlab.sim.math.geometry.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector2D
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertTrue

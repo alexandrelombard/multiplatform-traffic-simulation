@@ -2,7 +2,7 @@ package fr.ciadlab.sim.infrastructure.viewjs.controllers
 
 import fr.ciadlab.sim.infrastructure.road
 import fr.ciadlab.sim.infrastructure.roadNetwork
-import fr.ciadlab.sim.math.geometry.Vector3D
+import fr.ciadlab.sim.math.algebra.Vector3D
 import fr.ciadlab.sim.math.geometry.hermiteSpline
 
 val circleShapedRoadNetworkModel = roadNetwork {

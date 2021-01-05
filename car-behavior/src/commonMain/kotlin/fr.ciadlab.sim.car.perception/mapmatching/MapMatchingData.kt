@@ -1,7 +1,7 @@
 package fr.ciadlab.sim.car.perception.mapmatching
 
 import fr.ciadlab.sim.infrastructure.Road
-import fr.ciadlab.sim.math.geometry.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector2D
 
 /**
  * Map-matching data

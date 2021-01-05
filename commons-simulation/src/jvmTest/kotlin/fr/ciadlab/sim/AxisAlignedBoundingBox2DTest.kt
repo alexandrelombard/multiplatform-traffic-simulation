@@ -1,6 +1,6 @@
 package fr.ciadlab.sim
 
-import fr.ciadlab.sim.math.geometry.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector2D
 import org.junit.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

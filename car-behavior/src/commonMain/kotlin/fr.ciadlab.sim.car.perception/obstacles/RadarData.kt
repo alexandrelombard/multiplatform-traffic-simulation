@@ -1,6 +1,6 @@
 package fr.ciadlab.sim.car.perception.obstacles
 
-import fr.ciadlab.sim.math.geometry.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector2D
 
 /**
  * Radar data

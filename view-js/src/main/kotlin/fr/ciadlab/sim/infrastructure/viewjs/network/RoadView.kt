@@ -3,9 +3,8 @@ package fr.ciadlab.sim.infrastructure.viewjs.network
 import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.Color
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.context2D
-import fr.ciadlab.sim.infrastructure.viewjs.canvas.line
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.polyline
-import fr.ciadlab.sim.math.geometry.Vector3D
+import fr.ciadlab.sim.math.algebra.Vector3D
 
 fun RoadNetworkView.road(road: Road) {
     val debug = true    // TODO Externalize

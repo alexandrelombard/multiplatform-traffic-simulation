@@ -2,9 +2,9 @@ package fr.ciadlab.sim.car.perception.mapmatching
 
 import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.RoadNetwork
-import fr.ciadlab.sim.math.geometry.Vector2D
-import fr.ciadlab.sim.math.geometry.Vector3D
-import fr.ciadlab.sim.math.geometry.project
+import fr.ciadlab.sim.math.algebra.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector3D
+import fr.ciadlab.sim.math.algebra.project
 
 /**
  * Simple implementation of a map-matching provider, not relying on any optimization

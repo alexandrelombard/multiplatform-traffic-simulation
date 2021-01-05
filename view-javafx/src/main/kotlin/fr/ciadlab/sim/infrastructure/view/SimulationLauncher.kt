@@ -6,6 +6,7 @@ import fr.ciadlab.sim.infrastructure.*
 import fr.ciadlab.sim.infrastructure.IntersectionBuilder.ConnectedSide
 import fr.ciadlab.sim.infrastructure.view.simulation.trafficSimulationView
 import fr.ciadlab.sim.infrastructure.view.vehicle.vehicleView
+import fr.ciadlab.sim.math.algebra.*
 import fr.ciadlab.sim.math.geometry.*
 import fr.ciadlab.sim.physics.Units.KilometersPerHour
 import fr.ciadlab.sim.physics.Units.Milliseconds

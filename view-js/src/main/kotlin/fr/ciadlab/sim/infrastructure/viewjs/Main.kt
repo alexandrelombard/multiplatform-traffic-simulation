@@ -15,8 +15,8 @@ import fr.ciadlab.sim.infrastructure.viewjs.network.background
 import fr.ciadlab.sim.infrastructure.viewjs.network.intersectionView
 import fr.ciadlab.sim.infrastructure.viewjs.network.road
 import fr.ciadlab.sim.infrastructure.viewjs.network.roadNetworkView
-import fr.ciadlab.sim.math.geometry.Vector2D
-import fr.ciadlab.sim.math.geometry.Vector3D
+import fr.ciadlab.sim.math.algebra.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector3D
 import fr.ciadlab.sim.math.geometry.hermiteSpline
 import fr.ciadlab.sim.physics.Units.KilometersPerHour
 import fr.ciadlab.sim.physics.Units.Milliseconds

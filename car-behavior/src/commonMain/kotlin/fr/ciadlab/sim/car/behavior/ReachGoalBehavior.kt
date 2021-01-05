@@ -4,6 +4,7 @@ import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
 import fr.ciadlab.sim.car.behavior.lateral.purePursuit
 import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
 import fr.ciadlab.sim.infrastructure.offset
+import fr.ciadlab.sim.math.algebra.*
 import fr.ciadlab.sim.math.geometry.*
 import fr.ciadlab.sim.vehicle.Vehicle
 import kotlin.math.*

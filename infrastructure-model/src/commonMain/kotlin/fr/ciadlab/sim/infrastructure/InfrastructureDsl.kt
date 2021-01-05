@@ -1,6 +1,6 @@
 package fr.ciadlab.sim.infrastructure
 
-import fr.ciadlab.sim.math.geometry.Vector3D
+import fr.ciadlab.sim.math.algebra.Vector3D
 
 data class DslRoadNetwork(
     var roads: MutableList<Road> = arrayListOf(),

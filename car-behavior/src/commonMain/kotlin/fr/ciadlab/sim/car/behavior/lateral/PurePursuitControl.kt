@@ -2,7 +2,7 @@ package fr.ciadlab.sim.car.behavior.lateral
 
 import kotlin.math.*
 
-import fr.ciadlab.sim.math.geometry.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector2D
 
 /**
  * Computes the desired angle for the front wheels using the pure pursuit algorithm

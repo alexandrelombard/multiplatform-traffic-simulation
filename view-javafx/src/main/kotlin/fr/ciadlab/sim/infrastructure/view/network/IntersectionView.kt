@@ -2,8 +2,8 @@ package fr.ciadlab.sim.infrastructure.view.network
 
 import fr.ciadlab.sim.infrastructure.Intersection
 import fr.ciadlab.sim.math.geometry.MonotoneChain
-import fr.ciadlab.sim.math.geometry.Vector2D
-import fr.ciadlab.sim.math.geometry.Vector3D
+import fr.ciadlab.sim.math.algebra.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector3D
 import javafx.scene.paint.Color
 
 import tornadofx.polygon

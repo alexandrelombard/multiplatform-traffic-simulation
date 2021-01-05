@@ -1,6 +1,6 @@
 package fr.ciadlab.sim.traffic
 
-import fr.ciadlab.sim.math.geometry.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector2D
 
 class Spawner<Object>(
     /** A function instantiating an object */

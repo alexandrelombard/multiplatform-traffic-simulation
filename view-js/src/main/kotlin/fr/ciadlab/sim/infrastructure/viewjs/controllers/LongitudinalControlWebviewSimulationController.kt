@@ -12,7 +12,7 @@ import fr.ciadlab.sim.infrastructure.viewjs.network.background
 import fr.ciadlab.sim.infrastructure.viewjs.network.intersectionView
 import fr.ciadlab.sim.infrastructure.viewjs.network.road
 import fr.ciadlab.sim.infrastructure.viewjs.network.roadNetworkView
-import fr.ciadlab.sim.math.geometry.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.physics.Units
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit
@@ -120,8 +120,6 @@ class LongitudinalControlWebviewSimulationController {
                 3.5,
                 4.0)
         }.toList()
-
-        val roadNetworkPerceptionProvider = RoadNetworkPerceptionProvider(network, vehicles)
 
         // Drawing loop
         window.setInterval({

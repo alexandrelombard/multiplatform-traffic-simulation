@@ -1,7 +1,7 @@
 package fr.ciadlab.sim.car.behavior
 
 import fr.ciadlab.sim.infrastructure.Road
-import fr.ciadlab.sim.math.geometry.Vector3D
+import fr.ciadlab.sim.math.algebra.Vector3D
 import fr.ciadlab.sim.vehicle.Vehicle
 
 /**

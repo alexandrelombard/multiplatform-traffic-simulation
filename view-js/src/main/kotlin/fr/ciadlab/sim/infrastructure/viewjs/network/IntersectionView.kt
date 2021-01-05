@@ -4,8 +4,8 @@ import fr.ciadlab.sim.infrastructure.Intersection
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.Color
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.context2D
 import fr.ciadlab.sim.math.geometry.MonotoneChain
-import fr.ciadlab.sim.math.geometry.Vector2D
-import fr.ciadlab.sim.math.geometry.Vector3D
+import fr.ciadlab.sim.math.algebra.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector3D
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.polygon
 
 

@@ -1,7 +1,7 @@
 package fr.ciadlab.sim.tree
 
 import fr.ciadlab.sim.AxisAlignedBoundingBox2D
-import fr.ciadlab.sim.math.geometry.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector2D
 import kotlin.math.exp
 
 const val NORTH_EAST = 0
@@ -21,7 +21,8 @@ class QuadTree<T>(
     val children: MutableList<QuadTree<T>> = arrayListOf(),
     val parent: QuadTree<T>? = null,
     val capacity: Int = DEFAULT_CAPACITY,
-    val position: (T)->Vector2D) {
+    val position: (T)-> Vector2D
+) {
 
     /**
      * Add a value to the quad-tree, eventually recreating children nodes if required

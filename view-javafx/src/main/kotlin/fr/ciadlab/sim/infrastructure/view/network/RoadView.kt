@@ -2,7 +2,7 @@ package fr.ciadlab.sim.infrastructure.view.network
 
 import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.offset
-import fr.ciadlab.sim.math.geometry.Vector3D
+import fr.ciadlab.sim.math.algebra.Vector3D
 import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
 import javafx.scene.shape.StrokeLineJoin

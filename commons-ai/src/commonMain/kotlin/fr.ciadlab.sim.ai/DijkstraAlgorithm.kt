@@ -23,11 +23,17 @@ class DijkstraAlgorithm<Node> {
         // Set of explored nodes
         val exploredNodes = hashSetOf<Node>()
 
-        val toExplore = hashSetOf<Node>()
+        val toExplore = arrayListOf<Pair<Node, Node>>()
 
         distances[origin] = 0.0
 
-        toExplore.addAll(availableNodes(origin))
+        toExplore.addAll(availableNodes(origin).map { Pair(it, origin) })
+
+        while(!toExplore.isEmpty()) {
+            val currentNode = toExplore.removeFirst()
+            val sourceDistance = distances[currentNode.second]
+            val currentNodeDistance = distance(currentNode.second, currentNode.first) + sourceDistance!!
+        }
 
 
         TODO("Not yet implemented")

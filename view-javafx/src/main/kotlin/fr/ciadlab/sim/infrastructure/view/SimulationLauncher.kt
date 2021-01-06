@@ -78,13 +78,16 @@ class SimulationView : View() {
     }
 
     val simpleIntersectionTrafficSimulation = trafficSimulation<Vehicle> {
+        /** Store the routes of the vehicles */
+        val routes = hashMapOf<Vehicle, List<Road>?>()
+
         roadNetwork = simpleIntersectionRoadNetworkModel
         
         onSpawn.add { vehicle, _ ->
             // Compute a random route
             val router = OriginDestinationRouter(roadNetwork, MapMatchingProvider(roadNetwork))
             val route = router.findRoute(vehicle.position, this.exitAreas.random().position)
-
+            routes[vehicle] = route
         }
 
         vehicleBehavior = { vehicle, deltaTime ->

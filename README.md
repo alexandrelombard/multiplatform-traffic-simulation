@@ -22,6 +22,7 @@ http://alexandrelombard.github.io
 - commons-math: general utilities for geometry
 - commons-physics: general utilities for physics
 - commons-simulation: general utilities for simulation (kd-tree, etc.)
+- commons-ai: common artificial intelligence algorithms (A*, Dijkstra, etc.)
 
 ### Traffic simulation
 

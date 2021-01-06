@@ -34,11 +34,8 @@ fun Parent.trafficSimulationView(trafficSimulation: TrafficSimulation<Vehicle>, 
         exitAreaView(it)
     }
 
-    // Draw the vehicles
-    // FIXME This function is not regularly called
+    // Draw the vehicles that are manually created
     trafficSimulation.vehicles.forEach {
-        if(it is Vehicle) {
-            vehicleView(it)
-        }
+        vehicleView(it)
     }
 }

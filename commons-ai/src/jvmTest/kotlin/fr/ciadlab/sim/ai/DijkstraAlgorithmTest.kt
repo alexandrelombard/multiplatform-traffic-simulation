@@ -28,7 +28,7 @@ class DijkstraAlgorithmTest {
             origin, destination, availableNodes = { it.connectedNodes.keys }, distance = {a, b -> a.connectedNodes[b]!! })
 
         path!!.forEach {
-            println(it)
+            println(it.name)
         }
     }
 }

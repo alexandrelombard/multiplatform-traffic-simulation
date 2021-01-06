@@ -27,14 +27,12 @@ class DijkstraAlgorithm<Node> {
         // Set of explored nodes
         val exploredNodes = hashSetOf<Node>()
 
-        var minDistance = 0.0
-
         val toExplore = arrayListOf(origin)
 
         steps[origin] = PathStep(origin, origin, 0.0)
 
         while(!toExplore.isEmpty()) {
-            val currentNode = toExplore.find { steps[it]!!.distance == minDistance }!!
+            val currentNode = toExplore.minByOrNull { steps[it]!!.distance }!!
             val sourceDistance = steps[currentNode]!!.distance
             val neighbours = availableNodes(currentNode).filter { !exploredNodes.contains(it) }
 
@@ -47,9 +45,6 @@ class DijkstraAlgorithm<Node> {
                 // Update the distance
                 if(currentStep == null || currentStep.distance > totalDistance) {
                     steps[it] = PathStep(it, currentNode, totalDistance)
-                    if(totalDistance < minDistance) {
-                        minDistance = totalDistance
-                    }
                 }
             }
 

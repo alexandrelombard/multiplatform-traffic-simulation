@@ -96,7 +96,14 @@ class SimulationView : View() {
             val radarData = radar.performRadarDetection(vehicle.position, vehicle.direction, this.vehicles)
             // Retrieve the computed route
             val route = routes[vehicle]
+            val currentRoad = route?.minByOrNull { it.points.project(vehicle.position.toVector3D()).distance }
             // Execute the behavior
+            val driverBehavioralState = DriverBehavioralState(
+                currentRoad ?: roadNetworkModel.roads[0],
+                0,      // FIXME
+                listOf(),
+                50.0 unit KilometersPerHour,
+                route?.last()?.end() ?: roadNetworkModel.roads[0].end())
             vehicle.reachGoalBehavior(driverBehavioralState).apply(deltaTime)
         }
 

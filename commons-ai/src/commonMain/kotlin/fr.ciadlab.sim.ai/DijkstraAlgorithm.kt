@@ -32,7 +32,7 @@ class DijkstraAlgorithm<Node> {
         steps[origin] = PathStep(origin, origin, 0.0)
 
         while(!toExplore.isEmpty()) {
-            val currentNode = toExplore.minByOrNull { steps[it]!!.distance }!!
+            val currentNode = toExplore.minByOrNull { steps[it]!!.distance }!!      // FIXME This is slow
             val sourceDistance = steps[currentNode]!!.distance
             val neighbours = availableNodes(currentNode).filter { !exploredNodes.contains(it) }
 

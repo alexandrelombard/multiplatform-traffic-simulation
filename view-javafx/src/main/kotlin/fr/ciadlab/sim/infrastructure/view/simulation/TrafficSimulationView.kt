@@ -15,7 +15,7 @@ class TrafficSimulationView(val trafficSimulation: TrafficSimulation<Vehicle>) :
 
 fun Parent.trafficSimulationView(trafficSimulation: TrafficSimulation<Vehicle>, op : TrafficSimulationView.() -> Unit = {}) {
     // Register a listener to on spawn to re-create the vehicle views
-    trafficSimulation.onSpawn.add { Platform.runLater { vehicleView(it) } }
+    trafficSimulation.onSpawn.add { vehicle, _-> Platform.runLater { vehicleView(vehicle) } }
 
     // Draw the road network
     roadNetworkView(trafficSimulation.roadNetwork) {

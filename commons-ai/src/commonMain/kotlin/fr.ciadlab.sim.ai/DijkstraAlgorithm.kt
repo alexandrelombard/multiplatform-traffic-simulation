@@ -4,5 +4,32 @@ package fr.ciadlab.sim.ai
  * Implementation of the Dijkstra algorithm to look for the shortest path between two vertices of a graph
  * @author Alexandre Lombard
  */
-class DijkstraAlgorithm {
+class DijkstraAlgorithm<Node> {
+    /**
+     * Finds the shortest path as a list of nodes
+     * @param origin the source node
+     * @param destination the destination node
+     * @param availableNodes a function returning the available nodes from a given one
+     * @param distance a function giving the distance between two nodes
+     * @return the shortest path as a list of nodes
+     */
+    fun findShortestPath(
+        origin: Node,
+        destination: Node,
+        availableNodes: (Node)->Collection<Node>,
+        distance: (Node, Node)->Double): List<Node> {
+        // Map of distances (from origin)
+        val distances = hashMapOf<Node, Double>()
+        // Set of explored nodes
+        val exploredNodes = hashSetOf<Node>()
+
+        val toExplore = hashSetOf<Node>()
+
+        distances[origin] = 0.0
+
+        toExplore.addAll(availableNodes(origin))
+
+
+        TODO("Not yet implemented")
+    }
 }

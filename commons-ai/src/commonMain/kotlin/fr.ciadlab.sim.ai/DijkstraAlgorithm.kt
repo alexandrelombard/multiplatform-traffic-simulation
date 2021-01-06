@@ -4,7 +4,7 @@ package fr.ciadlab.sim.ai
  * Implementation of the Dijkstra algorithm to look for the shortest path between two vertices of a graph
  * @author Alexandre Lombard
  */
-class DijkstraAlgorithm<Node> {
+object DijkstraAlgorithm {
     /**
      * Finds the shortest path as a list of nodes
      * @param origin the source node
@@ -13,7 +13,7 @@ class DijkstraAlgorithm<Node> {
      * @param distance a function giving the distance between two nodes
      * @return the shortest path as a list of nodes or <code>null</code> if there is no path
      */
-    fun findShortestPath(
+    fun <Node>findShortestPath(
         origin: Node,
         destination: Node,
         availableNodes: (Node)->Collection<Node>,

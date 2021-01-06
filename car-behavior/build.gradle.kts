@@ -21,6 +21,7 @@ kotlin {
                 implementation(project(":commons-math"))
                 implementation(project(":commons-utils"))
                 implementation(project(":commons-physics"))
+                implementation(project(":commons-ai"))
                 implementation(project(":car-model"))
                 implementation(project(":infrastructure-model"))
             }

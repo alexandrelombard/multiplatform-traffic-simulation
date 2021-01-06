@@ -33,4 +33,7 @@ object Units {
     val Kilometers = 1000.0
     val Meters = 1.0
     val Millimeters = 1.0 / 1000.0
+    // Mass
+    val Kilograms = 1.0
+    val Grams = 1.0 / 1000.0
 }

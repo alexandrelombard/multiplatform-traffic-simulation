@@ -6,6 +6,10 @@ import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.RoadNetwork
 import fr.ciadlab.sim.math.algebra.Vector2D
 
+/**
+ * Computes the route from an origin to a destination for the given road network using the given map-matching provider
+ * @author Alexandre Lombard
+ */
 class OriginDestinationRouter(val roadNetwork: RoadNetwork, val mapMatchingProvider: MapMatchingProvider){
 
     /**

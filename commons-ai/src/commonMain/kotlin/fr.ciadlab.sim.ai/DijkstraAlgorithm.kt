@@ -11,31 +11,65 @@ class DijkstraAlgorithm<Node> {
      * @param destination the destination node
      * @param availableNodes a function returning the available nodes from a given one
      * @param distance a function giving the distance between two nodes
-     * @return the shortest path as a list of nodes
+     * @return the shortest path as a list of nodes or <code>null</code> if there is no path
      */
     fun findShortestPath(
         origin: Node,
         destination: Node,
         availableNodes: (Node)->Collection<Node>,
-        distance: (Node, Node)->Double): List<Node> {
-        // Map of distances (from origin)
-        val distances = hashMapOf<Node, Double>()
+        distance: (Node, Node)->Double): List<Node>? {
+        if(origin == destination) {
+            return arrayListOf(origin)
+        }
+
+        // Map of steps (from origin)
+        val steps = hashMapOf<Node, PathStep<Node>>()
         // Set of explored nodes
         val exploredNodes = hashSetOf<Node>()
 
-        val toExplore = arrayListOf<Pair<Node, Node>>()
+        var minDistance = 0.0
 
-        distances[origin] = 0.0
+        val toExplore = arrayListOf(origin)
 
-        toExplore.addAll(availableNodes(origin).map { Pair(it, origin) })
+        steps[origin] = PathStep(origin, origin, 0.0)
 
         while(!toExplore.isEmpty()) {
-            val currentNode = toExplore.removeFirst()
-            val sourceDistance = distances[currentNode.second]
-            val currentNodeDistance = distance(currentNode.second, currentNode.first) + sourceDistance!!
+            val currentNode = toExplore.find { steps[it]!!.distance == minDistance }!!
+            val sourceDistance = steps[currentNode]!!.distance
+            val neighbours = availableNodes(currentNode).filter { !exploredNodes.contains(it) }
+
+            toExplore.remove(currentNode)
+            exploredNodes.add(currentNode)
+
+            neighbours.forEach {
+                val totalDistance = sourceDistance + distance(currentNode, it)
+                val currentStep = steps[it]
+                // Update the distance
+                if(currentStep == null || currentStep.distance > totalDistance) {
+                    steps[it] = PathStep(it, currentNode, totalDistance)
+                    if(totalDistance < minDistance) {
+                        minDistance = totalDistance
+                    }
+                }
+            }
+
+            toExplore.addAll(neighbours)
         }
 
+        if(!steps.containsKey(destination)) {
+            return null
+        }
 
-        TODO("Not yet implemented")
+        val path = arrayListOf(destination)
+        while(path.first() != origin) {
+            path.add(0, steps[path.first()]!!.source)
+        }
+
+        return path
     }
 }
+
+/**
+ * Represents a pair of nodes, associating a node with its source, along with the total distance
+ */
+internal data class PathStep<Node>(val node: Node, val source: Node, val distance: Double)

@@ -94,6 +94,8 @@ class SimulationView : View() {
             // Compute perceptions
             val radar = RadarPerceptionProvider()
             val radarData = radar.performRadarDetection(vehicle.position, vehicle.direction, this.vehicles)
+            // Retrieve the computed route
+            val route = routes[vehicle]
             // Execute the behavior
             vehicle.reachGoalBehavior(driverBehavioralState).apply(deltaTime)
         }

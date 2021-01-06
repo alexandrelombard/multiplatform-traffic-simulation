@@ -110,6 +110,19 @@ data class Vehicle(
         return updatedVehicle
     }
 
+    override fun hashCode(): Int {
+        return identifier.hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(other == null)
+            return false
+
+        if(!(other is Vehicle))
+            return false
+
+        return identifier == other.identifier
+    }
 }
 
 /**

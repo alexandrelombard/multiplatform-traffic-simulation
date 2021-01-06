@@ -14,7 +14,7 @@ class MapMatchingProvider(
     /** The road network */
     val roadNetwork: RoadNetwork,
     /** An entry point allowing to define an advanced policy by filtering the potential roads */
-    val filterRoads: (RoadNetwork, Vector2D)->List<Road> = { _, _ -> roadNetwork.roads }) {
+    private val filterRoads: (RoadNetwork, Vector2D)->List<Road> = { _, _ -> roadNetwork.roads }) {
 
     /**
      * Computes the closest road to a position using the given road network

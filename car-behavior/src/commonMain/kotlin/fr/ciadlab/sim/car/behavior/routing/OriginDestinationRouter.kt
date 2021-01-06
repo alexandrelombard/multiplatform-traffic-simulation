@@ -1,0 +1,25 @@
+package fr.ciadlab.sim.car.behavior.routing
+
+import fr.ciadlab.sim.car.perception.mapmatching.MapMatchingProvider
+import fr.ciadlab.sim.infrastructure.Road
+import fr.ciadlab.sim.infrastructure.RoadNetwork
+import fr.ciadlab.sim.math.algebra.Vector2D
+
+class OriginDestinationRouter(val roadNetwork: RoadNetwork, val mapMatchingProvider: MapMatchingProvider){
+
+    /**
+     * Finds the route between two points
+     * @param origin the origin
+     * @param destination the destination
+     * @return the list of roads
+     */
+    fun findRoute(origin: Vector2D, destination: Vector2D): List<Road> {
+        val originMapMatching = mapMatchingProvider.mapMatching(origin)
+        val destinationMapMatching = mapMatchingProvider.mapMatching(destination)
+
+        // TODO Use a shortest path algorithm
+
+        return arrayListOf()
+    }
+
+}

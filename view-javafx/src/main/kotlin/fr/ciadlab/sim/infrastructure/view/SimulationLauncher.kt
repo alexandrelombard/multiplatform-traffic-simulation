@@ -2,6 +2,8 @@ package fr.ciadlab.sim.infrastructure.view
 
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
 import fr.ciadlab.sim.car.behavior.reachGoalBehavior
+import fr.ciadlab.sim.car.behavior.routing.OriginDestinationRouter
+import fr.ciadlab.sim.car.perception.mapmatching.MapMatchingProvider
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider
 import fr.ciadlab.sim.infrastructure.*
 import fr.ciadlab.sim.infrastructure.IntersectionBuilder.ConnectedSide
@@ -77,6 +79,13 @@ class SimulationView : View() {
 
     val simpleIntersectionTrafficSimulation = trafficSimulation<Vehicle> {
         roadNetwork = simpleIntersectionRoadNetworkModel
+        
+        onSpawn.add { vehicle, _ ->
+            // Compute a random route
+            val router = OriginDestinationRouter(roadNetwork, MapMatchingProvider(roadNetwork))
+            val route = router.findRoute(vehicle.position, this.exitAreas.random().position)
+
+        }
 
         vehicleBehavior = { vehicle, deltaTime ->
             // Compute perceptions

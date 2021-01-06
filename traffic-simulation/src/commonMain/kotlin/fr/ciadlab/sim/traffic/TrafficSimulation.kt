@@ -16,7 +16,7 @@ class TrafficSimulation<VehicleType>(
     /** The function called to update a vehicle */
     var vehicleUpdate: (VehicleType, DriverBehavioralAction, Double)->VehicleType = { v, _, _ -> v },
     /** The function called when a vehicle is spawned */
-    val onSpawn: MutableList<(VehicleType)->Unit> = arrayListOf(),
+    val onSpawn: MutableList<(VehicleType, Spawner<VehicleType>)->Unit> = arrayListOf(),
     /** The set of spawned vehicles */
     var vehicles: MutableSet<VehicleType> = hashSetOf()
 ) {

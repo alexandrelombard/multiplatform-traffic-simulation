@@ -35,7 +35,7 @@ fun <Object> TrafficSimulation<Object>.spawner(op: Spawner<Object>.() -> Unit): 
     op.invoke(spawner)
     // Register the spawner in the simulation object
     this.spawners.add(spawner)
-    spawner.onGeneration.add { obj -> this.onSpawn.forEach { it.invoke(obj) } }
+    spawner.onGeneration.add { obj -> this.onSpawn.forEach { it.invoke(obj, spawner) } }
     return spawner
 }
 

@@ -25,6 +25,12 @@ kotlin {
         }
 
         val jvmMain by getting
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test-junit"))
+            }
+        }
+
         val jsMain by getting
     }
 }

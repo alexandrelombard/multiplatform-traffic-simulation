@@ -98,6 +98,9 @@ class SimulationView : View() {
             // Retrieve the computed route and the current road
             val route = routes[vehicle]
             val currentRoad = route?.minByOrNull { it.points.project(vehicle.position.toVector3D()).distance }
+            val nextRoad = route?.get(min(route.indexOf(currentRoad) + 1, route.size - 1))
+            // Determine if the road must be travelled from begin to end (forward), or backward
+            val forward = if(currentRoad != null && nextRoad != null) roadNetwork.isAtEnd(currentRoad, nextRoad) else true
             // Execute the behavior
             val driverBehavioralState = DriverBehavioralState(
                 currentRoad ?: roadNetworkModel.roads[0],

@@ -106,9 +106,7 @@ class SimulationView : View() {
                 50.0 unit KilometersPerHour,
                 route?.last()?.end() ?: roadNetworkModel.roads[0].end())
 
-            println("${vehicle.direction}")
-
-            vehicle.reachGoalBehavior(driverBehavioralState).apply(deltaTime)
+             vehicle.reachGoalBehavior(driverBehavioralState).apply(deltaTime)
         }
 
         vehicleUpdate = { vehicle, action, deltaTime ->

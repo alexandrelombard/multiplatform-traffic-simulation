@@ -53,7 +53,7 @@ data class Vehicle(
      */
     fun update(acceleration: Double, wheelAngle: Double, deltaTime: Double): Vehicle {
         // Get the current direction angle
-        val direction = atan2(this.velocity.y, this.velocity.x)
+        val direction = this.direction.alpha
 
         // Compute the new speed
         val newSpeed = this.velocity.norm + this.acceleration * deltaTime

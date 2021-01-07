@@ -97,10 +97,16 @@ class SimulationView : View() {
             val radarData = radar.performRadarDetection(vehicle.position, vehicle.direction, this.vehicles)
             // Retrieve the computed route and the current road
             val route = routes[vehicle]
-            val currentRoad = route?.minByOrNull { it.points.project(vehicle.position.toVector3D()).distance }
-            val nextRoad = route?.get(min(route.indexOf(currentRoad) + 1, route.size - 1))
+            var currentRoad = route?.minByOrNull { it.points.project(vehicle.position.toVector3D()).distance }
+            var nextRoad = route?.get(min(route.indexOf(currentRoad) + 1, route.size - 1))
+//            if(nextRoad?.points?.project(vehicle.position.toVector3D())?.distance ?: Double.POSITIVE_INFINITY < 50.0) {
+//                currentRoad = nextRoad
+//                nextRoad = route?.get(min(route.indexOf(currentRoad) + 1, route.size - 1))
+//            }
+
             // Determine if the road must be travelled from begin to end (forward), or backward
-            val forward = if(currentRoad != null && nextRoad != null) roadNetwork.isAtEnd(currentRoad, nextRoad) else true
+            val forward =
+                if(currentRoad != null && nextRoad != null && currentRoad != nextRoad) roadNetwork.isAtEnd(currentRoad, nextRoad) else true
             // Execute the behavior
             val driverBehavioralState = DriverBehavioralState(
                 currentRoad ?: roadNetworkModel.roads[0],

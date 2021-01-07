@@ -117,14 +117,14 @@ class SimulationView : View() {
             vehicle.update(action.targetAcceleration, action.targetWheelAngle, deltaTime)
         }
 
-//        spawner {
-//            position = Vector2D(0.0, 0.0)
-//            direction = Vector2D(1.0, 0.0)
-//            generation = {
-//                Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, 3.8, 4.0)
-//            }
-//            strategy = { if(Random.nextFloat() < 0.01) { spawn() } }
-//        }
+        spawner {
+            position = Vector2D(0.0, 0.0)
+            direction = Vector2D(1.0, 0.0)
+            generation = {
+                Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, 3.8, 4.0)
+            }
+            strategy = { if(Random.nextFloat() < 0.01) { spawn() } }
+        }
 
         spawner {
             position = Vector2D(653.5, 400.0)

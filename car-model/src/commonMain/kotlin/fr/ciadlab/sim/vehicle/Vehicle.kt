@@ -1,6 +1,8 @@
 package fr.ciadlab.sim.vehicle
 
 import fr.ciadlab.sim.math.algebra.Vector2D
+import fr.ciadlab.sim.physics.Units.Degrees
+import fr.ciadlab.sim.physics.unit
 import fr.ciadlab.sim.utils.UUID
 import kotlin.math.*
 import kotlin.random.Random
@@ -18,7 +20,7 @@ data class Vehicle(
     val wheelAngle: Double,
     val wheelBase: Double,
     val length: Double,
-    val wheelAngleLimit: Double = 15.0 / 180.0 * PI,
+    val wheelAngleLimit: Double = 15.0 unit Degrees,
     val lastCommand: VehicleCommand? = null,
     val identifier: UUID = UUID.randomUUID(),
     val onUpdate: MutableList<(Vehicle)->Unit> = arrayListOf()) {

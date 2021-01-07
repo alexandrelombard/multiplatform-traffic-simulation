@@ -19,8 +19,8 @@ fun Parent.spawnerView(spawner: Spawner<*>, op : SpawnerView.() -> Unit = {}): P
     line {
         startX = spawner.position.x
         startY = spawner.position.y
-        endX = spawner.position.x + spawner.direction.x * 5.0
-        endY = spawner.position.y + spawner.direction.y * 5.0
+        endX = spawner.position.x + spawner.direction.x * 10.0
+        endY = spawner.position.y + spawner.direction.y * 10.0
     }
     return this
 }

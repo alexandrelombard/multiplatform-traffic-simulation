@@ -20,6 +20,7 @@ kotlin {
             dependencies {
                 implementation(project(":commons-math"))
                 implementation(project(":commons-utils"))
+                implementation(project(":commons-physics"))
             }
         }
         val commonTest by getting {

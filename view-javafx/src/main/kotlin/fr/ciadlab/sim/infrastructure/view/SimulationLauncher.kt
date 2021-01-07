@@ -1,5 +1,6 @@
 package fr.ciadlab.sim.infrastructure.view
 
+import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
 import fr.ciadlab.sim.car.behavior.reachGoalBehavior
 import fr.ciadlab.sim.car.behavior.routing.OriginDestinationRouter
@@ -104,6 +105,9 @@ class SimulationView : View() {
                 listOf(),
                 50.0 unit KilometersPerHour,
                 route?.last()?.end() ?: roadNetworkModel.roads[0].end())
+
+            println("${vehicle.direction}")
+
             vehicle.reachGoalBehavior(driverBehavioralState).apply(deltaTime)
         }
 
@@ -111,20 +115,20 @@ class SimulationView : View() {
             vehicle.update(action.targetAcceleration, action.targetWheelAngle, deltaTime)
         }
 
-        spawner {
-            position = Vector2D(0.0, 0.0)
-            direction = Vector2D(1.0, 0.0)
-            generation = {
-                Vehicle(position, Vector2D(0.0, 0.0), 0.0, Vector2D(0.0, 0.0), 0.0, 5.0, 4.0)
-            }
-            strategy = { if(Random.nextFloat() < 0.01) { spawn() } }
-        }
+//        spawner {
+//            position = Vector2D(0.0, 0.0)
+//            direction = Vector2D(1.0, 0.0)
+//            generation = {
+//                Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, 3.8, 4.0)
+//            }
+//            strategy = { if(Random.nextFloat() < 0.01) { spawn() } }
+//        }
 
         spawner {
             position = Vector2D(653.5, 400.0)
             direction = Vector2D(0.0, -1.0)
             generation = {
-                Vehicle(position, Vector2D(0.0, 0.0), 0.0, Vector2D(0.0, 0.0), 0.0, 5.0, 4.0)
+                Vehicle(position, Vector2D(0.0, 0.0), 0.0, Vector2D(0.0, -1.0), 0.0, 3.8, 4.0)
             }
             strategy = { if(Random.nextFloat() < 0.01) { spawn() } }
         }

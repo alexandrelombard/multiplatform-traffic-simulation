@@ -1,6 +1,7 @@
 package fr.ciadlab.sim.car.behavior
 
 import fr.ciadlab.sim.infrastructure.Road
+import fr.ciadlab.sim.infrastructure.offset
 import fr.ciadlab.sim.math.algebra.Vector3D
 import fr.ciadlab.sim.vehicle.Vehicle
 
@@ -20,4 +21,16 @@ data class DriverBehavioralState(
     /** The max speed according to the road */
     val maximumSpeed: Double,
     /** The position of the goal */
-    val goal: Vector3D)
+    val goal: Vector3D) {
+    /**
+     * Gets a lane point coordinates given the lane width
+     */
+    fun lane(laneWidth: Double): List<Vector3D> {
+        val laneOffset = this.currentRoad.laneOffset(this.currentLaneIndex)
+        if(this.travelForward) {
+            return this.currentRoad.points.offset(laneOffset * laneWidth)
+        } else {
+            return this.currentRoad.points.offset(laneOffset * laneWidth).asReversed()
+        }
+    }
+}

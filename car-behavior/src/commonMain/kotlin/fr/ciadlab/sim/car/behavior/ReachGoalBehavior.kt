@@ -31,8 +31,7 @@ class ReachGoalBehavior(
         fun purePursuitLateralControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Double {
             // We get the lane
             val laneWidth = 3.5
-            val laneOffset = driverBehavioralState.currentRoad.laneOffset(driverBehavioralState.currentLaneIndex)
-            val lane = driverBehavioralState.currentRoad.points.offset(laneOffset * laneWidth)
+            val lane = driverBehavioralState.lane(laneWidth)
 
             // We compute the parameters
             val projectionData = lane.project(vehicle.position.toVector3D())
@@ -53,8 +52,7 @@ class ReachGoalBehavior(
         fun stanleyLateralControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Double {
             // We get the lane
             val laneWidth = 3.5
-            val laneOffset = driverBehavioralState.currentRoad.laneOffset(driverBehavioralState.currentLaneIndex)
-            val lane = driverBehavioralState.currentRoad.points.offset(laneOffset * laneWidth)
+            val lane = driverBehavioralState.lane(laneWidth)
 
             // We compute the parameters
             val frontAxlePosition =
@@ -80,8 +78,7 @@ class ReachGoalBehavior(
         fun curvatureFollowingLateralControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Double {
             // We get the lane
             val laneWidth = 3.5
-            val laneOffset = driverBehavioralState.currentRoad.laneOffset(driverBehavioralState.currentLaneIndex)
-            val lane = driverBehavioralState.currentRoad.points.offset(laneOffset * laneWidth)
+            val lane = driverBehavioralState.lane(laneWidth)
 
             // We compute the parameters
             val frontAxlePosition =

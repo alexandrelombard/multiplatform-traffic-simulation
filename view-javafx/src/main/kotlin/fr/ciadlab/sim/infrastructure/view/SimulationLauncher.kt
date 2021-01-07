@@ -105,6 +105,7 @@ class SimulationView : View() {
             val driverBehavioralState = DriverBehavioralState(
                 currentRoad ?: roadNetworkModel.roads[0],
                 0,      // FIXME
+                forward,
                 listOf(),
                 50.0 unit KilometersPerHour,
                 route?.last()?.end() ?: roadNetworkModel.roads[0].end())
@@ -186,6 +187,7 @@ class SimulationView : View() {
         DriverBehavioralState(
             currentRoad = roadNetworkModel.roads[0],
             currentLaneIndex = 0,
+            travelForward = true,
             maximumSpeed = 50.0 unit KilometersPerHour,
             goal = roadNetworkModel.roads[0].end(), leaders = listOf())
 

@@ -13,6 +13,8 @@ data class DriverBehavioralState(
     val currentRoad: Road,
     /** The current lane index */
     val currentLaneIndex: Int,
+    /** True if the lane must be travelled in the forward direction, and false for backward */
+    val travelForward: Boolean,
     /** The current list of leaders (vehicles that this one will be following) */
     val leaders: List<Vehicle>,
     /** The max speed according to the road */

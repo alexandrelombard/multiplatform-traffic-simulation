@@ -106,6 +106,7 @@ class LongitudinalControlWebviewSimulationController {
             DriverBehavioralState(
                 currentRoad = network.roads[0],
                 currentLaneIndex = 0,
+                travelForward = true,
                 maximumSpeed = 50.0 unit Units.KilometersPerHour,
                 leaders = arrayListOf(),
                 goal = network.roads[0].end())

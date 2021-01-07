@@ -7,6 +7,7 @@ This one is:
 - Multiplatform: can be run on the JVM, or can be compiled into Javascript to run in your browser; being written in Kotlin,
   it could theoretically be compiled to native code
 - Provide a simulation DSL: this allows to describe the simulation environments and scenario with a convenient language
+- It is designed following several Functional Programming principles, making the simulation *almost* thread-safe
 
 The algorithms and models included in this repository have a live demo, just here:
 

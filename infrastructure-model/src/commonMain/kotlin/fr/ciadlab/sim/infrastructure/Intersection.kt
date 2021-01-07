@@ -4,7 +4,8 @@ package fr.ciadlab.sim.infrastructure
  * Data class representing an intersection as a list of lane connectors
  */
 data class Intersection(
-    val laneConnectors: List<LaneConnector> = arrayListOf()
+    val laneConnectors: List<LaneConnector> = arrayListOf(),
+    val connectedRoads: Map<Road, IntersectionBuilder.ConnectedSide> = hashMapOf()
 )
 
 /**

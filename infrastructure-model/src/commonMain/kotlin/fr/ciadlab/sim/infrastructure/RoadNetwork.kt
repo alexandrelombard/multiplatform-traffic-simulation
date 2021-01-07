@@ -53,6 +53,44 @@ data class RoadNetwork(
     fun getIntersections(road: Road): Collection<Intersection> {
         return roadIntersections[road] ?: hashSetOf()
     }
+
+    /**
+     * Returns <code>true</code> if the destination is at the begin side of the source, <code>false</code> for any other
+     * case
+     * @param source the source road
+     * @param destination the destination road
+     */
+    fun isAtBegin(source: Road, destination: Road): Boolean {
+        val sourceIntersections = roadIntersections[source]
+        val destinationIntersections = roadIntersections[destination]
+
+        if(sourceIntersections == null || destinationIntersections == null) {
+            return false
+        }
+
+        val commonsIntersections = sourceIntersections.intersect(destinationIntersections)
+
+        return commonsIntersections.any { it.connectedRoads[source] == IntersectionBuilder.ConnectedSide.SOURCE }
+    }
+
+    /**
+     * Returns <code>true</code> if the destination is at the end side of the source, <code>false</code> for any other
+     * case
+     * @param source the source road
+     * @param destination the destination road
+     */
+    fun isAtEnd(source: Road, destination: Road): Boolean {
+        val sourceIntersections = roadIntersections[source]
+        val destinationIntersections = roadIntersections[destination]
+
+        if(sourceIntersections == null || destinationIntersections == null) {
+            return false
+        }
+
+        val commonsIntersections = sourceIntersections.intersect(destinationIntersections)
+
+        return commonsIntersections.any { it.connectedRoads[source] == IntersectionBuilder.ConnectedSide.DESTINATION }
+    }
 }
 
 enum class TrafficType {

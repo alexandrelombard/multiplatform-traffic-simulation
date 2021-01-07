@@ -95,7 +95,7 @@ class SimulationView : View() {
             // Compute perceptions
             val radar = RadarPerceptionProvider()
             val radarData = radar.performRadarDetection(vehicle.position, vehicle.direction, this.vehicles)
-            // Retrieve the computed route
+            // Retrieve the computed route and the current road
             val route = routes[vehicle]
             val currentRoad = route?.minByOrNull { it.points.project(vehicle.position.toVector3D()).distance }
             // Execute the behavior

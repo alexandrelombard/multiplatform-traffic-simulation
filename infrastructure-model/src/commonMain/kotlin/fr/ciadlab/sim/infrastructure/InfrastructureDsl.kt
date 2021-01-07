@@ -31,8 +31,13 @@ fun DslRoadNetwork.road(op: DslRoad.() -> Unit): Road {
 data class DslIntersection(
     val laneConnectors: MutableSet<LaneConnector> = mutableSetOf(),
     private val builder: IntersectionBuilder = IntersectionBuilder()) {
+
+    /** The list of roads connected to the intersection along with the connected side */
+    val connectedRoads: MutableMap<Road, IntersectionBuilder.ConnectedSide> = hashMapOf()
+
     fun withRoad(connectedRoad: Road, connectedSide: IntersectionBuilder.ConnectedSide) {
         this.builder.addRoad(connectedRoad, connectedSide)
+        this.connectedRoads[connectedRoad] = connectedSide
         this.laneConnectors.addAll(this.builder.connectors)
     }
 }
@@ -40,7 +45,7 @@ data class DslIntersection(
 fun DslRoadNetwork.intersection(op: DslIntersection.() -> Unit): Intersection {
     val dslIntersection = DslIntersection()
     op.invoke(dslIntersection)
-    val intersection = Intersection(dslIntersection.laneConnectors.toList())
+    val intersection = Intersection(dslIntersection.laneConnectors.toList(), dslIntersection.connectedRoads)
     this.intersections.add(intersection)
     return intersection
 }

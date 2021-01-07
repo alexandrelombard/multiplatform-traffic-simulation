@@ -13,7 +13,53 @@ The algorithms and models included in this repository have a live demo, just her
 
 http://alexandrelombard.github.io
 
+Here's a quick example of an intersection, and the syntax of the code used to generate it:
+
 ![Simulator screenshot](https://raw.githubusercontent.com/alexandrelombard/multiplatform-traffic-simulation/master/images/img.png)
+
+```kotlin
+roadNetwork {
+    val road1 = road {
+        points =
+                hermiteSpline(
+                    Vector3D(0.0, 0.0, 0.0),
+                    Vector3D(100.0, 0.0, 0.0),
+                    Vector3D(200.0, 100.0, 0.0),
+                    Vector3D(100.0, 0.0, 0.0),
+                    Vector3D(400.0, 0.0, 0.0),
+                    Vector3D(100.0, 0.0, 0.0),
+                    Vector3D(625.0, 50.0, 0.0),
+                    Vector3D(100.0, 0.0, 0.0))
+        oneWay = false
+        forwardLanesCount = 3
+        backwardLanesCount = 2
+    }
+    val road2 = road {
+        points = listOf(
+            Vector3D(650.0, 75.0, 0.0),
+            Vector3D(650.0, 400.0, 0.0)
+        )
+        oneWay = false
+        forwardLanesCount = 2
+        backwardLanesCount = 2
+    }
+    val road3 = road {
+        points = listOf(
+            Vector3D(675.0, 50.0, 0.0),
+            Vector3D(1000.0, 50.0, 0.0)
+        )
+        oneWay = false
+        forwardLanesCount = 2
+        backwardLanesCount = 2
+    }
+
+    intersection {
+        withRoad(road1, ConnectedSide.DESTINATION)
+        withRoad(road2, ConnectedSide.SOURCE)
+        withRoad(road3, ConnectedSide.SOURCE)
+    }
+}
+```
 
 ## Modules
 

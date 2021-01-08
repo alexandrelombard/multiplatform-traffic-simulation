@@ -13,7 +13,7 @@ import kotlin.random.Random
  * At the creation a UUID is given to the car. This UUID remains through subsequent updates.
  */
 data class Vehicle(
-    val position: Vector2D,
+    override val position: Vector2D,
     val velocity: Vector2D,
     val acceleration: Double,
     val direction: Vector2D,
@@ -25,7 +25,7 @@ data class Vehicle(
     val maxAcceleration: Double = 2.0,
     val lastCommand: VehicleCommand? = null,
     val identifier: UUID = UUID.randomUUID(),
-    val onUpdate: MutableList<(Vehicle)->Unit> = arrayListOf()) {
+    val onUpdate: MutableList<(Vehicle)->Unit> = arrayListOf()) : Position2D {
 
     /**
      * The heading of the vehicle

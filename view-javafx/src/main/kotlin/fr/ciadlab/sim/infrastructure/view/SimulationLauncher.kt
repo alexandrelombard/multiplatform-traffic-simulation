@@ -150,7 +150,7 @@ class SimulationView : View() {
         }
 
         exitArea {
-            radius = 5.0
+            radius = 7.5
             position = Vector2D(1000.0, 50.0)
         }
     }

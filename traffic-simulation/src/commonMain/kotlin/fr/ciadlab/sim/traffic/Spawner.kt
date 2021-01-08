@@ -1,6 +1,7 @@
 package fr.ciadlab.sim.traffic
 
 import fr.ciadlab.sim.math.algebra.Vector2D
+import fr.ciadlab.sim.vehicle.Position2D
 
 class Spawner<Object>(
     /** A function instantiating an object */
@@ -29,7 +30,7 @@ class Spawner<Object>(
     }
 }
 
-fun <Object> TrafficSimulation<Object>.spawner(op: Spawner<Object>.() -> Unit): Spawner<Object> {
+fun <Object : Position2D> TrafficSimulation<Object>.spawner(op: Spawner<Object>.() -> Unit): Spawner<Object> {
     // Build the spawner object
     val spawner = Spawner<Object>()
     op.invoke(spawner)

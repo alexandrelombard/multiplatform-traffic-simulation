@@ -2,9 +2,9 @@ package fr.ciadlab.sim.traffic
 
 import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.infrastructure.RoadNetwork
-import fr.ciadlab.sim.tree.QuadTree
+import fr.ciadlab.sim.vehicle.Position2D
 
-class TrafficSimulation<VehicleType>(
+class TrafficSimulation<VehicleType : Position2D>(
     /** The list of spawners */
     val spawners: MutableList<Spawner<VehicleType>> = arrayListOf(),
     /** The list of exit areas */
@@ -17,6 +17,8 @@ class TrafficSimulation<VehicleType>(
     var vehicleUpdate: (VehicleType, DriverBehavioralAction, Double)->VehicleType = { v, _, _ -> v },
     /** The function called when a vehicle is spawned */
     val onSpawn: MutableList<(VehicleType, Spawner<VehicleType>)->Unit> = arrayListOf(),
+    /** The function called when a vehicle is destroyed */
+    val onDestroy: MutableList<(VehicleType)->Unit> = arrayListOf(),
     /** The set of spawned vehicles */
     var vehicles: MutableSet<VehicleType> = hashSetOf()
 ) {
@@ -25,6 +27,11 @@ class TrafficSimulation<VehicleType>(
      * @param deltaTime the elapsed time since the last step
      */
     fun step(deltaTime: Double) {
+        // Destroy the vehicles in the exit areas
+        val insideExitArea = vehicles.filter { v -> exitAreas.any { it.isInside(v.position) } }
+        vehicles.removeAll(insideExitArea)
+        insideExitArea.forEach { v -> onDestroy.forEach { it(v) } } // Calls the listeners
+
         // Calls the spawning strategies
         spawners.forEach { it.strategy?.invoke(deltaTime) }
 
@@ -40,7 +47,7 @@ class TrafficSimulation<VehicleType>(
     }
 }
 
-fun <VehicleType>trafficSimulation(op: TrafficSimulation<VehicleType>.() -> Unit): TrafficSimulation<VehicleType> {
+fun <VehicleType : Position2D>trafficSimulation(op: TrafficSimulation<VehicleType>.() -> Unit): TrafficSimulation<VehicleType> {
     val trafficSimulation = TrafficSimulation<VehicleType>()
     op.invoke(trafficSimulation)
 
@@ -52,7 +59,7 @@ fun <VehicleType>trafficSimulation(op: TrafficSimulation<VehicleType>.() -> Unit
     return trafficSimulation
 }
 
-fun <VehicleType>TrafficSimulation<VehicleType>.roadNetwork(op: RoadNetwork.() -> Unit) {
+fun <VehicleType : Position2D>TrafficSimulation<VehicleType>.roadNetwork(op: RoadNetwork.() -> Unit) {
     val roadNetwork = RoadNetwork()
     op.invoke(roadNetwork)
 

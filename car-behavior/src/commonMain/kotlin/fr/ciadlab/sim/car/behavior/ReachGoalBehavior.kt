@@ -120,7 +120,7 @@ class ReachGoalBehavior(
         }
 
         fun idmLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Double {
-            val closestLeader = driverBehavioralState.leaders.minByOrNull { it.position.distance(vehicle.position) }
+            val closestLeader = driverBehavioralState.leaders.minByOrNull { it.obstacleRelativePosition.norm }
 
             if (closestLeader == null) {
                 return intelligentDriverModelControl(
@@ -131,9 +131,9 @@ class ReachGoalBehavior(
                 )
             } else {
                 return intelligentDriverModelControl(
-                    closestLeader.position.distance(vehicle.position),
+                    closestLeader.obstacleRelativePosition.norm,
                     vehicle.velocity.norm,
-                    closestLeader.velocity.norm - vehicle.velocity.norm,
+                    closestLeader.obstacleRelativeVelocity.norm,
                     driverBehavioralState.maximumSpeed
                 )
             }

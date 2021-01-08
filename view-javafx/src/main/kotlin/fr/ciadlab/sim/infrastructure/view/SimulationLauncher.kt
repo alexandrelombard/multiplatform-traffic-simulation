@@ -80,15 +80,31 @@ class SimulationView : View() {
 
     val simpleIntersectionTrafficSimulation = trafficSimulation<Vehicle> {
         /** Store the routes of the vehicles */
-        val routes = hashMapOf<Vehicle, List<Road>?>()
+        val routes = hashMapOf<Vehicle, List<Pair<Road, Boolean>>?>()
 
         roadNetwork = simpleIntersectionRoadNetworkModel
         
         onSpawn.add { vehicle, _ ->
-            // Compute a random route
+            // Compute a route from the current position to a random exit area
+            val destination = this.exitAreas.random().position
             val router = OriginDestinationRouter(roadNetwork, MapMatchingProvider(roadNetwork))
-            val route = router.findRoute(vehicle.position, this.exitAreas.random().position)
-            routes[vehicle] = route
+            val route = router.findRoute(vehicle.position, destination)
+
+            if(route != null) {
+                // Define the directions of the roads of the route
+                val directions = route.mapIndexed { index, road ->
+                    if(index < route.size - 1) {
+                        // If we are before the last, we are forward if the next road is at the end of the current
+                        roadNetwork.isAtEnd(road, route[index + 1])
+                    } else {
+                        // If we are the last, we are forward if the destination is closer to the end of the road
+                        destination.toVector3D().distance(road.end()) < destination.toVector3D().distance(road.begin())
+                    }
+                }
+
+                // Store it
+                routes[vehicle] = route.mapIndexed { index, road -> Pair(road, directions[index]) }
+            }
         }
 
         vehicleBehavior = { vehicle, deltaTime ->
@@ -97,24 +113,16 @@ class SimulationView : View() {
             val radarData = radar.performRadarDetection(vehicle.position, vehicle.direction, this.vehicles)
             // Retrieve the computed route and the current road
             val route = routes[vehicle]
-            var currentRoad = route?.minByOrNull { it.points.project(vehicle.position.toVector3D()).distance }
-            var nextRoad = route?.get(min(route.indexOf(currentRoad) + 1, route.size - 1))
-//            if(nextRoad?.points?.project(vehicle.position.toVector3D())?.distance ?: Double.POSITIVE_INFINITY < 50.0) {
-//                currentRoad = nextRoad
-//                nextRoad = route?.get(min(route.indexOf(currentRoad) + 1, route.size - 1))
-//            }
+            val currentRoad = route?.minByOrNull { it.first.points.project(vehicle.position.toVector3D()).distance }
 
-            // Determine if the road must be travelled from begin to end (forward), or backward
-            val forward =
-                if(currentRoad != null && nextRoad != null && currentRoad != nextRoad) roadNetwork.isAtEnd(currentRoad, nextRoad) else true
             // Execute the behavior
             val driverBehavioralState = DriverBehavioralState(
-                currentRoad ?: roadNetworkModel.roads[0],
+                currentRoad?.first ?: roadNetworkModel.roads[0],
                 0,      // FIXME
-                forward,
+                currentRoad?.second ?: true,
                 listOf(),
                 50.0 unit KilometersPerHour,
-                route?.last()?.end() ?: roadNetworkModel.roads[0].end())
+                route?.last()?.first?.end() ?: roadNetworkModel.roads[0].end())
 
              vehicle.reachGoalBehavior(driverBehavioralState).apply(deltaTime)
         }

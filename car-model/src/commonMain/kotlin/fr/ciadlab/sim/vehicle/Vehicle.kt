@@ -21,6 +21,8 @@ data class Vehicle(
     val wheelBase: Double,
     val length: Double,
     val wheelAngleLimit: Double = 15.0 unit Degrees,
+    val minAcceleration: Double = -8.0,
+    val maxAcceleration: Double = 2.0,
     val lastCommand: VehicleCommand? = null,
     val identifier: UUID = UUID.randomUUID(),
     val onUpdate: MutableList<(Vehicle)->Unit> = arrayListOf()) {
@@ -101,7 +103,7 @@ data class Vehicle(
             this.copy(
                 position = newPosition,
                 velocity = newVelocity,
-                acceleration = acceleration,
+                acceleration = max(minAcceleration, min(maxAcceleration, acceleration)),
                 direction = newDirectionVector,
                 lastCommand = VehicleCommand(acceleration, wheelAngle),
                 wheelAngle = max(-wheelAngleLimit, min(wheelAngleLimit, wheelAngle)))

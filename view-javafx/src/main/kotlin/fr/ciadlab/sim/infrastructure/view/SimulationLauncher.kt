@@ -120,7 +120,7 @@ class SimulationView : View() {
                 currentRoad?.first ?: roadNetworkModel.roads[0],
                 0,      // FIXME
                 currentRoad?.second ?: true,
-                listOf(),
+                radarData,
                 50.0 unit KilometersPerHour,
                 route?.last()?.first?.end() ?: roadNetworkModel.roads[0].end())
 

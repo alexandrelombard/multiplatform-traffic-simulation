@@ -30,7 +30,9 @@ class TrafficSimulation<VehicleType : Position2D>(
         // Destroy the vehicles in the exit areas
         val insideExitArea = vehicles.filter { v -> exitAreas.any { it.isInside(v.position) } }
         vehicles.removeAll(insideExitArea)
-        insideExitArea.forEach { v -> onDestroy.forEach { it(v) } } // Calls the listeners
+        insideExitArea.forEach {
+                v -> onDestroy.forEach { it(v) }
+        }
 
         // Calls the spawning strategies
         spawners.forEach { it.strategy?.invoke(deltaTime) }

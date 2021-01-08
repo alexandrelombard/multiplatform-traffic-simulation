@@ -186,14 +186,6 @@ class SimulationView : View() {
     private var dragging: Boolean = false
     private var dragOrigin = Pair(0.0, 0.0)
 
-    private var vehicle =
-        Vehicle(
-            Vector2D(50.0, 50.0),
-            Vector2D(50.0 unit KilometersPerHour, 0.0),
-            0.0,
-            Vector2D(1.0, 0.0),
-            0.0, 3.5, 5.0)
-
     private val simulation = simpleIntersectionTrafficSimulation
     private val roadNetworkModel = simpleIntersectionRoadNetworkModel
 
@@ -210,11 +202,9 @@ class SimulationView : View() {
         this.primaryStage.setOnCloseRequest { Platform.exit(); exitProcess(0) }
 
         // Simulation run loop
-        fixedRateTimer(period = 50) {
-            val period = 50.0 unit Milliseconds
-//            vehicle = vehicle.update(0.0, 0.01, 0.05)
-            val action = vehicle.reachGoalBehavior(driverBehavioralState).apply(period)
-            vehicle = vehicle.update(action.targetAcceleration, action.targetWheelAngle, period)
+        fixedRateTimer(period = 10) {
+            val timeScale = 1.0
+            val period = (10.0 unit Milliseconds) * timeScale
 
             simulation.step(period)
         }
@@ -225,19 +215,7 @@ class SimulationView : View() {
         scaleY = 5.0
 
         group {
-//            roadNetworkView(simpleIntersectionRoadNetworkModel) {
-//                laneWidth = 3.5
-//                roadNetwork.roads.forEach { roadView(it, debug = true) }
-//                roadNetwork.intersections.forEach { intersectionView(it) }
-//            }
-            trafficSimulationView(simpleIntersectionTrafficSimulation) {
-            }
-
-            simpleIntersectionTrafficSimulation.vehicles.forEach {
-                vehicleView(it)
-            }
-
-            vehicleView(vehicle)
+            trafficSimulationView(simpleIntersectionTrafficSimulation) {}
         }
 
         onMousePressed = EventHandler { dragOrigin = Pair(it.x, it.y) }

@@ -178,6 +178,11 @@ fun List<Vector3D>.pointAtLength(length: Double): Vector3D {
     return this.last()
 }
 
+/**
+ * Projects the given point onto this polyline
+ * @param p the point to project
+ * @return the projection data
+ */
 fun List<Vector3D>.project(p: Vector3D): ProjectionData {
     if(this.size < 2) {
         throw IllegalArgumentException("The size of the list should be at least 2")
@@ -213,4 +218,31 @@ fun List<Vector3D>.project(p: Vector3D): ProjectionData {
         minDistance,
         segmentBegin,
         segmentEnd)
+}
+
+/**
+ * Split a polyline at the given length
+ * @param length the length
+ * @return a pair composed of the two parts of the polyline
+ */
+fun List<Vector3D>.split(length: Double): Pair<List<Vector3D>, List<Vector3D>> {
+    if(this.size < 2) {
+        throw IllegalArgumentException("The size of the list should be at least 2")
+    }
+
+    var index = 0
+    var currentLength = 0.0
+
+    while (index < size - 1 && currentLength + this[0].distance(this[1]) < length) {
+        currentLength += this[0].distance(this[1])
+        index++
+    }
+
+    val firstPart = this.subList(0, index + 1)
+    val secondPart = this.subList(index + 2, this.size)
+
+    val t = (length - currentLength) / (secondPart.first().distance(firstPart.last()))
+    val middlePoint = firstPart.last() + t * (secondPart.first() - firstPart.last())
+
+    return Pair(firstPart + middlePoint, listOf(middlePoint) + secondPart)
 }

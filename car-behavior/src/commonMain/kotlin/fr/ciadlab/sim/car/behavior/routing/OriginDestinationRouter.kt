@@ -22,7 +22,7 @@ class OriginDestinationRouter(val roadNetwork: RoadNetwork, val mapMatchingProvi
         val originMapMatching = mapMatchingProvider.mapMatching(origin)
         val destinationMapMatching = mapMatchingProvider.mapMatching(destination)
 
-        val path = DijkstraAlgorithm.findShortestPath<Road>(
+        val path = DijkstraAlgorithm.findShortestPath(
             originMapMatching.road,
             destinationMapMatching.road,
             availableNodes = { roadNetwork.getConnectedRoads(it) },

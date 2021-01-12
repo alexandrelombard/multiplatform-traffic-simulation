@@ -5,8 +5,46 @@ package fr.ciadlab.sim.infrastructure
  */
 data class Intersection(
     val laneConnectors: List<LaneConnector> = arrayListOf(),
-    val connectedRoads: Map<Road, IntersectionBuilder.ConnectedSide> = hashMapOf()
-)
+    val connectedRoads: Map<Road, IntersectionBuilder.ConnectedSide> = hashMapOf()) {
+
+    private val sourceMap = hashMapOf<Road, MutableList<LaneConnector>>()
+    private val destinationMap = hashMapOf<Road, MutableList<LaneConnector>>()
+
+    init {
+        laneConnectors.forEach {
+            // Building maps that allows to quickly retrieve the available connectors given a source road or a
+            // destination road
+            val sourceList = sourceMap[it.sourceRoad]
+            if(sourceList == null) {
+                sourceMap[it.sourceRoad] = arrayListOf(it)
+            } else {
+                sourceList += it
+            }
+            val destinationList = destinationMap[it.destinationRoad]
+            if(destinationList == null) {
+                destinationMap[it.destinationRoad] = arrayListOf(it)
+            } else {
+                destinationList += it
+            }
+        }
+    }
+
+    /**
+     * Retrieves the lane connector going from the **from** road to the **to** road
+     * @param from the source road
+     * @param to the destination road
+     * @return the collection of connectors matching the given criteria
+     */
+    fun laneConnector(from: Road, to: Road): Collection<LaneConnector> {
+        val sourceConnectors = sourceMap[from]
+        val destinationConnectors = destinationMap[to]
+
+        if(sourceConnectors == null || destinationConnectors == null)
+            return emptyList()
+
+        return sourceConnectors.intersect(destinationConnectors)
+    }
+}
 
 /**
  * Utility class building an intersection by guessing the connectors from

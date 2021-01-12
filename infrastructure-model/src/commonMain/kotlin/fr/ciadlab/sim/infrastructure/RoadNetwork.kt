@@ -55,6 +55,24 @@ data class RoadNetwork(
     }
 
     /**
+     * Gets the intersection at the begin of the road
+     * @param road the road
+     * @return the intersection or <code>null</code> if there is no intersection at the end of the road
+     */
+    fun getBeginIntersection(road: Road): Intersection? {
+        return roadIntersections[road]?.first { it.connectedRoads[road] == IntersectionBuilder.ConnectedSide.SOURCE }
+    }
+
+    /**
+     * Gets the intersection at the end of the road
+     * @param road the road
+     * @return the intersection or <code>null</code> if there is no intersection at the end of the road
+     */
+    fun getEndIntersection(road: Road): Intersection? {
+        return roadIntersections[road]?.first { it.connectedRoads[road] == IntersectionBuilder.ConnectedSide.DESTINATION }
+    }
+
+    /**
      * Returns <code>true</code> if the destination is at the begin side of the source, <code>false</code> for any other
      * case
      * @param source the source road

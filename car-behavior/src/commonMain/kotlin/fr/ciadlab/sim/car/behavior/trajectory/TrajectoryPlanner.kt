@@ -43,21 +43,33 @@ class TrajectoryPlanner(
             }
         }
 
-        // Build the trajectory
-        val trajectory = mutableListOf<Vector3D>()
-        trajectory.add(projection.projection)
-
-        while(trajectory.length() < length) {
-            // TODO Work with the lane instead of the road
-            val split = currentRoad.points.split(projection.length)
-            if(forward[currentRoadIndex]) {
-                trajectory.addAll(split.second)
-            } else {
-                trajectory.addAll(split.first.reversed())
+        // Compute the trajectory parts including each road and the intersection connections
+        val trajectoryParts = sequence {
+            for(i in currentRoadIndex until route.size) {
+                // FIXME Lane width parameter
+                // FIXME Dynamic lane index using lane connectors
+                if(forward[i]) {
+                    // Add the road
+                    yield(route[i].lane(route[i].forwardLaneIndex, 3.5))
+                    // Add the intersection to next road
+                    val intersection = roadNetwork.getEndIntersection(route[i])
+                    if(intersection != null && i < route.size - 1) {
+                        yield(intersection.laneConnector(route[i], route[i + 1]).first().defaultGeometry)
+                    }
+                } else {
+                    // Add the road
+                    yield(route[i].lane(0, 3.5))
+                    // Add the intersection to next road
+                    val intersection = roadNetwork.getBeginIntersection(route[i])
+                    if(intersection != null && i < route.size - 1) {
+                        yield(intersection.laneConnector(route[i], route[i + 1]).first().defaultGeometry)
+                    }
+                }
             }
-        }
+        }.flatMap { it }
 
-        // TODO Generate the complete route (including intersections) using a sequence
+        // FIXME Do not return the whole sequence as a list, return only the required part
+        return trajectoryParts.toList()
     }
 
 }

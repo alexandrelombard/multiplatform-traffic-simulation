@@ -1,6 +1,7 @@
 package fr.ciadlab.sim.infrastructure
 
 import fr.ciadlab.sim.math.algebra.Vector3D
+import fr.ciadlab.sim.math.geometry.hermiteSpline
 
 data class LaneConnector(
     val sourceRoad: Road,
@@ -65,4 +66,16 @@ data class LaneConnector(
                     destinationDirection.z
                 )
             }
+
+    /**
+     * Default geometry computed using a cubic spline.
+     * Can be used for debug or for computations which do not require the exact geometry of the connection.
+     */
+    val defaultGeometry: List<Vector3D> by lazy {
+        hermiteSpline(
+            sourcePoint,
+            sourceDirection * 20.0,
+            destinationPoint,
+            destinationDirection * 20.0, 10)
+    }
 }

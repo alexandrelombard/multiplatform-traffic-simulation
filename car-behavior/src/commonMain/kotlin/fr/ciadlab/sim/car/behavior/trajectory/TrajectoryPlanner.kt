@@ -58,7 +58,7 @@ class TrajectoryPlanner(
                     }
                 } else {
                     // Add the road
-                    yield(route[i].lane(0, 3.5))
+                    yield(route[i].lane(0, 3.5).reversed())
                     // Add the intersection to next road
                     val intersection = roadNetwork.getBeginIntersection(route[i])
                     if(intersection != null && i < route.size - 1) {

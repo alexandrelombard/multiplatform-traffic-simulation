@@ -1,5 +1,7 @@
 package fr.ciadlab.sim.car.behavior.trajectory
 
+import fr.ciadlab.sim.car.behavior.routing.OriginDestinationRouter
+import fr.ciadlab.sim.car.perception.mapmatching.MapMatchingProvider
 import fr.ciadlab.sim.infrastructure.IntersectionBuilder
 import fr.ciadlab.sim.infrastructure.intersection
 import fr.ciadlab.sim.infrastructure.road
@@ -59,8 +61,14 @@ class TrajectoryPlannerTest {
         val vehicle = Vehicle(
             Vector2D(650.0, 100.0), Vector2D(0.0, -5.0), 0.0, Vector2D(0.0, -1.0), 0.0, 3.8, 4.0)
 
-        val trajectoryPlanner = TrajectoryPlanner(roadNetwork)
+        val destination = Vector3D(1000.0, 50.0, 0.0)
 
-//        trajectoryPlanner.computeTrajectory()
+        val router = OriginDestinationRouter(roadNetwork, MapMatchingProvider(roadNetwork))
+        val route = router.findRoute(vehicle.position, destination.xy)
+
+        if(route != null) {
+            val trajectoryPlanner = TrajectoryPlanner(roadNetwork)
+            trajectoryPlanner.computeTrajectory(vehicle, 0, destination, route)
+        }
     }
 }

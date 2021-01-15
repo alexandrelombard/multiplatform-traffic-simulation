@@ -68,7 +68,9 @@ class TrajectoryPlannerTest {
 
         if(route != null) {
             val trajectoryPlanner = TrajectoryPlanner(roadNetwork)
-            trajectoryPlanner.computeTrajectory(vehicle, 0, destination, route)
+            val trajectory = trajectoryPlanner.computeTrajectory(vehicle, 0, destination, route)
+
+            assert(trajectory.isNotEmpty())
         }
     }
 }

@@ -60,7 +60,7 @@ data class RoadNetwork(
      * @return the intersection or <code>null</code> if there is no intersection at the end of the road
      */
     fun getBeginIntersection(road: Road): Intersection? {
-        return roadIntersections[road]?.first { it.connectedRoads[road] == IntersectionBuilder.ConnectedSide.SOURCE }
+        return roadIntersections[road]?.firstOrNull { it.connectedRoads[road] == IntersectionBuilder.ConnectedSide.SOURCE }
     }
 
     /**
@@ -69,7 +69,7 @@ data class RoadNetwork(
      * @return the intersection or <code>null</code> if there is no intersection at the end of the road
      */
     fun getEndIntersection(road: Road): Intersection? {
-        return roadIntersections[road]?.first { it.connectedRoads[road] == IntersectionBuilder.ConnectedSide.DESTINATION }
+        return roadIntersections[road]?.firstOrNull { it.connectedRoads[road] == IntersectionBuilder.ConnectedSide.DESTINATION }
     }
 
     /**

@@ -10,22 +10,37 @@ repositories {
 }
 
 kotlin {
-    target {
-        compilations.all {
-            kotlinOptions.outputFile = "$projectDir/web/simViewApp.js"
-            kotlinOptions.moduleKind = "commonjs"
-            kotlinOptions.sourceMap = true
-            kotlinOptions.sourceMapEmbedSources = "always"
-            kotlinOptions.metaInfo = true
-        }
+//    target {
+//        compilations.all {
+//            kotlinOptions.outputFile = "$projectDir/web/simViewApp.js"
+//            kotlinOptions.moduleKind = "commonjs"
+//            kotlinOptions.sourceMap = true
+//            kotlinOptions.sourceMapEmbedSources = "always"
+//            kotlinOptions.metaInfo = true
+//        }
+//        browser {
+//            webpackTask {
+//                compilations.all {
+//                    kotlinOptions.metaInfo = true
+//                }
+//                mode = org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig.Mode.DEVELOPMENT
+//                bin = "$projectDir/node_modules/$bin"
+//            }
+//        }
+//    }
+    js {
         browser {
+            // Remark: the browserDistribution task requires webpack, webpack-cli and webpack-dev-server node modules
+            // to be installed locally
             webpackTask {
                 compilations.all {
                     kotlinOptions.metaInfo = true
                 }
-                mode = org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig.Mode.DEVELOPMENT
+                outputFileName = "mps.js"
+                output.libraryTarget = "commonjs2"
                 bin = "$projectDir/node_modules/$bin"
             }
+            binaries.executable()
         }
     }
 

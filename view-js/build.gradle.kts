@@ -35,9 +35,10 @@ kotlin {
             webpackTask {
                 compilations.all {
                     kotlinOptions.metaInfo = true
+                    kotlinOptions.moduleKind = "umd"
                 }
                 outputFileName = "mps.js"
-                output.libraryTarget = "commonjs2"
+//                output.libraryTarget = "commonjs2"
                 bin = "$projectDir/node_modules/$bin"
             }
             binaries.executable()

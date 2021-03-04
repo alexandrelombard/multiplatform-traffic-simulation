@@ -1,5 +1,7 @@
 plugins {
     kotlin("jvm")
+    application
+    id("org.openjfx.javafxplugin") version "0.0.9"
 }
 
 group = "com.github.alombard.mts"
@@ -32,4 +34,9 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+
+javafx {
+    version = "15.0.1"
+    modules = listOf("javafx.controls")
 }

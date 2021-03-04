@@ -19,6 +19,10 @@ class TrafficSimulation<VehicleType : Position2D>(
     val onSpawn: MutableList<(VehicleType, Spawner<VehicleType>)->Unit> = arrayListOf(),
     /** The function called when a vehicle is destroyed */
     val onDestroy: MutableList<(VehicleType)->Unit> = arrayListOf(),
+    /** Function called before a step is run */
+    val onBeforeStep: MutableList<(Double)->Unit> = arrayListOf(),
+    /** Function called after a step is run */
+    val onAfterStep: MutableList<(Double)->Unit> = arrayListOf(),
     /** The set of spawned vehicles */
     var vehicles: MutableSet<VehicleType> = hashSetOf()
 ) {
@@ -27,6 +31,9 @@ class TrafficSimulation<VehicleType : Position2D>(
      * @param deltaTime the elapsed time since the last step
      */
     fun step(deltaTime: Double) {
+        // Call before step
+        onBeforeStep.forEach { it.invoke(deltaTime) }
+
         // Destroy the vehicles in the exit areas
         val insideExitArea = vehicles.filter { v -> exitAreas.any { it.isInside(v.position) } }
         vehicles.removeAll(insideExitArea)
@@ -46,6 +53,9 @@ class TrafficSimulation<VehicleType : Position2D>(
         }
 
         vehicles = updatedObjects.toMutableSet()
+
+        // Call after step
+        onAfterStep.forEach { it.invoke(deltaTime) }
     }
 }
 

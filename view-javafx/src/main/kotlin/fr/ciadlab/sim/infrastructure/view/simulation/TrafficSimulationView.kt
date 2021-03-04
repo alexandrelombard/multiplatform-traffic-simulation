@@ -24,7 +24,7 @@ fun Parent.trafficSimulationView(
     // Register a listener to on spawn to re-create the vehicle views
     trafficSimulation.onSpawn.add { vehicle, _ ->
         Platform.runLater {
-            val view = vehicleView(vehicle)
+            val view = vehicleView(vehicle)             // Creating a view for the vehicle
             vehicleViews[vehicle] = view
         }
     }
@@ -32,7 +32,7 @@ fun Parent.trafficSimulationView(
     // Register a listener to remove the vehicle views of old vehicles
     trafficSimulation.onDestroy.add { vehicle ->
         Platform.runLater {
-            vehicleViews[vehicle]?.removeFromParent()
+            vehicleViews[vehicle]?.removeFromParent()   // Removing the view for the vehicle
             vehicleViews.remove(vehicle)
         }
     }

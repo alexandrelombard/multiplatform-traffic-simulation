@@ -189,7 +189,6 @@ class SimulationView : View() {
 
 //    private val simulation = simpleIntersectionTrafficSimulation
 //    private val roadNetworkModel = simpleIntersectionRoadNetworkModel
-
     private val simulation = SimpleIntersection2Lanes.simulation
     private val roadNetworkModel = SimpleIntersection2Lanes.network
 

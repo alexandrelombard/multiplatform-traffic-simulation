@@ -59,8 +59,7 @@ object SimpleIntersection2Lanes {
 
         roadNetwork = network
 
-        onSpawn.add { v, _ -> basicOnSpawn(v, routes); println("Vehicle spawned") }
-        onDestroy.add { println("Vehicle destroyed") }
+        onSpawn.add { v, _ -> basicOnSpawn(v, routes) }
 
         vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(routes, vehicle, deltaTime) }
 

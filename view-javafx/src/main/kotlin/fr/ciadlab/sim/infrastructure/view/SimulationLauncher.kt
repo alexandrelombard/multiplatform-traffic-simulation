@@ -187,10 +187,10 @@ class SimulationView : View() {
     private var dragging: Boolean = false
     private var dragOrigin = Pair(0.0, 0.0)
 
-    private val simulation = simpleIntersectionTrafficSimulation
-    private val roadNetworkModel = simpleIntersectionRoadNetworkModel
-//    private val simulation = SimpleIntersection2Lanes.simulation
-//    private val roadNetworkModel = SimpleIntersection2Lanes.network
+//    private val simulation = simpleIntersectionTrafficSimulation
+//    private val roadNetworkModel = simpleIntersectionRoadNetworkModel
+    private val simulation = SimpleIntersection2Lanes.simulation
+    private val roadNetworkModel = SimpleIntersection2Lanes.network
 
     init {
         // Close when the main stage is closed

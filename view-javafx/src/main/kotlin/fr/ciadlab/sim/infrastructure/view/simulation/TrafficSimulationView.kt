@@ -19,7 +19,7 @@ fun Parent.trafficSimulationView(
     trafficSimulation: TrafficSimulation<Vehicle>,
     op: TrafficSimulationView.() -> Unit = {}
 ) {
-    val vehicleViews = hashMapOf<Vehicle, Parent>()
+    val vehicleViews = hashMapOf<Vehicle, VehicleView>()
 
     // Register a listener to on spawn to re-create the vehicle views
     trafficSimulation.onSpawn.add { vehicle, _ ->
@@ -34,6 +34,16 @@ fun Parent.trafficSimulationView(
         Platform.runLater {
             vehicleViews[vehicle]?.removeFromParent()   // Removing the view for the vehicle
             vehicleViews.remove(vehicle)
+        }
+    }
+
+    // Register a listener to update the vehicle views
+    trafficSimulation.onAfterStep.add {
+        val vehicles = trafficSimulation.vehicles
+        Platform.runLater {
+            vehicles.forEach {
+                vehicleViews[it]?.update(it)
+            }
         }
     }
 

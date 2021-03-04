@@ -12,7 +12,7 @@ import fr.ciadlab.sim.traffic.trafficSimulation
 import fr.ciadlab.sim.vehicle.Vehicle
 import kotlin.random.Random
 
-class SimpleIntersection2Lanes {
+object SimpleIntersection2Lanes {
     val network = roadNetwork {
         val roadWest = road {
             points = listOf(Vector3D(-100.0, 0.0, 0.0), Vector3D(-10.0, 0.0, 0.0))

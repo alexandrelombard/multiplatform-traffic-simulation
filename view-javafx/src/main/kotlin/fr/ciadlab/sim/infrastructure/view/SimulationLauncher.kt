@@ -8,6 +8,7 @@ import fr.ciadlab.sim.car.perception.mapmatching.MapMatchingProvider
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider
 import fr.ciadlab.sim.infrastructure.*
 import fr.ciadlab.sim.infrastructure.IntersectionBuilder.ConnectedSide
+import fr.ciadlab.sim.infrastructure.view.scenario.SimpleIntersection2Lanes
 import fr.ciadlab.sim.infrastructure.view.simulation.trafficSimulationView
 import fr.ciadlab.sim.infrastructure.view.vehicle.vehicleView
 import fr.ciadlab.sim.math.algebra.*
@@ -186,16 +187,11 @@ class SimulationView : View() {
     private var dragging: Boolean = false
     private var dragOrigin = Pair(0.0, 0.0)
 
-    private val simulation = simpleIntersectionTrafficSimulation
-    private val roadNetworkModel = simpleIntersectionRoadNetworkModel
+//    private val simulation = simpleIntersectionTrafficSimulation
+//    private val roadNetworkModel = simpleIntersectionRoadNetworkModel
 
-    private val driverBehavioralState =
-        DriverBehavioralState(
-            currentRoad = roadNetworkModel.roads[0],
-            currentLaneIndex = 0,
-            travelForward = true,
-            maximumSpeed = 50.0 unit KilometersPerHour,
-            goal = roadNetworkModel.roads[0].end(), leaders = listOf())
+    private val simulation = SimpleIntersection2Lanes.simulation
+    private val roadNetworkModel = SimpleIntersection2Lanes.network
 
     init {
         // Close when the main stage is closed
@@ -215,7 +211,7 @@ class SimulationView : View() {
         scaleY = 5.0
 
         group {
-            trafficSimulationView(simpleIntersectionTrafficSimulation) {}
+            trafficSimulationView(simulation) {}
         }
 
         onMousePressed = EventHandler { dragOrigin = Pair(it.x, it.y) }

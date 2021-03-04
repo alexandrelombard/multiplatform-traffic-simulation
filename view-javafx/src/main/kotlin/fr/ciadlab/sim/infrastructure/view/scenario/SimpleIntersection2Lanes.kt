@@ -1,9 +1,9 @@
 package fr.ciadlab.sim.infrastructure.view.scenario
 
-import fr.ciadlab.sim.infrastructure.IntersectionBuilder
-import fr.ciadlab.sim.infrastructure.intersection
-import fr.ciadlab.sim.infrastructure.road
-import fr.ciadlab.sim.infrastructure.roadNetwork
+import fr.ciadlab.sim.infrastructure.*
+import fr.ciadlab.sim.infrastructure.view.basics.basicOnSpawn
+import fr.ciadlab.sim.infrastructure.view.basics.basicVehicleBehavior
+import fr.ciadlab.sim.infrastructure.view.basics.basicVehicleUpdate
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
 import fr.ciadlab.sim.traffic.exitArea
@@ -54,7 +54,16 @@ class SimpleIntersection2Lanes {
         val wheelBase = 3.8
         val length = 4.0
 
+        /** Store the routes of the vehicles */
+        val routes = hashMapOf<Vehicle, List<Pair<Road, Boolean>>?>()
+
         roadNetwork = network
+
+        onSpawn.add { v, _ -> basicOnSpawn(v, routes) }
+
+        vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(routes, vehicle, deltaTime) }
+
+        vehicleUpdate = { vehicle, action, deltaTime -> basicVehicleUpdate(vehicle, action, deltaTime) }
 
         spawner {
             position = Vector2D(-100.0, 0.0)

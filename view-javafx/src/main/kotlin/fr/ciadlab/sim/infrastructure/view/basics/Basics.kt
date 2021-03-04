@@ -16,7 +16,7 @@ import fr.ciadlab.sim.traffic.TrafficSimulation
 import fr.ciadlab.sim.vehicle.Vehicle
 
 /**
- * Simple functions that can be used as default behaviors
+ * Simple functions that can be used as default behaviors.
  * @author Alexandre Lombard
  */
 
@@ -45,7 +45,6 @@ fun TrafficSimulation<Vehicle>.basicOnSpawn(vehicle: Vehicle, routes: MutableMap
 
 fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
     routes: Map<Vehicle, List<Pair<Road, Boolean>>?>,
-    roadNetworkModel: RoadNetwork,
     vehicle: Vehicle,
     deltaTime: Double): DriverBehavioralAction {
     // Compute perceptions
@@ -57,12 +56,12 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
 
     // Execute the behavior
     val driverBehavioralState = DriverBehavioralState(
-        currentRoad?.first ?: roadNetworkModel.roads[0],
+        currentRoad?.first ?: this.roadNetwork.roads[0],
         0,      // FIXME
         currentRoad?.second ?: true,
         radarData,
         50.0 unit Units.KilometersPerHour,
-        route?.last()?.first?.end() ?: roadNetworkModel.roads[0].end())
+        route?.last()?.first?.end() ?: this.roadNetwork.roads[0].end())
 
     return vehicle.reachGoalBehavior(driverBehavioralState).apply(deltaTime)
 }

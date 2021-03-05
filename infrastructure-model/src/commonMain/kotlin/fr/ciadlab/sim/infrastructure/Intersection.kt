@@ -67,8 +67,8 @@ class IntersectionBuilder(val uturnsAllowed: Boolean = true) {
         } else {
             // We take every existing roads and we compute all the possible movements
             connectedRoads.forEach {
-                movements(it.first, it.second, road, connectedSide)
-                movements(road, connectedSide, it.first, it.second)
+                movements(it.first, it.second, road, connectedSide)     // From the existing ones to the new one
+                movements(road, connectedSide, it.first, it.second)     // From the new one to the existing ones
             }
 
             // We generate uturn movements
@@ -147,6 +147,9 @@ class IntersectionBuilder(val uturnsAllowed: Boolean = true) {
      * Generates the uturns movements
      */
     private fun uturn(road: Road, connectedSide: ConnectedSide) {
+        if(road.oneWay)     // No Uturn on one way roads
+            return
+
         // Only the leftest lane of the driving direction is allowed to perform a uturn
         if(connectedSide == ConnectedSide.DESTINATION) {
             road.backwardLanes.forEach {

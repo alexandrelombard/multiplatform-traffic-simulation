@@ -19,7 +19,7 @@ data class Road(
     val totalLanesCount = forwardLanesCount + backwardLanesCount
     val forwardLaneIndex = if(oneWay) 0 else backwardLanesCount
 
-    val backwardLanes = 0 until backwardLanesCount
+    val backwardLanes = if(backwardLanesCount == 0) emptyList() else 0 until backwardLanesCount
     val forwardLanes = forwardLaneIndex until totalLanesCount
 
     val length by lazy {

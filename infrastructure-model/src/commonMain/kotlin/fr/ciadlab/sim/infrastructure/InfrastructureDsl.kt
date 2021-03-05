@@ -56,13 +56,18 @@ data class DslLaneConnector(
     var sourceLane: Int = 0,
     var destinationLane: Int = 0)
 
-fun DslRoadNetwork.laneConnector(
+fun DslIntersection.laneConnector(
     sourceRoad: Road,
     destinationRoad: Road,
-    op: DslLaneConnector.() -> Unit): LaneConnector {
+    op: DslLaneConnector.() -> Unit = {}): LaneConnector {
     val dslLaneConnector = DslLaneConnector(sourceRoad, destinationRoad)
     op.invoke(dslLaneConnector)
-    return LaneConnector(
+
+    val laneConnector = LaneConnector(
         dslLaneConnector.sourceRoad, dslLaneConnector.sourceLane,
         dslLaneConnector.destinationRoad, dslLaneConnector.destinationLane)
+
+    this.laneConnectors.add(laneConnector)
+
+    return laneConnector
 }

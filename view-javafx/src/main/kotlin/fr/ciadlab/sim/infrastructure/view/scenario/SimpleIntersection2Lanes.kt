@@ -43,10 +43,8 @@ object SimpleIntersection2Lanes {
         }
 
         intersection {
-            withRoad(roadWest, IntersectionBuilder.ConnectedSide.DESTINATION)
-            withRoad(roadEast, IntersectionBuilder.ConnectedSide.SOURCE)
-            withRoad(roadSouth, IntersectionBuilder.ConnectedSide.DESTINATION)
-            withRoad(roadNorth, IntersectionBuilder.ConnectedSide.SOURCE)
+            laneConnector(roadWest, roadEast)
+            laneConnector(roadSouth, roadNorth)
         }
     }
 

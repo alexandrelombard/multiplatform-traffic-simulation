@@ -30,6 +30,13 @@ fun lombardLateralControl(
 
 //    return sign * atan(2.0 * wheelBase * cos(angleError - atan(targetPointDistance / lateralError)) / sqrt(lateralError.pow(2.0) + targetPointDistance.pow(2.0))) +
 //            asin(2.0 * wheelBase * asin(curvature / 2.0) / lookAheadDistance)
-    return sign * atan(2.0 * wheelBase * cos(angleError - atan(targetPointDistance / lateralError)) / sqrt(lateralError.pow(2.0) + targetPointDistance.pow(2.0))) +
-            asin(k * asin(curvature / 2.0) / PI)
+    val firstMember =
+        if(lateralError == 0.0 && targetPointDistance == 0.0)   // Safety test
+            0.0
+        else
+            sign * atan(2.0 * wheelBase * cos(angleError - atan(targetPointDistance / lateralError)) / sqrt(lateralError.pow(2.0) + targetPointDistance.pow(2.0)))
+    val secondMember = asin(k * asin(curvature / 2.0) / PI)
+    val result = firstMember + secondMember
+
+    return result
 }

@@ -54,6 +54,11 @@ data class Vehicle(
      * @param deltaTime the delta of time for the update
      */
     fun update(acceleration: Double, wheelAngle: Double, deltaTime: Double): Vehicle {
+        if(acceleration.isNaN())
+            throw IllegalArgumentException("Acceleration cannot be NaN")
+        if(wheelAngle.isNaN())
+            throw IllegalArgumentException("Wheel angle cannot be NaN")
+
         // Get the current direction angle
         val direction = this.direction.alpha
 

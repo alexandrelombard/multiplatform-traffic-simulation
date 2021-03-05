@@ -8,6 +8,7 @@ import fr.ciadlab.sim.car.perception.mapmatching.MapMatchingProvider
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider
 import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.RoadNetwork
+import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.project
 import fr.ciadlab.sim.math.algebra.toVector3D
 import fr.ciadlab.sim.physics.Units
@@ -22,9 +23,21 @@ import fr.ciadlab.sim.vehicle.Vehicle
 
 fun TrafficSimulation<Vehicle>.basicOnSpawn(vehicle: Vehicle, routes: MutableMap<Vehicle, List<Pair<Road, Boolean>>?>) {
     // Compute a route from the current position to a random exit area
-    val destination = exitAreas.random().position
     val router = OriginDestinationRouter(roadNetwork, MapMatchingProvider(roadNetwork))
-    val route = router.findRoute(vehicle.position, destination)
+
+    // We try to find a destination among all the exit areas, if a link cannot be made, we retry with another
+    // random destination
+    val availableDestinations = mutableListOf(*exitAreas.toTypedArray())
+
+    lateinit var destination: Vector2D  // If route is not null, destination won't be null
+    var route: List<Road>? = null
+
+    while (route == null && availableDestinations.isNotEmpty()) {
+        val randomDestination = availableDestinations.random()
+        destination = randomDestination.position
+        route = router.findRoute(vehicle.position, destination)
+        availableDestinations.remove(randomDestination)
+    }
 
     if(route != null) {
         // Define the directions of the roads of the route

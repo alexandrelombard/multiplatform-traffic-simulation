@@ -12,6 +12,7 @@ import javafx.scene.Group
 import javafx.scene.Parent
 import tornadofx.add
 import tornadofx.removeFromParent
+import java.util.concurrent.ConcurrentHashMap
 
 class TrafficSimulationView(val trafficSimulation: TrafficSimulation<Vehicle>) : Group()
 
@@ -19,7 +20,7 @@ fun Parent.trafficSimulationView(
     trafficSimulation: TrafficSimulation<Vehicle>,
     op: TrafficSimulationView.() -> Unit = {}
 ) {
-    val vehicleViews = hashMapOf<Vehicle, VehicleView>()
+    val vehicleViews = ConcurrentHashMap<Vehicle, VehicleView>()
 
     // Register a listener to on spawn to re-create the vehicle views
     trafficSimulation.onSpawn.add { vehicle, _ ->

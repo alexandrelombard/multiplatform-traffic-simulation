@@ -1,8 +1,10 @@
 package fr.ciadlab.sim.infrastructure.view.network
 
 import fr.ciadlab.sim.infrastructure.LaneConnector
+import fr.ciadlab.sim.math.algebra.Vector2D
 import javafx.scene.paint.Color
-import tornadofx.*
+import tornadofx.cubiccurve
+import tornadofx.polygon
 
 class LaneConnectorView(val laneConnector: LaneConnector) {
 
@@ -12,7 +14,7 @@ fun RoadNetworkView.laneConnectorView(laneConnector: LaneConnector) {
     // Settings
     val lineWidth = 1.0
     val color = Color.WHITE
-    val arrowSize = 3.0
+    val arrowSize = 2.0
     val arrowRatio = 2.0
 
     // Aliases
@@ -28,18 +30,21 @@ fun RoadNetworkView.laneConnectorView(laneConnector: LaneConnector) {
 
     val connectorEnd = destinationPoint.add(destinationRoad.laneOffset(destinationLane) * laneWidth, destinationNormal)
     val distance = Vector2D(sourcePoint.x + (sourceNormal * sourceRoad.laneOffset(sourceLane) * laneWidth).x, sourcePoint.y + (sourceNormal * sourceRoad.laneOffset(sourceLane) * laneWidth).y)
-        .distance(Vector2D(connectorEnd.x, connectorEnd.y))
+        .distance(connectorEnd.xy)
 
+    val connectorStart = Vector2D(
+        sourcePoint.x + (sourceNormal * sourceRoad.laneOffset(sourceLane) * laneWidth).x,
+        sourcePoint.y + (sourceNormal * sourceRoad.laneOffset(sourceLane) * laneWidth).y)
 
     cubiccurve {
-        startX = sourcePoint.x + (sourceNormal * sourceRoad.laneOffset(sourceLane) * laneWidth).x
-        startY = sourcePoint.y + (sourceNormal * sourceRoad.laneOffset(sourceLane) * laneWidth).y
+        startX = connectorStart.x
+        startY = connectorStart.y
         endX = connectorEnd.x
         endY = connectorEnd.y
-        controlX1 = startX + laneConnector.sourceDirection.x * (0.2 * distance)
-        controlY1 = startY + laneConnector.sourceDirection.y * (0.2 * distance)
-        controlX2 = endX - laneConnector.destinationDirection.x * (0.2 * distance)
-        controlY2 = endY - laneConnector.destinationDirection.y * (0.2 * distance)
+        controlX1 = connectorStart.x + laneConnector.sourceDirection.x * (0.35 * distance)
+        controlY1 = connectorStart.y + laneConnector.sourceDirection.y * (0.35 * distance)
+        controlX2 = connectorEnd.x - laneConnector.destinationDirection.x * (0.35 * distance)
+        controlY2 = connectorEnd.y - laneConnector.destinationDirection.y * (0.35 * distance)
         stroke = color
         strokeWidth = lineWidth
         fill = Color.TRANSPARENT

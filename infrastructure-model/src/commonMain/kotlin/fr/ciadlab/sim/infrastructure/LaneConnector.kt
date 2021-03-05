@@ -74,8 +74,8 @@ data class LaneConnector(
     val defaultGeometry: List<Vector3D> by lazy {
         hermiteSpline(
             sourcePoint,
-            sourceDirection * 20.0,
+            sourceDirection * 0.2 * (sourcePoint.distance(destinationPoint)),
             destinationPoint,
-            destinationDirection * 20.0, 10)
+            destinationDirection * 0.2 * (sourcePoint.distance(destinationPoint)), 10)
     }
 }

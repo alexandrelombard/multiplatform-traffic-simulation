@@ -7,15 +7,28 @@ data class FixedPhasesTrafficLightPolicy(
 ) {
 
     fun currentState(laneConnector: LaneConnector, currentTime: Double): TrafficLightState {
-        // TODO
-        return TrafficLightState.GREEN
+        val lanePhase = phases[laneConnector] ?: return TrafficLightState.UNKNOWN
+        val totalDuration = lanePhase.sumByDouble { it.duration }
+
+        val position = currentTime % totalDuration
+
+        return findPhase(position, lanePhase).state
+    }
+
+    /**
+     * Find a phase given time
+     */
+    private fun findPhase(time: Double, phases: List<TrafficLightFixedPhase>): TrafficLightFixedPhase {
+        var i = 0
+        var cumulativeTime = 0.0
+
+        while(i < phases.size - 1 && cumulativeTime + phases[i].duration < time) {
+            cumulativeTime += phases[i++].duration
+        }
+
+        return phases[i]
     }
 
 }
 
-data class TrafficLightFixedPhase(val startTime: Double, val state: TrafficLightState) :
-        Comparable<TrafficLightFixedPhase> {
-    override fun compareTo(other: TrafficLightFixedPhase): Int {
-        return startTime.compareTo(other.startTime)
-    }
-}
+data class TrafficLightFixedPhase(val duration: Double, val state: TrafficLightState)

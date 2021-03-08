@@ -7,5 +7,6 @@ package fr.ciadlab.sim.infrastructure.intersection
 enum class TrafficLightState {
     RED,
     YELLOW,
-    GREEN
+    GREEN,
+    UNKNOWN
 }

@@ -56,7 +56,7 @@ object SimpleIntersection2LanesWithTrafficLights {
                     connectors += southNorth
                 }
 
-                policy = FixedPhasesTrafficLightPolicy
+                policy = FixedPhasesTrafficLightPolicy()
             }
         }
     }

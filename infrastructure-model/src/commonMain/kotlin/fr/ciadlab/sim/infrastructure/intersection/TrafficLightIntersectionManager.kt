@@ -9,7 +9,6 @@ import fr.ciadlab.sim.infrastructure.LaneConnector
  * @author Alexandre Lombard
  */
 data class TrafficLightIntersectionManager(
-    val intersection: Intersection,
     val trafficLights: Map<LaneConnector, TrafficLightState>) {
 
     /**

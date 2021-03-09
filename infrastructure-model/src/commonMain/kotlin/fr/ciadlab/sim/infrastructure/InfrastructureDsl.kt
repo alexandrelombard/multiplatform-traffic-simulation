@@ -1,9 +1,6 @@
 package fr.ciadlab.sim.infrastructure
 
-import fr.ciadlab.sim.infrastructure.intersection.FixedPhasesTrafficLightPolicy
-import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLight
-import fr.ciadlab.sim.infrastructure.intersection.TrafficLightIntersectionManager
-import fr.ciadlab.sim.infrastructure.intersection.TrafficLightState
+import fr.ciadlab.sim.infrastructure.intersection.*
 import fr.ciadlab.sim.math.algebra.Vector3D
 
 data class DslRoadNetwork(
@@ -79,12 +76,15 @@ fun DslIntersection.laneConnector(
 
 
 data class DslIntersectionTrafficLights(
-    val trafficLights: Map<LaneConnector>
-    val policy: (LaneConnector, Double)->TrafficLightState
+    var trafficLights: MutableList<IntersectionTrafficLight> = arrayListOf(),
+    var policy: (LaneConnector, Double)->TrafficLightState = {_, _ -> TrafficLightState.UNKNOWN}
 )
 
 fun DslIntersection.trafficLights(
-    op: DslIntersectionTrafficLights.() -> Unit = {}): TrafficLightIntersectionManager {
+    op: DslIntersectionTrafficLights.() -> Unit = {}): IntersectionTrafficLights {
+    val dslIntersectionTrafficLights = DslIntersectionTrafficLights()
+    op.invoke(dslIntersectionTrafficLights)
+    return IntersectionTrafficLights(dslIntersectionTrafficLights.trafficLights, dslIntersectionTrafficLights.policy)
 }
 
 data class DslIntersectionTrafficLight(
@@ -94,5 +94,9 @@ fun DslIntersectionTrafficLights.trafficLight(
     op: DslIntersectionTrafficLight.() -> Unit = {}): IntersectionTrafficLight {
     val dslIntersectionTrafficLight = DslIntersectionTrafficLight()
     op.invoke(dslIntersectionTrafficLight)
-    return IntersectionTrafficLight(dslIntersectionTrafficLight.connectors)
+
+    val trafficLight = IntersectionTrafficLight(dslIntersectionTrafficLight.connectors)
+    this.trafficLights.add(trafficLight)
+
+    return trafficLight
 }

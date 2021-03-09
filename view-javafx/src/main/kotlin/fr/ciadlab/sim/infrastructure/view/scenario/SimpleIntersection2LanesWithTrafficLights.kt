@@ -89,7 +89,7 @@ object SimpleIntersection2LanesWithTrafficLights {
             position = Vector2D(0.0, -100.0)
             direction = Vector2D(0.0, 1.0)
             generation = {
-                Vehicle(position, Vector2D(0.0, 0.0), 0.0, Vector2D(0.0, 1.0), 0.0, wheelBase, length)
+                Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
             }
             strategy = { if(Random.nextFloat() < 0.01) { spawn() } }
         }

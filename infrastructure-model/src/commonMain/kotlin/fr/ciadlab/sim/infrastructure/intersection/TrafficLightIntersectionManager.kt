@@ -13,6 +13,16 @@ data class TrafficLightIntersectionManager(
     val trafficLights: Map<LaneConnector, TrafficLightState>) {
 
     /**
+     * Apply a scheduling policy to the current traffic light intersection manager
+     * @param currentTime the current simulation time
+     * @param policy the policy providing the current traffic light state for a given connector
+     * @return the updated traffic manager
+     */
+    fun applyPolicy(currentTime: Double, policy: (LaneConnector, Double)->TrafficLightState): TrafficLightIntersectionManager {
+        return this.copy(trafficLights = this.trafficLights.mapValues { policy(it.key, currentTime) })
+    }
+
+    /**
      * Change the state of the given connector
      * @param connector the lane connector
      * @param newState the new state

@@ -50,17 +50,17 @@ object SimpleIntersection2LanesWithTrafficLights {
             val southNorth = laneConnector(roadSouth, roadNorth)
 
             trafficLights {
-                trafficLight {
+                val lightWestEast = trafficLight {
                     connectors += westEast
                 }
 
-                trafficLight {
+                val lightSouthNorth = trafficLight {
                     connectors += southNorth
                 }
 
 //                policy = FixedPhasesTrafficLightPolicy()
                 policy = fixedPhasesPolicy {
-                    phases(trafficLight) {
+                    phases(lightWestEast) {
                         phase(10.0, TrafficLightState.GREEN)
                         phase(4.0, TrafficLightState.YELLOW)
                         phase(15.0, TrafficLightState.RED)

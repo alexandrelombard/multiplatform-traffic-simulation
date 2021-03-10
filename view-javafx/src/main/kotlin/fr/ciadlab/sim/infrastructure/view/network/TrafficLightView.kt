@@ -1,21 +1,22 @@
 package fr.ciadlab.sim.infrastructure.view.network
 
-import fr.ciadlab.sim.infrastructure.LaneConnector
-import fr.ciadlab.sim.infrastructure.intersection.TrafficLightIntersectionManager
+import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLight
+import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLights
 import fr.ciadlab.sim.infrastructure.intersection.TrafficLightState
 import javafx.scene.paint.Color
+import tornadofx.Vector2D
 import tornadofx.circle
 
-fun RoadNetworkView.trafficLights(trafficLightIntersectionManager: TrafficLightIntersectionManager) {
-    trafficLightIntersectionManager.trafficLights.forEach {
+fun RoadNetworkView.trafficLights(intersectionTrafficLights: IntersectionTrafficLights) {
+    intersectionTrafficLights.trafficLights.forEach {
         // TODO Manage joint states: i.e. traffic lights for different connectors sharing the same state
-        trafficLight(it.key, it.value)
+        trafficLight(it, intersectionTrafficLights.policy.currentState(it.laneConnectors.first(), 0.0))
     }
 }
 
-fun RoadNetworkView.trafficLight(laneConnector: LaneConnector, state: TrafficLightState) {
+fun RoadNetworkView.trafficLight(trafficLight: IntersectionTrafficLight, state: TrafficLightState) {
     val offset = 10.0
-    val reference = laneConnector.sourcePoint + laneConnector.sourceNormal * offset
+    val reference = Vector2D(0.0, 0.0) // laneConnector.sourcePoint + laneConnector.sourceNormal * offset
 
     // Top circle
     circle {

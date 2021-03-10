@@ -189,8 +189,10 @@ class SimulationView : View() {
 
 //    private val simulation = simpleIntersectionTrafficSimulation
 //    private val roadNetworkModel = simpleIntersectionRoadNetworkModel
-    private val simulation = SimpleIntersection2Lanes.simulation
-    private val roadNetworkModel = SimpleIntersection2Lanes.network
+//    private val simulation = SimpleIntersection2Lanes.simulation
+//    private val roadNetworkModel = SimpleIntersection2Lanes.network
+    private val simulation = SimpleIntersection2LanesWithTrafficLights.simulation
+    private val roadNetworkModel = SimpleIntersection2LanesWithTrafficLights.network
 
     init {
         // Close when the main stage is closed

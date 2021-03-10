@@ -26,6 +26,8 @@ class TrafficSimulation<VehicleType : Position2D>(
     /** The set of spawned vehicles */
     var vehicles: MutableSet<VehicleType> = hashSetOf()
 ) {
+    var simulationTime = 0.0
+
     /**
      * Run a simulation step
      * @param deltaTime the elapsed time since the last step
@@ -53,6 +55,8 @@ class TrafficSimulation<VehicleType : Position2D>(
         }
 
         vehicles = updatedObjects.toMutableSet()
+
+        simulationTime += deltaTime
 
         // Call after step
         onAfterStep.forEach { it.invoke(deltaTime) }

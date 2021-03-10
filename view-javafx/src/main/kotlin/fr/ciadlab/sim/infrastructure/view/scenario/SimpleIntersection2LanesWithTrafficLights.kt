@@ -58,7 +58,6 @@ object SimpleIntersection2LanesWithTrafficLights {
                     connectors += southNorth
                 }
 
-//                policy = FixedPhasesTrafficLightPolicy()
                 policy = fixedPhasesPolicy {
                     phases(lightWestEast) {
                         phase(10.0, TrafficLightState.GREEN)

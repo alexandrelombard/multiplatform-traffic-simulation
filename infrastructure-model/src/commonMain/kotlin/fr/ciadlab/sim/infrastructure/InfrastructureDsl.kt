@@ -104,7 +104,7 @@ fun DslIntersectionTrafficLights.trafficLight(
 // region Phases and scheduling policy
 
 data class DslFixedPhasesTrafficLights(
-    val phases: MutableList<TrafficLightFixedPhase> = arrayListOf())
+    val phases: MutableMap<IntersectionTrafficLight, MutableList<TrafficLightFixedPhase>> = hashMapOf())
 
 data class DslFixedPhases(
     val trafficLight: IntersectionTrafficLight, val phases: MutableList<TrafficLightFixedPhase> = arrayListOf())
@@ -123,7 +123,12 @@ fun DslFixedPhasesTrafficLights.phases(
     op: DslFixedPhases.() -> Unit = {}) : DslFixedPhases {
     val dslFixedPhases = DslFixedPhases(trafficLight)
     op.invoke(dslFixedPhases)
-    // TODO Add the phase to the policy
+
+    // Add the phase to the DslFixedPhasesTrafficLights
+    val trafficLightPhases = this.phases[trafficLight] ?: arrayListOf()
+    trafficLightPhases.addAll(dslFixedPhases.phases)
+    this.phases[trafficLight] = trafficLightPhases
+
     return dslFixedPhases
 }
 

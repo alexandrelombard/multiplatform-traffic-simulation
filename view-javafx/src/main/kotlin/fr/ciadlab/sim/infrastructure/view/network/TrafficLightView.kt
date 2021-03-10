@@ -9,36 +9,38 @@ import tornadofx.circle
 
 fun RoadNetworkView.trafficLightsView(intersectionTrafficLights: IntersectionTrafficLights) {
     intersectionTrafficLights.trafficLights.forEach {
-        // TODO Manage joint states: i.e. traffic lights for different connectors sharing the same state
+        // TODO Manage the state using the time
         trafficLightView(it, intersectionTrafficLights.policy.currentState(it.laneConnectors.first(), 0.0))
     }
 }
 
 fun RoadNetworkView.trafficLightView(trafficLight: IntersectionTrafficLight, state: TrafficLightState) {
-    val offset = 10.0
-    val reference = Vector2D(0.0, 0.0) // laneConnector.sourcePoint + laneConnector.sourceNormal * offset
+    // TODO Improve positioning of the traffic light relatively to the intersection
+    val offset = 5.0
+    val referenceLaneConnector = trafficLight.laneConnectors.first()
+    val reference = referenceLaneConnector.sourcePoint + referenceLaneConnector.sourceNormal * offset
 
     // Top circle
     circle {
         centerX = reference.x
         centerY = reference.y
-        radius = 2.0
+        radius = 1.0
         fill = if(state == TrafficLightState.RED) Color.RED else Color.BLACK
     }
 
     // Middle circle
     circle {
         centerX = reference.x
-        centerY = reference.y + 5.0
-        radius = 2.0
+        centerY = reference.y + 2.5
+        radius = 1.0
         fill = if(state == TrafficLightState.YELLOW) Color.YELLOW else Color.BLACK
     }
 
     // Bottom circle
     circle {
         centerX = reference.x
-        centerY = reference.y + 10.0
-        radius = 2.0
+        centerY = reference.y + 5.0
+        radius = 1.0
         fill = if(state == TrafficLightState.GREEN) Color.GREEN else Color.BLACK
     }
 }

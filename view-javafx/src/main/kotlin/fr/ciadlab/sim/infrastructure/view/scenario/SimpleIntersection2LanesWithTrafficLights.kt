@@ -1,8 +1,6 @@
 package fr.ciadlab.sim.infrastructure.view.scenario
 
 import fr.ciadlab.sim.infrastructure.*
-import fr.ciadlab.sim.infrastructure.intersection.FixedPhasesTrafficLightPolicy
-import fr.ciadlab.sim.infrastructure.intersection.TrafficLightFixedPhase
 import fr.ciadlab.sim.infrastructure.intersection.TrafficLightState
 import fr.ciadlab.sim.infrastructure.view.basics.basicOnSpawn
 import fr.ciadlab.sim.infrastructure.view.basics.basicVehicleBehavior

@@ -1,8 +1,11 @@
 package fr.ciadlab.sim.infrastructure
 
+import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLight
+
 data class RoadNetwork(
     val roads: List<Road> = arrayListOf(),
     val intersections: List<Intersection> = arrayListOf(),
+    val trafficLights: List<IntersectionTrafficLight> = arrayListOf(),
     val trafficType: TrafficType = TrafficType.RIGHT_HAND
 ) {
     /** Contains the links between roads, allows to know which roads are connected to a given one */

@@ -9,6 +9,7 @@ import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider
 import fr.ciadlab.sim.infrastructure.*
 import fr.ciadlab.sim.infrastructure.IntersectionBuilder.ConnectedSide
 import fr.ciadlab.sim.infrastructure.view.scenario.SimpleIntersection2Lanes
+import fr.ciadlab.sim.infrastructure.view.scenario.SimpleIntersection2LanesWithTrafficLights
 import fr.ciadlab.sim.infrastructure.view.simulation.trafficSimulationView
 import fr.ciadlab.sim.infrastructure.view.vehicle.vehicleView
 import fr.ciadlab.sim.math.algebra.*

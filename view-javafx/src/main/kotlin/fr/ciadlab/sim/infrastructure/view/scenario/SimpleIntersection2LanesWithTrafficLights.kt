@@ -2,6 +2,8 @@ package fr.ciadlab.sim.infrastructure.view.scenario
 
 import fr.ciadlab.sim.infrastructure.*
 import fr.ciadlab.sim.infrastructure.intersection.FixedPhasesTrafficLightPolicy
+import fr.ciadlab.sim.infrastructure.intersection.TrafficLightFixedPhase
+import fr.ciadlab.sim.infrastructure.intersection.TrafficLightState
 import fr.ciadlab.sim.infrastructure.view.basics.basicOnSpawn
 import fr.ciadlab.sim.infrastructure.view.basics.basicVehicleBehavior
 import fr.ciadlab.sim.infrastructure.view.basics.basicVehicleUpdate
@@ -56,7 +58,14 @@ object SimpleIntersection2LanesWithTrafficLights {
                     connectors += southNorth
                 }
 
-                policy = FixedPhasesTrafficLightPolicy()
+//                policy = FixedPhasesTrafficLightPolicy()
+                policy = fixedPhasesPolicy {
+                    phases(trafficLight) {
+                        phase(10.0, TrafficLightState.GREEN)
+                        phase(4.0, TrafficLightState.YELLOW)
+                        phase(15.0, TrafficLightState.RED)
+                    }
+                }
             }
         }
     }

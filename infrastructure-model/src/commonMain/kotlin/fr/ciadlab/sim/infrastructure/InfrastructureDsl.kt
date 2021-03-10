@@ -73,7 +73,7 @@ fun DslIntersection.laneConnector(
     return laneConnector
 }
 
-
+// region Traffic lights
 
 data class DslIntersectionTrafficLights(
     var trafficLights: MutableList<IntersectionTrafficLight> = arrayListOf(),
@@ -100,3 +100,40 @@ fun DslIntersectionTrafficLights.trafficLight(
 
     return trafficLight
 }
+
+// region Phases and scheduling policy
+
+data class DslFixedPhasesTrafficLights(
+    val phases: MutableList<TrafficLightFixedPhase> = arrayListOf())
+
+data class DslFixedPhases(
+    val trafficLight: IntersectionTrafficLight, val phases: MutableList<TrafficLightFixedPhase> = arrayListOf())
+
+data class DslFixedPhase(val phase: TrafficLightFixedPhase)
+
+fun DslIntersectionTrafficLights.fixedPhasesPolicy(
+    op: DslFixedPhasesTrafficLights.() -> Unit = {}): DslFixedPhasesTrafficLights {
+    val dslFixedPhasesTrafficLights = DslFixedPhasesTrafficLights()
+    op.invoke(dslFixedPhasesTrafficLights)
+    return dslFixedPhasesTrafficLights
+}
+
+fun DslFixedPhasesTrafficLights.phases(
+    trafficLight: IntersectionTrafficLight,
+    op: DslFixedPhases.() -> Unit = {}) : DslFixedPhases {
+    val dslFixedPhases = DslFixedPhases(trafficLight)
+    op.invoke(dslFixedPhases)
+    // TODO Add the phase to the policy
+    return dslFixedPhases
+}
+
+fun DslFixedPhases.phase(duration: Double, state: TrafficLightState): DslFixedPhase {
+    val dslFixedPhase = DslFixedPhase(TrafficLightFixedPhase(duration, state))
+    this.phases.add(dslFixedPhase.phase)
+    return dslFixedPhase
+}
+
+
+// endregion
+
+// endregion

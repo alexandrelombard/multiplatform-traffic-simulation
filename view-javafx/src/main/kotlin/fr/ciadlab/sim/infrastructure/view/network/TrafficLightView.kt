@@ -9,7 +9,7 @@ import tornadofx.circle
 
 fun RoadNetworkView.trafficLightsView(intersectionTrafficLights: IntersectionTrafficLights) {
     intersectionTrafficLights.trafficLights.forEach {
-        // TODO Manage the state using the time
+        // TODO Manage the state using the simulation time
         trafficLightView(it, intersectionTrafficLights.policy.currentState(it.laneConnectors.first(), 0.0))
     }
 }

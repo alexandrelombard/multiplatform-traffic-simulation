@@ -84,6 +84,9 @@ fun DslIntersection.trafficLights(
     op: DslIntersectionTrafficLights.() -> Unit = {}): IntersectionTrafficLights {
     val dslIntersectionTrafficLights = DslIntersectionTrafficLights()
     op.invoke(dslIntersectionTrafficLights)
+
+    // TODO Check conflicts (several traffic lights addressing a single lane connector)
+
     return IntersectionTrafficLights(dslIntersectionTrafficLights.trafficLights, dslIntersectionTrafficLights.policy)
 }
 
@@ -117,8 +120,16 @@ fun DslIntersectionTrafficLights.fixedPhasesPolicy(
     op.invoke(dslFixedPhasesTrafficLights)
 
     // Build policy from dslFixedPhasesTrafficLights
-    val policy = FixedPhasesTrafficLightPolicy(dslFixedPhasesTrafficLights.phases.mapKeys { it.key.laneConnectors })
+    val trafficLights = dslFixedPhasesTrafficLights.phases
+    val policyContent = hashMapOf<LaneConnector, List<TrafficLightFixedPhase>>()
 
+    trafficLights.forEach { entry ->
+        entry.key.laneConnectors.forEach {
+            policyContent[it] = entry.value
+        }
+    }
+
+    val policy = FixedPhasesTrafficLightPolicy(policyContent)
     return policy
 }
 

@@ -1,4 +1,4 @@
-package fr.ciadlab.sim.math.geometry
+package geometry
 
 import fr.ciadlab.sim.math.algebra.Vector3D
 import fr.ciadlab.sim.math.algebra.project

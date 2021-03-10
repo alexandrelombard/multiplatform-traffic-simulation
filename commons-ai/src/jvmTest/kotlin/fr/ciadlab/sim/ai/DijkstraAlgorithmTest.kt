@@ -19,12 +19,10 @@ class DijkstraAlgorithmTest {
             ) to 6.0
         ))
 
-
-        val dijkstraAlgorithm = DijkstraAlgorithm<Node>()
         val origin = graph
         val destination = Node("D", hashMapOf())
 
-        val path = dijkstraAlgorithm.findShortestPath(
+        val path = DijkstraAlgorithm.findShortestPath(
             origin, destination, availableNodes = { it.connectedNodes.keys }, distance = {a, b -> a.connectedNodes[b]!! })
 
         path!!.forEach {

@@ -4,9 +4,9 @@ import fr.ciadlab.sim.infrastructure.LaneConnector
 
 data class FixedPhasesTrafficLightPolicy(
     val phases: Map<LaneConnector, List<TrafficLightFixedPhase>>
-) {
+) : TrafficLightPolicy {
 
-    fun currentState(laneConnector: LaneConnector, currentTime: Double): TrafficLightState {
+    override fun currentState(laneConnector: LaneConnector, currentTime: Double): TrafficLightState {
         val lanePhase = phases[laneConnector] ?: return TrafficLightState.UNKNOWN
         val totalDuration = lanePhase.sumByDouble { it.duration }
 

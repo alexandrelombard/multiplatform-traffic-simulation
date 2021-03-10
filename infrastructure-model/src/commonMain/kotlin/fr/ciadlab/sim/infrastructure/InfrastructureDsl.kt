@@ -77,7 +77,7 @@ fun DslIntersection.laneConnector(
 
 data class DslIntersectionTrafficLights(
     var trafficLights: MutableList<IntersectionTrafficLight> = arrayListOf(),
-    var policy: (LaneConnector, Double)->TrafficLightState = {_, _ -> TrafficLightState.UNKNOWN}
+    var policy: TrafficLightPolicy = TrafficLightPolicy {_, _ -> TrafficLightState.UNKNOWN}
 )
 
 fun DslIntersection.trafficLights(
@@ -112,10 +112,14 @@ data class DslFixedPhases(
 data class DslFixedPhase(val phase: TrafficLightFixedPhase)
 
 fun DslIntersectionTrafficLights.fixedPhasesPolicy(
-    op: DslFixedPhasesTrafficLights.() -> Unit = {}): DslFixedPhasesTrafficLights {
+    op: DslFixedPhasesTrafficLights.() -> Unit = {}): TrafficLightPolicy {
     val dslFixedPhasesTrafficLights = DslFixedPhasesTrafficLights()
     op.invoke(dslFixedPhasesTrafficLights)
-    return dslFixedPhasesTrafficLights
+
+    // Build policy from dslFixedPhasesTrafficLights
+    val policy = FixedPhasesTrafficLightPolicy(dslFixedPhasesTrafficLights.phases.mapKeys { it.key.laneConnectors })
+
+    return policy
 }
 
 fun DslFixedPhasesTrafficLights.phases(
@@ -137,7 +141,6 @@ fun DslFixedPhases.phase(duration: Double, state: TrafficLightState): DslFixedPh
     this.phases.add(dslFixedPhase.phase)
     return dslFixedPhase
 }
-
 
 // endregion
 

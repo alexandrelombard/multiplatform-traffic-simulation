@@ -6,7 +6,7 @@ import fr.ciadlab.sim.math.algebra.Vector3D
 data class DslRoadNetwork(
     var roads: MutableList<Road> = arrayListOf(),
     var intersections: MutableList<Intersection> = arrayListOf(),
-    var trafficLights: MutableList<IntersectionTrafficLight> = arrayListOf(),
+    var trafficLights: MutableList<IntersectionTrafficLights> = arrayListOf(),
     var trafficType: TrafficType = TrafficType.RIGHT_HAND)
 
 fun roadNetwork(op: DslRoadNetwork.() -> Unit): RoadNetwork {
@@ -87,12 +87,14 @@ fun DslRoadNetwork.trafficLights(
     val dslIntersectionTrafficLights = DslIntersectionTrafficLights()
     op.invoke(dslIntersectionTrafficLights)
 
-    // Register the traffic lights to the network
-    this.trafficLights.addAll(dslIntersectionTrafficLights.trafficLights)
-
     // TODO Check conflicts (several traffic lights addressing a single lane connector)
 
-    return IntersectionTrafficLights(dslIntersectionTrafficLights.trafficLights, dslIntersectionTrafficLights.policy)
+    // Register the traffic lights to the network
+    val intersectionTrafficLights =
+        IntersectionTrafficLights(dslIntersectionTrafficLights.trafficLights, dslIntersectionTrafficLights.policy)
+    this.trafficLights.add(intersectionTrafficLights)
+
+    return intersectionTrafficLights
 }
 
 data class DslIntersectionTrafficLight(

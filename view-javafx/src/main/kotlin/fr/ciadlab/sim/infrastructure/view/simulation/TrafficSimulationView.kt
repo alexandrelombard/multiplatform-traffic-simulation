@@ -1,8 +1,7 @@
 package fr.ciadlab.sim.infrastructure.view.simulation
 
-import fr.ciadlab.sim.infrastructure.view.network.intersectionView
-import fr.ciadlab.sim.infrastructure.view.network.roadNetworkView
-import fr.ciadlab.sim.infrastructure.view.network.roadView
+import fr.ciadlab.sim.infrastructure.view.network.*
+import fr.ciadlab.sim.infrastructure.view.network.trafficLightView
 import fr.ciadlab.sim.infrastructure.view.vehicle.VehicleView
 import fr.ciadlab.sim.infrastructure.view.vehicle.vehicleView
 import fr.ciadlab.sim.traffic.TrafficSimulation
@@ -53,6 +52,7 @@ fun Parent.trafficSimulationView(
         laneWidth = 3.5
         roadNetwork.roads.forEach { roadView(it, debug = true) }
         roadNetwork.intersections.forEach { intersectionView(it) }
+        roadNetwork.trafficLights.forEach { trafficLightsView(it) }
     }
 
     // Draw the spawners

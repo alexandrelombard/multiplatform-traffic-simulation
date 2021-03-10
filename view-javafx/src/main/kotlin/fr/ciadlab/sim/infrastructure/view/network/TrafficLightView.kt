@@ -7,14 +7,14 @@ import javafx.scene.paint.Color
 import tornadofx.Vector2D
 import tornadofx.circle
 
-fun RoadNetworkView.trafficLights(intersectionTrafficLights: IntersectionTrafficLights) {
+fun RoadNetworkView.trafficLightsView(intersectionTrafficLights: IntersectionTrafficLights) {
     intersectionTrafficLights.trafficLights.forEach {
         // TODO Manage joint states: i.e. traffic lights for different connectors sharing the same state
-        trafficLight(it, intersectionTrafficLights.policy.currentState(it.laneConnectors.first(), 0.0))
+        trafficLightView(it, intersectionTrafficLights.policy.currentState(it.laneConnectors.first(), 0.0))
     }
 }
 
-fun RoadNetworkView.trafficLight(trafficLight: IntersectionTrafficLight, state: TrafficLightState) {
+fun RoadNetworkView.trafficLightView(trafficLight: IntersectionTrafficLight, state: TrafficLightState) {
     val offset = 10.0
     val reference = Vector2D(0.0, 0.0) // laneConnector.sourcePoint + laneConnector.sourceNormal * offset
 

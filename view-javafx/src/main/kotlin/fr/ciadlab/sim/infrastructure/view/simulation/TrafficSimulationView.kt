@@ -1,5 +1,6 @@
 package fr.ciadlab.sim.infrastructure.view.simulation
 
+import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLights
 import fr.ciadlab.sim.infrastructure.view.network.*
 import fr.ciadlab.sim.infrastructure.view.network.trafficLightView
 import fr.ciadlab.sim.infrastructure.view.vehicle.VehicleView
@@ -19,7 +20,9 @@ fun Parent.trafficSimulationView(
     trafficSimulation: TrafficSimulation<Vehicle>,
     op: TrafficSimulationView.() -> Unit = {}
 ) {
+    // Collection of elements which are to be visually updated
     val vehicleViews = ConcurrentHashMap<Vehicle, VehicleView>()
+    val trafficLightViews = arrayListOf<Group>()
 
     // Register a listener to on spawn to re-create the vehicle views
     trafficSimulation.onSpawn.add { vehicle, _ ->
@@ -36,6 +39,9 @@ fun Parent.trafficSimulationView(
             vehicleViews.remove(vehicle)
         }
     }
+
+    // Register a listener to update the traffic light views
+
 
     // Register a listener to update the vehicle views
     trafficSimulation.onAfterStep.add {

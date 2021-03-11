@@ -49,20 +49,24 @@ class TrafficSimulation<VehicleType : Position2D>(
         // Update the infrastructure
         roadNetwork.trafficLights.forEach {
             val policy = it.policy
-            it.trafficLights.addAll(it.trafficLights.map {
+            val updatedTrafficLights = it.trafficLights.map {
                 it.changeState(policy.currentState(it.laneConnectors.first(), simulationTime))
-            })
+            }
+            with(it.trafficLights) {
+                clear()
+                addAll(updatedTrafficLights)
+            }
         }
 
         // Run the behaviors and update the vehicles
-        val updatedObjects = vehicles.map {
+        val updatedVehicles = vehicles.map {
             // Compute the action from the behavior
             val action = vehicleBehavior.invoke(it, deltaTime)
             // Apply the action to get an updated vehicle
             vehicleUpdate.invoke(it, action, deltaTime)
         }
 
-        vehicles = updatedObjects.toMutableSet()
+        vehicles = updatedVehicles.toMutableSet()
 
         simulationTime += deltaTime
 

@@ -12,6 +12,7 @@ import kotlin.random.Random
  * The vehicle is updated by making new copy of the object to ensure thread-safety.
  * At the creation a UUID is given to the car. This UUID remains through subsequent updates.
  */
+// TODO Use the Updatable abstract class
 data class Vehicle(
     override val position: Vector2D,
     val velocity: Vector2D,

@@ -1,11 +1,11 @@
 package fr.ciadlab.sim.infrastructure.view.scenario
 
 import fr.ciadlab.sim.infrastructure.*
-import fr.ciadlab.sim.infrastructure.view.basics.basicOnSpawn
 import fr.ciadlab.sim.infrastructure.view.basics.basicVehicleBehavior
-import fr.ciadlab.sim.infrastructure.view.basics.basicVehicleUpdate
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
+import fr.ciadlab.sim.traffic.basics.basicOnSpawn
+import fr.ciadlab.sim.traffic.basics.basicVehicleUpdate
 import fr.ciadlab.sim.traffic.exitArea
 import fr.ciadlab.sim.traffic.spawner
 import fr.ciadlab.sim.traffic.trafficSimulation

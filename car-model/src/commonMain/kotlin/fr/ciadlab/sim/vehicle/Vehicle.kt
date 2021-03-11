@@ -1,5 +1,7 @@
 package fr.ciadlab.sim.vehicle
 
+import fr.ciadlab.sim.entity.Identifiable
+import fr.ciadlab.sim.entity.Updatable
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.physics.Units.Degrees
 import fr.ciadlab.sim.physics.unit
@@ -25,8 +27,8 @@ data class Vehicle(
     val minAcceleration: Double = -8.0,
     val maxAcceleration: Double = 2.0,
     val lastCommand: VehicleCommand? = null,
-    val identifier: UUID = UUID.randomUUID(),
-    val onUpdate: MutableList<(Vehicle)->Unit> = arrayListOf()) : Position2D {
+    override val identifier: UUID = UUID.randomUUID(),
+    override val onUpdate: MutableList<(Vehicle)->Unit> = arrayListOf()) : Position2D, Identifiable, Updatable<Vehicle> {
 
     /**
      * The heading of the vehicle

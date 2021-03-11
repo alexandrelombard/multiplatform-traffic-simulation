@@ -135,7 +135,8 @@ class ReachGoalBehavior(
                     closestLeader.obstacleRelativePosition.norm,
                     vehicle.velocity.norm,
                     closestLeader.obstacleRelativeVelocity.norm,
-                    driverBehavioralState.maximumSpeed
+                    driverBehavioralState.maximumSpeed,
+                    minimumSpacing = 5.0
                 )
             }
         }

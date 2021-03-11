@@ -1,10 +1,9 @@
 package fr.ciadlab.sim.car.behavior
 
-import fr.ciadlab.sim.car.perception.obstacles.RadarData
+import fr.ciadlab.sim.car.perception.obstacles.ObstacleData
 import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.offset
 import fr.ciadlab.sim.math.algebra.Vector3D
-import fr.ciadlab.sim.vehicle.Vehicle
 
 /**
  * Contains all the data required by a vehicle to take a decision
@@ -18,7 +17,7 @@ data class DriverBehavioralState(
     /** True if the lane must be travelled in the forward direction, and false for backward */
     val travelForward: Boolean,
     /** The radar data */
-    val leaders: List<RadarData>,
+    val leaders: List<ObstacleData>,
     /** The max speed according to the road */
     val maximumSpeed: Double,
     /** The position of the goal */

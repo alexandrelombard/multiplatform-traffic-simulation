@@ -25,7 +25,7 @@ class RadarPerceptionProvider(
      * Performs the radar detection and returns the coordinates of obstacles relatively to the radar position and
      * orientation. The direction of the radar is the y-axis of the frame of the radar (right-handed frame).
      */
-    fun performRadarDetection(sourcePosition: Vector2D, direction: Vector2D, vehicles: Collection<Vehicle>): List<RadarData> {
+    fun performRadarDetection(sourcePosition: Vector2D, direction: Vector2D, vehicles: Collection<Vehicle>): List<ObstacleData> {
         return vehicles.filter {
             // Filter according to the distance
             val distance = (it.position - sourcePosition).norm
@@ -39,7 +39,7 @@ class RadarPerceptionProvider(
             val vectorSpace = VectorSpace2D(xAxis, direction)
             val affineSpace = AffineSpace2D(sourcePosition, xAxis, direction)
 
-            RadarData(affineSpace.fromDefault(it.position), vectorSpace.fromDefault(it.velocity))
+            ObstacleData(affineSpace.fromDefault(it.position), vectorSpace.fromDefault(it.velocity))
         }
     }
 

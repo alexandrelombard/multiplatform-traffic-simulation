@@ -3,23 +3,24 @@ package fr.ciadlab.sim.car.behavior
 import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
 import fr.ciadlab.sim.car.behavior.lateral.purePursuit
 import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
-import fr.ciadlab.sim.infrastructure.offset
 import fr.ciadlab.sim.math.algebra.*
-import fr.ciadlab.sim.math.geometry.*
 import fr.ciadlab.sim.vehicle.Vehicle
-import kotlin.math.*
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.sign
+import kotlin.math.sqrt
 
 class ReachGoalBehavior(
     val vehicle: Vehicle,
     val driverBehavioralState: DriverBehavioralState,
     val longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = Companion::idmLongitudinalControl,
-    val lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = Companion::curvatureFollowingLateralControl) {
+    val lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = Companion::curvatureFollowingLateralControl) : DriverBehavior {
 
     /**
      * Computes the action of the driver according the current state and the current behavior
      * @param deltaTime the simulation step time
      */
-    fun apply(deltaTime: Double): DriverBehavioralAction {
+    override fun apply(deltaTime: Double): DriverBehavioralAction {
         val targetAcceleration = longitudinalControl.invoke(driverBehavioralState, vehicle)
         val targetWheelAngle = lateralControl.invoke(driverBehavioralState, vehicle)
         // return vehicle.update(targetAcceleration, targetWheelAngle, deltaTime)
@@ -146,6 +147,6 @@ fun Vehicle.reachGoalBehavior(
     driverBehavioralState: DriverBehavioralState,
     longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = ReachGoalBehavior.Companion::idmLongitudinalControl,
     lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = ReachGoalBehavior.Companion::curvatureFollowingLateralControl
-): ReachGoalBehavior {
+): DriverBehavior {
     return ReachGoalBehavior(this, driverBehavioralState, longitudinalControl, lateralControl)
 }

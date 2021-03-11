@@ -13,7 +13,7 @@ The algorithms and models included in this repository have a live demo, just her
 
 http://alexandrelombard.github.io
 
-Here's a quick example of an intersection, and the syntax of the code used to generate it:
+Here's a quick example of an intersection, and the syntax of the code (a Kotlin DSL) used to generate it:
 
 ![Simulator screenshot](https://raw.githubusercontent.com/alexandrelombard/multiplatform-traffic-simulation/master/images/img.png)
 
@@ -60,6 +60,12 @@ roadNetwork {
     }
 }
 ```
+
+The language used to describe the road network and the simulation allows to easily create roads, intersections,
+traffic lights, etc. and to place spawners, exit areas and other simulation elements.
+
+It relies on a rather simple model for the behavior of the vehicle, but it proposes advanced models for lateral control,
+longitudinal control, and more generally for the behavior of the driver.
 
 ## Modules
 

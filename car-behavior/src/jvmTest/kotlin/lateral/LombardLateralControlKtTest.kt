@@ -1,5 +1,6 @@
-package fr.ciadlab.sim.car.behavior.lateral
+package lateral
 
+import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.vehicle.Vehicle
 import kotlin.math.*

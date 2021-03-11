@@ -1,4 +1,4 @@
-package fr.ciadlab.sim.car.behavior.lateral
+package lateral
 
 fun Double.round(decimals: Int): Double {
     var multiplier = 1.0

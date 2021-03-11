@@ -87,3 +87,5 @@ roadNetwork {
 
 Clone the project, let gradle configure it for you, then go to the view-javafx module and run the main function of
 _SimulationLauncher.kt_
+
+Remark: Java 15 required.

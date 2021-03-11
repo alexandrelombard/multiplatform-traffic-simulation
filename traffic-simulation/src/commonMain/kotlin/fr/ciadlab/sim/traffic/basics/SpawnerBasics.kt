@@ -14,7 +14,7 @@ import fr.ciadlab.sim.vehicle.Vehicle
  */
 
 /**
- *
+ * Compute a random route for a vehicle
  */
 fun TrafficSimulation<Vehicle>.basicOnSpawn(vehicle: Vehicle, routes: MutableMap<Vehicle, List<Pair<Road, Boolean>>?>) {
     // Compute a route from the current position to a random exit area

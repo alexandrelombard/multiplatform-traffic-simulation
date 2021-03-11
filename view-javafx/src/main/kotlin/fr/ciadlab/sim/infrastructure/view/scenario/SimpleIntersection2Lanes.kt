@@ -69,7 +69,7 @@ object SimpleIntersection2Lanes {
             generation = {
                 Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
             }
-            strategy = { if(Random.nextFloat() < 0.01) { spawn() } }
+            strategy = { if(Random.nextFloat() < 0.2 * it) { spawn() } }
         }
 
         spawner {
@@ -78,7 +78,7 @@ object SimpleIntersection2Lanes {
             generation = {
                 Vehicle(position, Vector2D(0.0, 0.0), 0.0, Vector2D(0.0, 1.0), 0.0, wheelBase, length)
             }
-            strategy = { if(Random.nextFloat() < 0.01) { spawn() } }
+            strategy = { if(Random.nextFloat() < 0.2 * it) { spawn() } }
         }
 
         exitArea {

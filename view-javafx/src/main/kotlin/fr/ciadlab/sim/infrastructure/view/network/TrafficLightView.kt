@@ -14,7 +14,6 @@ import tornadofx.opcr
 
 fun RoadNetworkView.trafficLightsView(intersectionTrafficLights: IntersectionTrafficLights) {
     intersectionTrafficLights.trafficLights.forEach {
-        // TODO Manage the state using the simulation time
         trafficLightView(it)
     }
 }

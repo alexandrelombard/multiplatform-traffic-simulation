@@ -24,7 +24,7 @@ class RespectTrafficLightBehavior(
                 }.minByOrNull { it.value }
 
         if(closestTrafficLight != null && closestTrafficLight.key.state == TrafficLightState.RED) {
-            // Brake, the traffic light is RED
+            // Adapt acceleration, the traffic light is RED
             return DriverBehavioralAction(longitudinalControl(driverBehavioralState, vehicle, closestTrafficLight.value), 0.0)
         }
 
@@ -43,6 +43,6 @@ class RespectTrafficLightBehavior(
 }
 
 fun Vehicle.respectTrafficLightBehavior(
-    vehicle: Vehicle, driverBehavioralState: DriverBehavioralState, perceivedTrafficLights: List<IntersectionTrafficLight>): DriverBehavior {
-    return RespectTrafficLightBehavior(vehicle, driverBehavioralState, perceivedTrafficLights)
+    driverBehavioralState: DriverBehavioralState, perceivedTrafficLights: List<IntersectionTrafficLight>): DriverBehavior {
+    return RespectTrafficLightBehavior(this, driverBehavioralState, perceivedTrafficLights)
 }

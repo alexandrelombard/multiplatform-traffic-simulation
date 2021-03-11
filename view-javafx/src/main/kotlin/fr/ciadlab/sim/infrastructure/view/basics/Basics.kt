@@ -3,11 +3,12 @@ package fr.ciadlab.sim.infrastructure.view.basics
 import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
 import fr.ciadlab.sim.car.behavior.reachGoalBehavior
+import fr.ciadlab.sim.car.behavior.respectTrafficLightBehavior
 import fr.ciadlab.sim.car.behavior.routing.OriginDestinationRouter
 import fr.ciadlab.sim.car.perception.mapmatching.MapMatchingProvider
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider
+import fr.ciadlab.sim.car.perception.signals.TrafficLightPerceptionProvider
 import fr.ciadlab.sim.infrastructure.Road
-import fr.ciadlab.sim.infrastructure.RoadNetwork
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.project
 import fr.ciadlab.sim.math.algebra.toVector3D
@@ -60,12 +61,16 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
     routes: Map<Vehicle, List<Pair<Road, Boolean>>?>,
     vehicle: Vehicle,
     deltaTime: Double): DriverBehavioralAction {
-    // Compute perceptions
-    val radar = RadarPerceptionProvider()
-    val radarData = radar.performRadarDetection(vehicle.position, vehicle.direction, this.vehicles)
     // Retrieve the computed route and the current road
     val route = routes[vehicle]
     val currentRoad = route?.minByOrNull { it.first.points.project(vehicle.position.toVector3D()).distance }
+
+    // Compute perceptions
+    val radar = RadarPerceptionProvider()
+    val radarData = radar.performRadarDetection(vehicle.position, vehicle.direction, this.vehicles)
+    val trafficLights = TrafficLightPerceptionProvider()
+    val perceivedTrafficLights = trafficLights.performTrafficLightDetection(
+        route?.map { it.first } ?: emptyList(), this.roadNetwork.trafficLights.flatMap { it.trafficLights })
 
     // Execute the behavior
     val driverBehavioralState = DriverBehavioralState(
@@ -77,6 +82,7 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
         route?.last()?.first?.end() ?: this.roadNetwork.roads[0].end())
 
     return vehicle.reachGoalBehavior(driverBehavioralState).apply(deltaTime)
+        .and(vehicle.respectTrafficLightBehavior(driverBehavioralState, perceivedTrafficLights).apply(deltaTime))
 }
 
 fun TrafficSimulation<Vehicle>.basicVehicleUpdate(vehicle: Vehicle, action: DriverBehavioralAction, deltaTime: Double): Vehicle {

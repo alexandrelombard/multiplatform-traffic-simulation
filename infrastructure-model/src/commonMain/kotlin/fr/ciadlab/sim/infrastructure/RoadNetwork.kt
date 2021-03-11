@@ -1,6 +1,5 @@
 package fr.ciadlab.sim.infrastructure
 
-import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLight
 import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLights
 
 data class RoadNetwork(

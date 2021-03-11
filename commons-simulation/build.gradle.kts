@@ -23,6 +23,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":commons-math"))
+                implementation(project(":commons-utils"))
             }
         }
         val commonTest by getting {

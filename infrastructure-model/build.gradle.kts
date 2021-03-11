@@ -19,6 +19,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":commons-math"))
+                implementation(project(":commons-utils"))
+                implementation(project(":commons-simulation"))
             }
         }
         val commonTest by getting {

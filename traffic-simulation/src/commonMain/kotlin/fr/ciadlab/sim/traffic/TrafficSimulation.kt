@@ -46,6 +46,14 @@ class TrafficSimulation<VehicleType : Position2D>(
         // Calls the spawning strategies
         spawners.forEach { it.strategy?.invoke(deltaTime) }
 
+        // Update the infrastructure
+        roadNetwork.trafficLights.forEach {
+            val policy = it.policy
+            it.trafficLights.addAll(it.trafficLights.map {
+                it.changeState(policy.currentState(it.laneConnectors.first(), simulationTime))
+            })
+        }
+
         // Run the behaviors and update the vehicles
         val updatedObjects = vehicles.map {
             // Compute the action from the behavior

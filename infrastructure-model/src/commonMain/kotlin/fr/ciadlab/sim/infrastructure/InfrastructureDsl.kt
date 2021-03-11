@@ -78,7 +78,7 @@ fun DslIntersection.laneConnector(
 // region Traffic lights
 
 data class DslIntersectionTrafficLights(
-    var trafficLights: MutableList<IntersectionTrafficLight> = arrayListOf(),
+    var trafficLights: MutableSet<IntersectionTrafficLight> = hashSetOf(),
     var policy: TrafficLightPolicy = TrafficLightPolicy {_, _ -> TrafficLightState.UNKNOWN}
 )
 
@@ -105,7 +105,7 @@ fun DslIntersectionTrafficLights.trafficLight(
     val dslIntersectionTrafficLight = DslIntersectionTrafficLight()
     op.invoke(dslIntersectionTrafficLight)
 
-    val trafficLight = IntersectionTrafficLight(dslIntersectionTrafficLight.connectors)
+    val trafficLight = IntersectionTrafficLight(dslIntersectionTrafficLight.connectors, TrafficLightState.UNKNOWN)
     this.trafficLights.add(trafficLight)
 
     return trafficLight

@@ -3,12 +3,11 @@ package fr.ciadlab.sim.infrastructure.view.network
 import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLight
 import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLights
 import fr.ciadlab.sim.infrastructure.intersection.TrafficLightState
-import fr.ciadlab.sim.infrastructure.view.vehicle.VehicleView
-import fr.ciadlab.sim.vehicle.Vehicle
+import javafx.application.Platform
 import javafx.scene.Group
 import javafx.scene.Parent
 import javafx.scene.paint.Color
-import tornadofx.Vector2D
+import javafx.scene.shape.Circle
 import tornadofx.circle
 import tornadofx.group
 import tornadofx.opcr
@@ -16,11 +15,24 @@ import tornadofx.opcr
 fun RoadNetworkView.trafficLightsView(intersectionTrafficLights: IntersectionTrafficLights) {
     intersectionTrafficLights.trafficLights.forEach {
         // TODO Manage the state using the simulation time
-        trafficLightView(it, intersectionTrafficLights.policy.currentState(it.laneConnectors.first(), 0.0))
+        trafficLightView(it)
     }
 }
 
-class TrafficLightView(val trafficLight: IntersectionTrafficLight, var state: TrafficLightState): Group() {
+class TrafficLightView(var trafficLight: IntersectionTrafficLight): Group() {
+    private lateinit var topCircle: Circle
+    private lateinit var middleCircle: Circle
+    private lateinit var bottomCircle: Circle
+
+    init {
+        trafficLight.onUpdate += {
+            trafficLight = it
+            Platform.runLater {
+                applyColor(trafficLight.state)
+            }
+        }
+    }
+
     val trafficLightView = group {
         // TODO Improve positioning of the traffic light relatively to the intersection
         val offset = 5.0
@@ -28,61 +40,35 @@ class TrafficLightView(val trafficLight: IntersectionTrafficLight, var state: Tr
         val reference = referenceLaneConnector.sourcePoint + referenceLaneConnector.sourceNormal * offset
 
         // Top circle
-        circle {
+        topCircle = circle {
             centerX = reference.x
             centerY = reference.y
             radius = 1.0
-            fill = if(state == TrafficLightState.RED) Color.RED else Color.BLACK
         }
 
         // Middle circle
-        circle {
+        middleCircle = circle {
             centerX = reference.x
             centerY = reference.y + 2.5
             radius = 1.0
-            fill = if(state == TrafficLightState.YELLOW) Color.YELLOW else Color.BLACK
         }
 
         // Bottom circle
-        circle {
+        bottomCircle = circle {
             centerX = reference.x
             centerY = reference.y + 5.0
             radius = 1.0
-            fill = if(state == TrafficLightState.GREEN) Color.GREEN else Color.BLACK
         }
+
+        applyColor(trafficLight.state)
+    }
+
+    private fun applyColor(state: TrafficLightState) {
+        this.topCircle.fill = if(state == TrafficLightState.RED) Color.RED else Color.BLACK
+        this.middleCircle.fill = if(state == TrafficLightState.YELLOW) Color.YELLOW else Color.BLACK
+        this.bottomCircle.fill = if(state == TrafficLightState.GREEN) Color.GREEN else Color.BLACK
     }
 }
 
-//fun RoadNetworkView.trafficLightView(trafficLight: IntersectionTrafficLight, state: TrafficLightState) {
-//    // TODO Improve positioning of the traffic light relatively to the intersection
-//    val offset = 5.0
-//    val referenceLaneConnector = trafficLight.laneConnectors.first()
-//    val reference = referenceLaneConnector.sourcePoint + referenceLaneConnector.sourceNormal * offset
-//
-//    // Top circle
-//    circle {
-//        centerX = reference.x
-//        centerY = reference.y
-//        radius = 1.0
-//        fill = if(state == TrafficLightState.RED) Color.RED else Color.BLACK
-//    }
-//
-//    // Middle circle
-//    circle {
-//        centerX = reference.x
-//        centerY = reference.y + 2.5
-//        radius = 1.0
-//        fill = if(state == TrafficLightState.YELLOW) Color.YELLOW else Color.BLACK
-//    }
-//
-//    // Bottom circle
-//    circle {
-//        centerX = reference.x
-//        centerY = reference.y + 5.0
-//        radius = 1.0
-//        fill = if(state == TrafficLightState.GREEN) Color.GREEN else Color.BLACK
-//    }
-//}
-
-fun Parent.trafficLightView(trafficLight: IntersectionTrafficLight, state: TrafficLightState, op: TrafficLightView.() -> Unit = {}): TrafficLightView =
-    opcr(this, TrafficLightView(trafficLight, state), op)
+fun Parent.trafficLightView(trafficLight: IntersectionTrafficLight, op: TrafficLightView.() -> Unit = {}): TrafficLightView =
+    opcr(this, TrafficLightView(trafficLight), op)

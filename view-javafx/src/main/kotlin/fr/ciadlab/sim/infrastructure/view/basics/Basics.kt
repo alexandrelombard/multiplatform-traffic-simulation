@@ -81,8 +81,9 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
         50.0 unit Units.KilometersPerHour,
         route?.last()?.first?.end() ?: this.roadNetwork.roads[0].end())
 
-    return vehicle.reachGoalBehavior(driverBehavioralState).apply(deltaTime)
-        .and(vehicle.respectTrafficLightBehavior(driverBehavioralState, perceivedTrafficLights).apply(deltaTime))
+    return vehicle.reachGoalBehavior(driverBehavioralState)
+        .and(vehicle.respectTrafficLightBehavior(driverBehavioralState, perceivedTrafficLights))
+        .apply(deltaTime)
 }
 
 fun TrafficSimulation<Vehicle>.basicVehicleUpdate(vehicle: Vehicle, action: DriverBehavioralAction, deltaTime: Double): Vehicle {

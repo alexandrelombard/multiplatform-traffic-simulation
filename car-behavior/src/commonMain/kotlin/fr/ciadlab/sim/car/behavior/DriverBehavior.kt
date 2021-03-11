@@ -1,5 +1,15 @@
 package fr.ciadlab.sim.car.behavior
 
-fun interface DriverBehavior {
+interface DriverBehavior {
     fun apply(deltaTime: Double): DriverBehavioralAction
+
+    fun and(driverBehavior: DriverBehavior): DriverBehavior {
+        val t = this
+        val o = driverBehavior
+        return object: DriverBehavior {
+            override fun apply(deltaTime: Double): DriverBehavioralAction {
+                return t.apply(deltaTime).and(o.apply(deltaTime))
+            }
+        }
+    }
 }

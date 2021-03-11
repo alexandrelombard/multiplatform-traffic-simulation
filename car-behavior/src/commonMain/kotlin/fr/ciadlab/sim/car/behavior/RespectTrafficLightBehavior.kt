@@ -14,6 +14,8 @@ class RespectTrafficLightBehavior(
     override fun apply(deltaTime: Double): DriverBehavioralAction {
         // TODO Optimize
         // TODO Consider all potential traffic lights
+        // We associate to each traffic light the distance from the vehicle to traffic light, then we take the min if it
+        // exists
         val closestTrafficLight =
             this.perceivedTrafficLights
                 .associateWith {

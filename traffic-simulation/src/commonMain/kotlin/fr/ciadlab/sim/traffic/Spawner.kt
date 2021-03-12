@@ -1,6 +1,7 @@
 package fr.ciadlab.sim.traffic
 
 import fr.ciadlab.sim.math.algebra.Vector2D
+import fr.ciadlab.sim.traffic.spawner.GenerationStrategy
 import fr.ciadlab.sim.vehicle.Position2D
 
 class Spawner<Object>(
@@ -44,6 +45,8 @@ fun <Object> Spawner<Object>.generation(op: ()->Object) {
     this.generation = op
 }
 
-fun <Object> Spawner<Object>.strategy(op: (Double)->Unit) {
+fun <Object> Spawner<Object>.strategy(
+    generationStrategy: GenerationStrategy,
+    op: (Double)->Unit = { if(generationStrategy.apply(it)) { spawn()} }) {
     this.strategy = op
 }

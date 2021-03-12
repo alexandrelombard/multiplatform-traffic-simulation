@@ -9,6 +9,7 @@ include("commons-simulation")
 include("infrastructure-model")
 include("car-model")
 include("car-behavior")
+include("v2x-simulation")
 include("traffic-simulation")
 // View projects
 include("view-javafx")

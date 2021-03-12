@@ -5,6 +5,7 @@ import fr.ciadlab.sim.traffic.spawner.GenerationStrategy
 import fr.ciadlab.sim.vehicle.Position2D
 
 class Spawner<Object>(
+    val trafficSimulation: TrafficSimulation<*>,
     /** A function instantiating an object */
     var generation: (()->Object)? = null,
     /** A strategy for determining when to create new objects */
@@ -33,7 +34,7 @@ class Spawner<Object>(
 
 fun <Object : Position2D> TrafficSimulation<Object>.spawner(op: Spawner<Object>.() -> Unit): Spawner<Object> {
     // Build the spawner object
-    val spawner = Spawner<Object>()
+    val spawner = Spawner<Object>(this)
     op.invoke(spawner)
     // Register the spawner in the simulation object
     this.spawners.add(spawner)

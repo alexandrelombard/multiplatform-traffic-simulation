@@ -10,7 +10,7 @@ import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.intersection
 import fr.ciadlab.sim.infrastructure.road
 import fr.ciadlab.sim.infrastructure.roadNetwork
-import fr.ciadlab.sim.infrastructure.view.scenario.SimpleIntersection2LanesWithTrafficLights
+import fr.ciadlab.sim.infrastructure.view.scenario.TwoIntersections2LanesWithTrafficLights
 import fr.ciadlab.sim.infrastructure.view.simulation.trafficSimulationView
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
@@ -163,8 +163,10 @@ class SimulationView : View() {
 
 //    private val simulation = simpleIntersectionTrafficSimulation
 //    private val roadNetworkModel = simpleIntersectionRoadNetworkModel
-    private val simulation = SimpleIntersection2LanesWithTrafficLights.simulation
-    private val roadNetworkModel = SimpleIntersection2LanesWithTrafficLights.network
+//    private val simulation = SimpleIntersection2LanesWithTrafficLights.simulation
+//    private val roadNetworkModel = SimpleIntersection2LanesWithTrafficLights.network
+    private val simulation = TwoIntersections2LanesWithTrafficLights.simulation
+    private val roadNetworkModel = TwoIntersections2LanesWithTrafficLights.network
 
     init {
         // Close when the main stage is closed

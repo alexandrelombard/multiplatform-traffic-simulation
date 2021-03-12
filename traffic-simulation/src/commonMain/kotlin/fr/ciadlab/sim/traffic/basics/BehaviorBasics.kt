@@ -2,8 +2,8 @@ package fr.ciadlab.sim.infrastructure.view.basics
 
 import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
-import fr.ciadlab.sim.car.behavior.reachGoalBehavior
-import fr.ciadlab.sim.car.behavior.respectTrafficLightBehavior
+import fr.ciadlab.sim.car.behavior.default.reachGoalBehavior
+import fr.ciadlab.sim.car.behavior.default.respectTrafficLightBehavior
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider
 import fr.ciadlab.sim.car.perception.signals.TrafficLightPerceptionProvider
 import fr.ciadlab.sim.infrastructure.Road

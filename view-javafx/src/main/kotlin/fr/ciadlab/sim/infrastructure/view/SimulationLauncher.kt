@@ -1,34 +1,35 @@
 package fr.ciadlab.sim.infrastructure.view
 
-import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
-import fr.ciadlab.sim.car.behavior.reachGoalBehavior
+import fr.ciadlab.sim.car.behavior.default.reachGoalBehavior
 import fr.ciadlab.sim.car.behavior.routing.OriginDestinationRouter
 import fr.ciadlab.sim.car.perception.mapmatching.MapMatchingProvider
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider
-import fr.ciadlab.sim.infrastructure.*
 import fr.ciadlab.sim.infrastructure.IntersectionBuilder.ConnectedSide
-import fr.ciadlab.sim.infrastructure.view.scenario.SimpleIntersection2Lanes
+import fr.ciadlab.sim.infrastructure.Road
+import fr.ciadlab.sim.infrastructure.intersection
+import fr.ciadlab.sim.infrastructure.road
+import fr.ciadlab.sim.infrastructure.roadNetwork
 import fr.ciadlab.sim.infrastructure.view.scenario.SimpleIntersection2LanesWithTrafficLights
 import fr.ciadlab.sim.infrastructure.view.simulation.trafficSimulationView
-import fr.ciadlab.sim.infrastructure.view.vehicle.vehicleView
-import fr.ciadlab.sim.math.algebra.*
-import fr.ciadlab.sim.math.geometry.*
+import fr.ciadlab.sim.math.algebra.Vector2D
+import fr.ciadlab.sim.math.algebra.Vector3D
+import fr.ciadlab.sim.math.algebra.project
+import fr.ciadlab.sim.math.algebra.toVector3D
+import fr.ciadlab.sim.math.geometry.hermiteSpline
 import fr.ciadlab.sim.physics.Units.KilometersPerHour
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit
-import fr.ciadlab.sim.traffic.*
+import fr.ciadlab.sim.traffic.exitArea
+import fr.ciadlab.sim.traffic.spawner
+import fr.ciadlab.sim.traffic.trafficSimulation
 import fr.ciadlab.sim.vehicle.Vehicle
 import javafx.application.Platform
 import javafx.event.EventHandler
-import tornadofx.View
-import tornadofx.stackpane
-import tornadofx.group
-import tornadofx.Stylesheet
-import tornadofx.App
-import tornadofx.launch
+import tornadofx.*
+import kotlin.collections.set
 import kotlin.concurrent.fixedRateTimer
-import kotlin.math.*
+import kotlin.math.max
 import kotlin.random.Random
 import kotlin.system.exitProcess
 
@@ -157,41 +158,11 @@ class SimulationView : View() {
         }
     }
 
-    val eightShapedRoadNetworkModel = roadNetwork {
-        val eightShapedRoad = road {
-            points = listOf(
-                Vector3D(0.0, 0.0, 0.0),
-                Vector3D(100.0, 100.0, 0.0),
-                *hermiteSpline(
-                    Vector3D(100.0, 100.0, 0.0),
-                    Vector3D(50.0, 50.0, 0.0),
-                    Vector3D(150.0, 50.0, 0.0),
-                    Vector3D(0.0, -100.0, 0.0),
-                    Vector3D(100.0, 0.0, 0.0),
-                    Vector3D(-50.0, 50.0, 0.0)
-                ).toTypedArray(),
-                Vector3D(0.0, 100.0, 0.0),
-                *hermiteSpline(
-                    Vector3D(0.0, 100.0, 0.0),
-                    Vector3D(-50.0, 50.0, 0.0),
-                    Vector3D(-50.0, 50.0, 0.0),
-                    Vector3D(0.0, -100.0, 0.0),
-                    Vector3D(0.0, 0.0, 0.0),
-                    Vector3D(50.0, 50.0, 0.0)
-                ).toTypedArray())
-            oneWay = true
-            forwardLanesCount = 1
-            backwardLanesCount = 0
-        }
-    }
-
     private var dragging: Boolean = false
     private var dragOrigin = Pair(0.0, 0.0)
 
 //    private val simulation = simpleIntersectionTrafficSimulation
 //    private val roadNetworkModel = simpleIntersectionRoadNetworkModel
-//    private val simulation = SimpleIntersection2Lanes.simulation
-//    private val roadNetworkModel = SimpleIntersection2Lanes.network
     private val simulation = SimpleIntersection2LanesWithTrafficLights.simulation
     private val roadNetworkModel = SimpleIntersection2LanesWithTrafficLights.network
 

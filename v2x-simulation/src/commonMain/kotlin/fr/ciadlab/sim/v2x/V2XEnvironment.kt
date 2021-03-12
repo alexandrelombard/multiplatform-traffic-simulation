@@ -7,6 +7,7 @@ import fr.ciadlab.sim.utils.UUID
  * @author Alexandre Lombard
  */
 class V2XEnvironment {
+    // TODO Make it thread-safe
 
     private val repository: MutableMap<UUID, V2XCommunicationUnit> = hashMapOf()
 
@@ -28,6 +29,12 @@ class V2XEnvironment {
      */
     fun unicast(source: UUID, destination: UUID, message: V2XMessage) {
         repository[destination]?.fireMessageReceived(source, message)
+    }
+
+    fun multicast(source: UUID, destination: List<UUID>, message: V2XMessage) {
+        destination.forEach {
+            unicast(source, it, message)
+        }
     }
 
     /**

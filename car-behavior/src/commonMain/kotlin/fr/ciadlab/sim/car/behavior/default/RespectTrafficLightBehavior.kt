@@ -1,5 +1,8 @@
-package fr.ciadlab.sim.car.behavior
+package fr.ciadlab.sim.car.behavior.default
 
+import fr.ciadlab.sim.car.behavior.DriverBehavior
+import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
+import fr.ciadlab.sim.car.behavior.DriverBehavioralState
 import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
 import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLight
 import fr.ciadlab.sim.infrastructure.intersection.TrafficLightState

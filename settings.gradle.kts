@@ -10,6 +10,7 @@ include("infrastructure-model")
 include("car-model")
 include("car-behavior")
 include("v2x-simulation")
+include("v2x-traffic-management")
 include("traffic-simulation")
 // View projects
 include("view-javafx")

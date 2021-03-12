@@ -1,5 +1,8 @@
-package fr.ciadlab.sim.car.behavior
+package fr.ciadlab.sim.car.behavior.default
 
+import fr.ciadlab.sim.car.behavior.DriverBehavior
+import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
+import fr.ciadlab.sim.car.behavior.DriverBehavioralState
 import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
 import fr.ciadlab.sim.car.behavior.lateral.purePursuit
 import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
@@ -14,7 +17,8 @@ class ReachGoalBehavior(
     val vehicle: Vehicle,
     val driverBehavioralState: DriverBehavioralState,
     val longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = Companion::idmLongitudinalControl,
-    val lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = Companion::curvatureFollowingLateralControl) : DriverBehavior {
+    val lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = Companion::curvatureFollowingLateralControl)
+    : DriverBehavior {
 
     /**
      * Computes the action of the driver according the current state and the current behavior

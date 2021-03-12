@@ -25,6 +25,7 @@ kotlin {
                 implementation(project(":infrastructure-model"))
                 implementation(project(":car-model"))
                 implementation(project(":car-behavior"))
+                implementation(project(":v2x-simulation"))
                 implementation(project(":traffic-simulation"))
             }
         }

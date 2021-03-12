@@ -20,13 +20,13 @@ class Spawner<Object>(
      * @return the generated object or <code>null</code> if nothing was generated
      */
     fun spawn(): Object? {
-        val vehicle = generation?.invoke()
-        if(vehicle != null) {
+        val obj = generation?.invoke()
+        if(obj != null) {
             onGeneration.forEach {
-                it.invoke(vehicle)
+                it.invoke(obj)
             }
         }
-        return vehicle
+        return obj
     }
 }
 

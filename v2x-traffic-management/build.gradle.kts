@@ -21,6 +21,7 @@ kotlin {
                 implementation(kotlin("stdlib-common"))
 
                 implementation(project(":commons-utils"))
+                implementation(project(":commons-simulation"))
                 implementation(project(":infrastructure-model"))
                 implementation(project(":traffic-simulation"))
                 implementation(project(":v2x-simulation"))

@@ -16,6 +16,8 @@ class TrafficLightPerceptionProvider {
         if(route.size < 2)
             return emptyList()
 
+        // FIXME This only considers the first part of the route
+
         // We then check if there a traffic light managing the connection between route[0] and route[1]
         return trafficLights.filter {
             it.laneConnectors.any {

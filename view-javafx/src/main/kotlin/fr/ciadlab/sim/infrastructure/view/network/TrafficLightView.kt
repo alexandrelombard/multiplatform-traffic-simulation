@@ -13,9 +13,10 @@ import tornadofx.group
 import tornadofx.opcr
 
 fun RoadNetworkView.trafficLightsView(intersectionTrafficLights: IntersectionTrafficLights) {
-    Platform.runLater {
-        intersectionTrafficLights.trafficLights.forEach {
-            // TODO Platform.runLater is required but should not be
+
+    intersectionTrafficLights.trafficLights.forEach {
+        // FIXME Platform.runLater is required but should not be
+        Platform.runLater {
             trafficLightView(it)
         }
     }

@@ -83,13 +83,12 @@ data class RoadNetwork(
      */
     fun isAtBegin(source: Road, destination: Road): Boolean {
         val sourceIntersections = roadIntersections[source]
-        val destinationIntersections = roadIntersections[destination]
 
-        if(sourceIntersections == null || destinationIntersections == null) {
+        if(sourceIntersections == null) {
             return false
         }
 
-        val commonsIntersections = sourceIntersections.intersect(destinationIntersections)
+        val commonsIntersections = sourceIntersections.filter { it.connectedRoads.containsKey(destination) }
 
         return commonsIntersections.any { it.connectedRoads[source] == IntersectionBuilder.ConnectedSide.SOURCE }
     }
@@ -102,13 +101,12 @@ data class RoadNetwork(
      */
     fun isAtEnd(source: Road, destination: Road): Boolean {
         val sourceIntersections = roadIntersections[source]
-        val destinationIntersections = roadIntersections[destination]
 
-        if(sourceIntersections == null || destinationIntersections == null) {
+        if(sourceIntersections == null) {
             return false
         }
 
-        val commonsIntersections = sourceIntersections.intersect(destinationIntersections)
+        val commonsIntersections = sourceIntersections.filter { it.connectedRoads.containsKey(destination) }
 
         return commonsIntersections.any { it.connectedRoads[source] == IntersectionBuilder.ConnectedSide.DESTINATION }
     }

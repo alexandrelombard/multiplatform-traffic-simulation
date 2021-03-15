@@ -72,6 +72,14 @@ fun DslIntersection.laneConnector(
 
     this.laneConnectors.add(laneConnector)
 
+    // Register the connected roads (source and destination)
+    this.connectedRoads[sourceRoad] =
+        if(sourceRoad.isForwardLane(dslLaneConnector.sourceLane)) IntersectionBuilder.ConnectedSide.DESTINATION
+        else IntersectionBuilder.ConnectedSide.SOURCE
+    this.connectedRoads[destinationRoad] =
+        if(destinationRoad.isForwardLane(dslLaneConnector.destinationLane)) IntersectionBuilder.ConnectedSide.SOURCE
+        else IntersectionBuilder.ConnectedSide.DESTINATION
+
     return laneConnector
 }
 

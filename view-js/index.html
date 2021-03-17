@@ -2,13 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>View JS test page</title>
     <script type="text/javascript" src="build/distributions/mps.js"></script>
 </head>
 <body>
 <script type="text/javascript">
     let viewJs = window["view-js"];
     console.log(viewJs);
+
+    let app = viewJs.fr.ciadlab.sim.infrastructure.viewjs;
+
+    app.loadSimViewJs([]);
 </script>
 </body>
 </html>

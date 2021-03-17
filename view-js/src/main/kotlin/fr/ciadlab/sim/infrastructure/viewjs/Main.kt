@@ -13,8 +13,8 @@ import fr.ciadlab.sim.infrastructure.viewjs.car.vehicleView
 import fr.ciadlab.sim.infrastructure.viewjs.controllers.LateralControlWebviewSimulationController
 import fr.ciadlab.sim.infrastructure.viewjs.network.background
 import fr.ciadlab.sim.infrastructure.viewjs.network.intersectionView
-import fr.ciadlab.sim.infrastructure.viewjs.network.roadView
 import fr.ciadlab.sim.infrastructure.viewjs.network.roadNetworkView
+import fr.ciadlab.sim.infrastructure.viewjs.network.roadView
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
 import fr.ciadlab.sim.math.geometry.hermiteSpline

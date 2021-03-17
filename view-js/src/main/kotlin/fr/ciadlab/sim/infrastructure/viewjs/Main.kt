@@ -1,7 +1,7 @@
 package fr.ciadlab.sim.infrastructure.viewjs
 
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
-import fr.ciadlab.sim.car.behavior.reachGoalBehavior
+import fr.ciadlab.sim.car.behavior.default.reachGoalBehavior
 import fr.ciadlab.sim.infrastructure.IntersectionBuilder
 import fr.ciadlab.sim.infrastructure.intersection
 import fr.ciadlab.sim.infrastructure.road
@@ -22,10 +22,10 @@ import fr.ciadlab.sim.physics.Units.KilometersPerHour
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit
 import fr.ciadlab.sim.vehicle.Vehicle
-import org.w3c.dom.CanvasRenderingContext2D
-import org.w3c.dom.HTMLCanvasElement
 import kotlinx.browser.document
 import kotlinx.browser.window
+import org.w3c.dom.CanvasRenderingContext2D
+import org.w3c.dom.HTMLCanvasElement
 
 private var dragging: Boolean = false
 private var dragOrigin = Pair(0.0, 0.0)
@@ -52,8 +52,7 @@ fun main() {
     }
 }
 
-@JsName("loadSimViewJs")
-fun loadSimViewJs(args: Array<String>) {
+fun generateBaseCanvas(args: Array<String>): HTMLCanvasElement {
     val canvasProvided = args.isNotEmpty()
 
     val canvas =
@@ -61,8 +60,6 @@ fun loadSimViewJs(args: Array<String>) {
             document.createElement("canvas") as HTMLCanvasElement
         else
             document.getElementById(args[0]) as HTMLCanvasElement
-
-    val context = canvas.getContext("2d") as CanvasRenderingContext2D
 
     canvas.onwheel = {
         val scaleFactor = if (it.deltaY < 0.0) 1.1 else 0.9
@@ -108,6 +105,14 @@ fun loadSimViewJs(args: Array<String>) {
 
         document.body!!.appendChild(canvas)
     }
+
+    return canvas
+}
+
+@JsName("loadSimViewJs")
+fun loadSimViewJs(args: Array<String>) {
+    val canvas = generateBaseCanvas(args)
+    val context = canvas.getContext("2d") as CanvasRenderingContext2D
 
     val roadNetworkModel = roadNetwork {
         val road1 = road {

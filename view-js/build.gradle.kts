@@ -51,6 +51,7 @@ kotlin {
                 implementation(project(":commons-math"))
                 implementation(project(":commons-physics"))
                 implementation(project(":commons-utils"))
+                implementation(project(":commons-simulation"))
                 implementation(project(":car-model"))
                 implementation(project(":car-behavior"))
                 implementation(project(":infrastructure-model"))

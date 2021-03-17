@@ -35,7 +35,7 @@ kotlin {
             webpackTask {
                 compilations.all {
                     kotlinOptions.metaInfo = true
-                    kotlinOptions.moduleKind = "umd"
+//                    kotlinOptions.moduleKind = "umd"
                 }
                 outputFileName = "mps.js"
 //                output.libraryTarget = "commonjs2"

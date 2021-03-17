@@ -16,12 +16,18 @@ class TrafficLightPerceptionProvider {
         if(route.size < 2)
             return emptyList()
 
-        // FIXME This only considers the first part of the route
-
         // We then check if there a traffic light managing the connection between route[0] and route[1]
         return trafficLights.filter {
             it.laneConnectors.any {
-                it.sourceRoad == route[0] && it.destinationRoad == route[1]
+                // FIXME This is not optimal
+                var res = false
+                for(i in 0 until route.size - 1) {
+                    if(it.sourceRoad == route[i] && it.destinationRoad == route[i + 1]) {
+                        res = true
+                        break
+                    }
+                }
+                res
             }
         }
     }

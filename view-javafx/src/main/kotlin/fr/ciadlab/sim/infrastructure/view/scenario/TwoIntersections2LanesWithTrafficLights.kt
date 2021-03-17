@@ -146,23 +146,23 @@ object TwoIntersections2LanesWithTrafficLights {
             strategy(TimeAwareGenerationStrategy(this@trafficSimulation))
         }
 
-//        spawner {
-//            position = Vector2D(0.0, -100.0)
-//            direction = Vector2D(0.0, 1.0)
-//            generation = {
-//                Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
-//            }
-//            strategy(TimeAwareGenerationStrategy(this@trafficSimulation))
-//        }
-//
-//        spawner {
-//            position = Vector2D(100.0, -100.0)
-//            direction = Vector2D(0.0, 1.0)
-//            generation = {
-//                Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
-//            }
-//            strategy(TimeAwareGenerationStrategy(this@trafficSimulation))
-//        }
+        spawner {
+            position = Vector2D(0.0, -100.0)
+            direction = Vector2D(0.0, 1.0)
+            generation = {
+                Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
+            }
+            strategy(TimeAwareGenerationStrategy(this@trafficSimulation))
+        }
+
+        spawner {
+            position = Vector2D(100.0, -100.0)
+            direction = Vector2D(0.0, 1.0)
+            generation = {
+                Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
+            }
+            strategy(TimeAwareGenerationStrategy(this@trafficSimulation))
+        }
 
         exitArea {
             radius = 7.5

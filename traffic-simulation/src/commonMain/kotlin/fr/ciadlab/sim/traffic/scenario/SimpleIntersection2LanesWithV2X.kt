@@ -1,4 +1,4 @@
-package fr.ciadlab.sim.infrastructure.view.scenario
+package fr.ciadlab.sim.traffic.scenario
 
 import fr.ciadlab.sim.infrastructure.*
 import fr.ciadlab.sim.infrastructure.view.basics.basicVehicleBehavior
@@ -8,11 +8,12 @@ import fr.ciadlab.sim.traffic.basics.basicOnSpawn
 import fr.ciadlab.sim.traffic.basics.basicVehicleUpdate
 import fr.ciadlab.sim.traffic.exitArea
 import fr.ciadlab.sim.traffic.spawner
+import fr.ciadlab.sim.traffic.spawner.TimeAwareGenerationStrategy
+import fr.ciadlab.sim.traffic.strategy
 import fr.ciadlab.sim.traffic.trafficSimulation
 import fr.ciadlab.sim.vehicle.Vehicle
-import kotlin.random.Random
 
-object SimpleIntersection2Lanes {
+object SimpleIntersection2LanesWithV2X {
     val network = roadNetwork {
         val roadWest = road {
             points = listOf(Vector3D(-100.0, 0.0, 0.0), Vector3D(-10.0, 0.0, 0.0))
@@ -43,8 +44,10 @@ object SimpleIntersection2Lanes {
         }
 
         intersection {
-            laneConnector(roadWest, roadEast)
-            laneConnector(roadSouth, roadNorth)
+            val westEast = laneConnector(roadWest, roadEast)
+            val southNorth = laneConnector(roadSouth, roadNorth)
+
+
         }
     }
 
@@ -69,16 +72,16 @@ object SimpleIntersection2Lanes {
             generation = {
                 Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
             }
-            strategy = { if(Random.nextFloat() < 0.2 * it) { spawn() } }
+            strategy(TimeAwareGenerationStrategy(this@trafficSimulation))
         }
 
         spawner {
             position = Vector2D(0.0, -100.0)
             direction = Vector2D(0.0, 1.0)
             generation = {
-                Vehicle(position, Vector2D(0.0, 0.0), 0.0, Vector2D(0.0, 1.0), 0.0, wheelBase, length)
+                Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
             }
-            strategy = { if(Random.nextFloat() < 0.2 * it) { spawn() } }
+            strategy(TimeAwareGenerationStrategy(this@trafficSimulation))
         }
 
         exitArea {

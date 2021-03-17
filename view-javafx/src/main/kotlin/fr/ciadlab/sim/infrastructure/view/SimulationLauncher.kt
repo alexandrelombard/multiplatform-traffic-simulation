@@ -10,7 +10,6 @@ import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.intersection
 import fr.ciadlab.sim.infrastructure.road
 import fr.ciadlab.sim.infrastructure.roadNetwork
-import fr.ciadlab.sim.infrastructure.view.scenario.TwoIntersections2LanesWithTrafficLights
 import fr.ciadlab.sim.infrastructure.view.simulation.trafficSimulationView
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
@@ -21,6 +20,7 @@ import fr.ciadlab.sim.physics.Units.KilometersPerHour
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit
 import fr.ciadlab.sim.traffic.exitArea
+import fr.ciadlab.sim.traffic.scenario.TwoIntersections2LanesWithTrafficLights
 import fr.ciadlab.sim.traffic.spawner
 import fr.ciadlab.sim.traffic.trafficSimulation
 import fr.ciadlab.sim.vehicle.Vehicle

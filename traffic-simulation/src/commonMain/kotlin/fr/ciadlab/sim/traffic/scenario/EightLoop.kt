@@ -1,4 +1,4 @@
-package fr.ciadlab.sim.infrastructure.view.scenario
+package fr.ciadlab.sim.traffic.scenario
 
 import fr.ciadlab.sim.infrastructure.road
 import fr.ciadlab.sim.infrastructure.roadNetwork

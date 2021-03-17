@@ -19,10 +19,10 @@ import fr.ciadlab.sim.physics.unit
 import fr.ciadlab.sim.vehicle.Vehicle
 import fr.ciadlab.sim.vehicle.withSimulatedDirectionError
 import fr.ciadlab.sim.vehicle.withSimulatedPositionError
+import kotlinx.browser.document
+import kotlinx.browser.window
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
-import kotlin.browser.document
-import kotlin.browser.window
 
 enum class LongitudinalControlModel {
     /** IDM */

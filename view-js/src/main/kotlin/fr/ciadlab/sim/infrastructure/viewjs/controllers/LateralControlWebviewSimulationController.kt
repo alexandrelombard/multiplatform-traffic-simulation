@@ -27,8 +27,8 @@ import fr.ciadlab.sim.vehicle.withSimulatedDirectionError
 import fr.ciadlab.sim.vehicle.withSimulatedPositionError
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
-import kotlin.browser.document
-import kotlin.browser.window
+import kotlinx.browser.document
+import kotlinx.browser.window
 
 enum class LateralControlModel {
     /** Traditional pure-pursuit with look-ahead */

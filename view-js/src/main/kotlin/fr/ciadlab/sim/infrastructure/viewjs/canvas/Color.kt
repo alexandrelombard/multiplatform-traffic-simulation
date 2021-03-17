@@ -9,7 +9,9 @@ enum class Color(private val style: String) {
     BLACK("rgb(0, 0, 0)"),
     MAGENTA("rgb(255,0,255)"),
     TRANSPARENT("rgba(0, 0, 0, 0)"),
-    RED("rgb(255,0,0)");
+    RED("rgb(255,0,0)"),
+    GREEN("rgb(0,255,0)"),
+    BLUE("rgb(0,0,255)");
 
     override fun toString() = style
 

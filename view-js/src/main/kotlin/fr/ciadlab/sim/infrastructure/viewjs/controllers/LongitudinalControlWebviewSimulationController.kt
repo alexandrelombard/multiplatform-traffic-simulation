@@ -7,10 +7,10 @@ import fr.ciadlab.sim.infrastructure.viewjs.canvas.Color
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.clear
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.context2D
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.line
-import fr.ciadlab.sim.infrastructure.viewjs.car.carView
+import fr.ciadlab.sim.infrastructure.viewjs.car.vehicleView
 import fr.ciadlab.sim.infrastructure.viewjs.network.background
 import fr.ciadlab.sim.infrastructure.viewjs.network.intersectionView
-import fr.ciadlab.sim.infrastructure.viewjs.network.road
+import fr.ciadlab.sim.infrastructure.viewjs.network.roadView
 import fr.ciadlab.sim.infrastructure.viewjs.network.roadNetworkView
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.physics.Units
@@ -128,7 +128,7 @@ class LongitudinalControlWebviewSimulationController {
             roadNetworkView(network, canvas) {
                 background(Color.rgb(230, 230, 230))
 
-                roadNetwork.roads.forEach { road(it) }
+                roadNetwork.roads.forEach { roadView(it) }
                 roadNetwork.intersections.forEach { intersectionView(it) }
             }
 
@@ -143,7 +143,7 @@ class LongitudinalControlWebviewSimulationController {
                     strokeStyle = Color.RED
                 }
 
-                context.carView(vehicle)
+                context.vehicleView(vehicle)
             }
         }, 20)
 

@@ -6,8 +6,7 @@ import fr.ciadlab.sim.infrastructure.viewjs.canvas.context2D
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.polyline
 import fr.ciadlab.sim.math.algebra.Vector3D
 
-fun RoadNetworkView.road(road: Road) {
-    val debug = true    // TODO Externalize
+fun RoadNetworkView.roadView(road: Road, debug: Boolean = true) {
     val defaultLineColor = Color.WHITE  // TODO Externalize
 
     val context = canvas.context2D()

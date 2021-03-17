@@ -42,6 +42,34 @@ fun CanvasRenderingContext2D.line(op: Line.() -> Unit = {}) {
 }
 // endregion
 
+// region Circle
+data class Circle(
+    var centerX: Double = 0.0, var centerY: Double = 0.0, var radius: Double = 1.0,
+    var fill: Color = Color.BLACK, var stroke: Color = Color.BLACK, var strokeWidth: Double = 1.0)
+
+/**
+ * Draws a circle
+ */
+fun CanvasRenderingContext2D.circle(op: Circle.() -> Unit = {}) {
+    // Initialize settings
+    val circle = Circle()
+    op.invoke(circle)
+
+    this.save()
+
+    // Apply style
+    this.lineWidth = circle.strokeWidth
+    this.fillStyle = circle.fill.toString()
+    this.strokeStyle = circle.stroke.toString()
+
+    // Draw circle
+    this.arc(circle.centerX, circle.centerY, circle.radius, 0.0, kotlin.math.PI * 2.0)
+    this.stroke()
+
+    this.restore()
+}
+// endregion
+
 // region Polyline
 data class Polyline(
     var lineWidth: Double = 1.0,
@@ -146,7 +174,7 @@ fun CanvasRenderingContext2D.cubiccurve(op: CubicCurve.() -> Unit = {}) {
 // endregion
 
 // region Image
-fun CanvasRenderingContext2D.image(src: String): Image {
+fun image(src: String): Image {
     // Load the image
     val image = Image()
     image.src = src

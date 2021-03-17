@@ -9,11 +9,11 @@ import fr.ciadlab.sim.infrastructure.roadNetwork
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.Color
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.clear
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.context2D
-import fr.ciadlab.sim.infrastructure.viewjs.car.carView
+import fr.ciadlab.sim.infrastructure.viewjs.car.vehicleView
 import fr.ciadlab.sim.infrastructure.viewjs.controllers.LateralControlWebviewSimulationController
 import fr.ciadlab.sim.infrastructure.viewjs.network.background
 import fr.ciadlab.sim.infrastructure.viewjs.network.intersectionView
-import fr.ciadlab.sim.infrastructure.viewjs.network.road
+import fr.ciadlab.sim.infrastructure.viewjs.network.roadView
 import fr.ciadlab.sim.infrastructure.viewjs.network.roadNetworkView
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
@@ -206,10 +206,10 @@ fun loadSimViewJs(args: Array<String>) {
         roadNetworkView(eightShapedRoadNetworkModel, canvas) {
             background(Color.rgb(230, 230, 230))
 
-            roadNetwork.roads.forEach { road(it) }
+            roadNetwork.roads.forEach { roadView(it) }
             roadNetwork.intersections.forEach { intersectionView(it) }
         }
-        context.carView(vehicle)
+        context.vehicleView(vehicle)
     }, 20)
 
     // Simulation loop

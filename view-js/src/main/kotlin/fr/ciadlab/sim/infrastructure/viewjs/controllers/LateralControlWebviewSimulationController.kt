@@ -2,10 +2,10 @@ package fr.ciadlab.sim.infrastructure.viewjs.controllers
 
 import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
-import fr.ciadlab.sim.car.behavior.ReachGoalBehavior.Companion.constantSpeedControl
-import fr.ciadlab.sim.car.behavior.ReachGoalBehavior.Companion.purePursuitLateralControl
-import fr.ciadlab.sim.car.behavior.ReachGoalBehavior.Companion.stanleyLateralControl
-import fr.ciadlab.sim.car.behavior.reachGoalBehavior
+import fr.ciadlab.sim.car.behavior.default.ReachGoalBehavior.Companion.constantSpeedControl
+import fr.ciadlab.sim.car.behavior.default.ReachGoalBehavior.Companion.purePursuitLateralControl
+import fr.ciadlab.sim.car.behavior.default.ReachGoalBehavior.Companion.stanleyLateralControl
+import fr.ciadlab.sim.car.behavior.default.reachGoalBehavior
 import fr.ciadlab.sim.infrastructure.offset
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.Color
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.clear
@@ -14,9 +14,11 @@ import fr.ciadlab.sim.infrastructure.viewjs.canvas.line
 import fr.ciadlab.sim.infrastructure.viewjs.car.vehicleView
 import fr.ciadlab.sim.infrastructure.viewjs.network.background
 import fr.ciadlab.sim.infrastructure.viewjs.network.intersectionView
-import fr.ciadlab.sim.infrastructure.viewjs.network.roadView
 import fr.ciadlab.sim.infrastructure.viewjs.network.roadNetworkView
-import fr.ciadlab.sim.math.algebra.*
+import fr.ciadlab.sim.infrastructure.viewjs.network.roadView
+import fr.ciadlab.sim.math.algebra.Vector2D
+import fr.ciadlab.sim.math.algebra.project
+import fr.ciadlab.sim.math.algebra.toVector3D
 import fr.ciadlab.sim.physics.Units
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit

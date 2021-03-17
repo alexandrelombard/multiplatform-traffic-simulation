@@ -2,7 +2,7 @@ package fr.ciadlab.sim.infrastructure.viewjs.controllers
 
 import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
-import fr.ciadlab.sim.car.behavior.reachGoalBehavior
+import fr.ciadlab.sim.car.behavior.default.reachGoalBehavior
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.Color
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.clear
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.context2D
@@ -10,8 +10,8 @@ import fr.ciadlab.sim.infrastructure.viewjs.canvas.line
 import fr.ciadlab.sim.infrastructure.viewjs.car.vehicleView
 import fr.ciadlab.sim.infrastructure.viewjs.network.background
 import fr.ciadlab.sim.infrastructure.viewjs.network.intersectionView
-import fr.ciadlab.sim.infrastructure.viewjs.network.roadView
 import fr.ciadlab.sim.infrastructure.viewjs.network.roadNetworkView
+import fr.ciadlab.sim.infrastructure.viewjs.network.roadView
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.physics.Units
 import fr.ciadlab.sim.physics.Units.Milliseconds

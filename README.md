@@ -95,3 +95,13 @@ Clone the project, let gradle configure it for you, then go to the view-javafx m
 _SimulationLauncher.kt_
 
 Remark: Java 15 required.
+
+## Build notes
+
+First, change the vehicleView image directory to the appropriate one.
+
+Then, to produce a runnable JS file, in the *view-js* module, run the following:
+
+```
+gradle browserDevelopmentWebpack
+```

@@ -40,7 +40,7 @@ class VehicleView (var vehicle: Vehicle) {
     }
 
     companion object {
-        val image: Image = image("$imageBasePath/car_up_right.png")
+        var image: Image = image("$imageBasePath/car_up_right.png")
     }
 
     private fun toDegrees(radian: Double) = radian / PI * 180.0

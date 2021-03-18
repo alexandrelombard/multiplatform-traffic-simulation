@@ -8,7 +8,7 @@ import kotlin.math.PI
 
 private var carImage: Image? = null
 
-//private val imageBasePath = "assets/js/sim-view-js"
+//private val imageBasePath = "./assets/js/sim-view-js"
 private val imageBasePath = "./build/distributions/fr/ciadlab/sim/infrastructure/viewjs/car"
 
 class VehicleView (var vehicle: Vehicle) {

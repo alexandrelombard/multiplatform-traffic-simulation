@@ -65,7 +65,10 @@ fun CanvasRenderingContext2D.circle(op: Circle.() -> Unit = {}) {
     // Draw circle
     this.beginPath()
     this.arc(circle.centerX, circle.centerY, circle.radius, 0.0, kotlin.math.PI * 2.0)
+    this.closePath()
     this.stroke()
+    if(circle.fill != Color.TRANSPARENT)
+        this.fill()
 
     this.restore()
 }

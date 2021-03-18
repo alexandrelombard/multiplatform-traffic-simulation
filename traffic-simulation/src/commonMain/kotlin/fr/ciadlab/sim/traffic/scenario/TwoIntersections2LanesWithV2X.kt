@@ -14,6 +14,7 @@ import fr.ciadlab.sim.traffic.trafficSimulation
 import fr.ciadlab.sim.utils.UUID
 import fr.ciadlab.sim.v2x.V2XMessage
 import fr.ciadlab.sim.v2x.intersection.roadSideUnit
+import fr.ciadlab.sim.v2x.intersection.transparentIntersectionManager
 import fr.ciadlab.sim.vehicle.Vehicle
 
 object TwoIntersections2LanesWithV2X {
@@ -85,24 +86,7 @@ object TwoIntersections2LanesWithV2X {
             val southNorth = laneConnector(roadSouthEast, roadNorthEast)
 
             roadSideUnit {
-                val messageQueue = arrayListOf<Pair<UUID, V2XMessage>>()
-                communicationUnit.onMessageReceived += { id, message -> messageQueue.add(Pair(id, message)) }
-
-                val authorizationList = arrayListOf<Pair<UUID, V2XMessage>>()
-
-                protocol = {
-                    // Read the message queue
-                    val pendingMessages = arrayListOf<Pair<UUID, V2XMessage>>()
-                    messageQueue.let {
-                        pendingMessages.addAll(it)
-                        it.clear()
-                    }
-                    // Update the internal list
-                    pendingMessages.filter { it.second.d }
-                    // Transmit the authorization list
-                }
-
-//                protocol = transparentIntersectionManager(communicationUnit, this@intersection.laneConnectors)
+                protocol = transparentIntersectionManager(communicationUnit, this@intersection.laneConnectors)
             }
         }
     }

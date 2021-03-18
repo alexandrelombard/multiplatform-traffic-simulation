@@ -88,6 +88,8 @@ object TwoIntersections2LanesWithV2X {
                 val messageQueue = arrayListOf<Pair<UUID, V2XMessage>>()
                 communicationUnit.onMessageReceived += { id, message -> messageQueue.add(Pair(id, message)) }
 
+                val authorizationList = arrayListOf<Pair<UUID, V2XMessage>>()
+
                 protocol = {
                     // Read the message queue
                     val pendingMessages = arrayListOf<Pair<UUID, V2XMessage>>()
@@ -96,8 +98,11 @@ object TwoIntersections2LanesWithV2X {
                         it.clear()
                     }
                     // Update the internal list
+                    pendingMessages.filter { it.second.d }
                     // Transmit the authorization list
                 }
+
+//                protocol = transparentIntersectionManager(communicationUnit, this@intersection.laneConnectors)
             }
         }
     }

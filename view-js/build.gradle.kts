@@ -30,6 +30,11 @@ kotlin {
 //    }
     js {
         browser {
+            // Disable "dead code elimination"
+            dceTask {
+                dceOptions.devMode = true
+            }
+
             // Remark: the browserDistribution task requires webpack, webpack-cli and webpack-dev-server node modules
             // to be installed locally
             webpackTask {
@@ -44,6 +49,23 @@ kotlin {
             binaries.executable()
         }
     }
+
+    // Listen to the build end to replace the module name with a custom one
+    val initialModuleName = "view-js"
+    val finalModuleName = "simViewApp"
+    project.gradle.addBuildListener(object: BuildListener {
+        override fun buildStarted(gradle: Gradle) {}
+        override fun settingsEvaluated(settings: Settings) {}
+        override fun projectsLoaded(gradle: Gradle) {}
+        override fun projectsEvaluated(gradle: Gradle) {}
+
+        override fun buildFinished(result: BuildResult) {
+            // Replace the module name in the output JS file
+            val jsFile = File(projectDir, "build/distributions/mps.js")
+            val jsFileContent = jsFile.readText()
+            jsFile.writeText(jsFileContent.replace("\"$initialModuleName\"", "\"$finalModuleName\""))
+        }
+    })
 
     sourceSets {
         val main by getting {

@@ -52,7 +52,7 @@ kotlin {
 
     // Listen to the build end to replace the module name with a custom one
     val initialModuleName = "view-js"
-    val finalModuleName = "simViewApp"
+    val finalModuleName = "mps"
     project.gradle.addBuildListener(object: BuildListener {
         override fun buildStarted(gradle: Gradle) {}
         override fun settingsEvaluated(settings: Settings) {}

@@ -11,6 +11,8 @@ import fr.ciadlab.sim.infrastructure.viewjs.canvas.clear
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.context2D
 import fr.ciadlab.sim.infrastructure.viewjs.car.vehicleView
 import fr.ciadlab.sim.infrastructure.viewjs.controllers.LateralControlWebviewSimulationController
+import fr.ciadlab.sim.infrastructure.viewjs.controllers.LongitudinalControlWebviewSimulationController
+import fr.ciadlab.sim.infrastructure.viewjs.controllers.TwoIntersectionsWebviewSimulationController
 import fr.ciadlab.sim.infrastructure.viewjs.network.background
 import fr.ciadlab.sim.infrastructure.viewjs.network.intersectionView
 import fr.ciadlab.sim.infrastructure.viewjs.network.roadNetworkView
@@ -52,6 +54,8 @@ fun main() {
         loadSimViewJs(arrayOf())
         loadTwoIntersections(arrayOf())
         LateralControlWebviewSimulationController()
+        LongitudinalControlWebviewSimulationController()
+        TwoIntersectionsWebviewSimulationController()
     }
 }
 

@@ -12,7 +12,12 @@ import org.w3c.dom.CanvasRenderingContext2D
 
 class TrafficSimulationView(val trafficSimulation: TrafficSimulation<Vehicle>)
 
-fun CanvasRenderingContext2D.trafficSimulationView(trafficSimulation: TrafficSimulation<Vehicle>) {
+fun CanvasRenderingContext2D.trafficSimulationView(trafficSimulation: TrafficSimulation<Vehicle>, op: TrafficSimulationView.() -> Unit = {}) {
+    this.save()
+
+    val trafficSimulationView = TrafficSimulationView(trafficSimulation)
+    op.invoke(trafficSimulationView)
+
     // Collection of elements which are to be visually updated
     val vehicleViews = hashMapOf<Vehicle, VehicleView>()
 
@@ -58,4 +63,6 @@ fun CanvasRenderingContext2D.trafficSimulationView(trafficSimulation: TrafficSim
     trafficSimulation.vehicles.forEach {
         vehicleView(it)
     }
+
+    this.restore()
 }

@@ -1,5 +1,6 @@
 package fr.ciadlab.sim.infrastructure.viewjs.simulation
 
+import fr.ciadlab.sim.infrastructure.viewjs.canvas.Color
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.circle
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.line
 import fr.ciadlab.sim.traffic.Spawner
@@ -9,6 +10,7 @@ fun CanvasRenderingContext2D.spawnerView(spawner: Spawner<*>) {
     circle {
         centerX = spawner.position.x
         centerY = spawner.position.y
+        fill = Color.BLACK
         radius = 5.0
     }
 

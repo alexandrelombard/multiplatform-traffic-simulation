@@ -15,12 +15,14 @@ import fr.ciadlab.sim.infrastructure.viewjs.network.background
 import fr.ciadlab.sim.infrastructure.viewjs.network.intersectionView
 import fr.ciadlab.sim.infrastructure.viewjs.network.roadNetworkView
 import fr.ciadlab.sim.infrastructure.viewjs.network.roadView
+import fr.ciadlab.sim.infrastructure.viewjs.simulation.trafficSimulationView
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
 import fr.ciadlab.sim.math.geometry.hermiteSpline
 import fr.ciadlab.sim.physics.Units.KilometersPerHour
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit
+import fr.ciadlab.sim.traffic.scenario.TwoIntersections2LanesWithTrafficLights
 import fr.ciadlab.sim.vehicle.Vehicle
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -48,6 +50,7 @@ fun main() {
     // Required functions should be referred to in this main function.
     if(false) {
         loadSimViewJs(arrayOf())
+        loadTwoIntersections(arrayOf())
         LateralControlWebviewSimulationController()
     }
 }
@@ -217,5 +220,35 @@ fun loadSimViewJs(args: Array<String>) {
 //        vehicle = vehicle.update(0.0, 0.0, 0.01)
         val driverAction = vehicle.reachGoalBehavior(driverBehavioralState).apply(10.0 unit Milliseconds)
         vehicle = vehicle.update(driverAction.targetAcceleration, driverAction.targetWheelAngle, 10.0 unit Milliseconds)
+    }, 10)
+}
+
+@JsName("loadTwoIntersections")
+fun loadTwoIntersections(args: Array<String>) {
+    val canvas = generateBaseCanvas(args)
+    val context = canvas.getContext("2d") as CanvasRenderingContext2D
+
+    val roadNetworkModel = TwoIntersections2LanesWithTrafficLights.network
+    val simulation = TwoIntersections2LanesWithTrafficLights.simulation
+
+    // Drawing loop
+    window.setInterval({
+        context.clear(canvas)
+
+        context.trafficSimulationView(simulation)
+
+//        roadNetworkView(roadNetworkModel, canvas) {
+//            background(Color.rgb(230, 230, 230))
+//
+//            roadNetwork.roads.forEach { roadView(it) }
+//            roadNetwork.intersections.forEach { intersectionView(it) }
+//            // TODO roadNetwork.trafficLights.forEach { trafficLightView(it) }
+//        }
+    }, 20)
+
+    // Simulation loop
+    window.setInterval({
+//        vehicle = vehicle.update(0.0, 0.0, 0.01)
+        simulation.step(0.01)
     }, 10)
 }

@@ -24,6 +24,7 @@ fun CanvasRenderingContext2D.trafficLightView(trafficLight: IntersectionTrafficL
         centerX = reference.x
         centerY = reference.y
         radius = 1.0
+        strokeWidth = 0.5
         fill = if(state == TrafficLightState.RED) Color.RED else Color.BLACK
     }
 
@@ -32,6 +33,7 @@ fun CanvasRenderingContext2D.trafficLightView(trafficLight: IntersectionTrafficL
         centerX = reference.x
         centerY = reference.y + 2.5
         radius = 1.0
+        strokeWidth = 0.5
         fill = if(state == TrafficLightState.YELLOW) Color.YELLOW else Color.BLACK
     }
 
@@ -40,6 +42,7 @@ fun CanvasRenderingContext2D.trafficLightView(trafficLight: IntersectionTrafficL
         centerX = reference.x
         centerY = reference.y + 5.0
         radius = 1.0
+        strokeWidth = 0.5
         fill = if(state == TrafficLightState.GREEN) Color.GREEN else Color.BLACK
     }
 }

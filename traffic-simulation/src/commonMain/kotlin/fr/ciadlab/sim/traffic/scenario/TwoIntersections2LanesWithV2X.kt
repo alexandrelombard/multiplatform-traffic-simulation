@@ -11,8 +11,6 @@ import fr.ciadlab.sim.traffic.spawner
 import fr.ciadlab.sim.traffic.spawner.TimeAwareGenerationStrategy
 import fr.ciadlab.sim.traffic.strategy
 import fr.ciadlab.sim.traffic.trafficSimulation
-import fr.ciadlab.sim.utils.UUID
-import fr.ciadlab.sim.v2x.V2XMessage
 import fr.ciadlab.sim.v2x.intersection.roadSideUnit
 import fr.ciadlab.sim.v2x.intersection.transparentIntersectionManager
 import fr.ciadlab.sim.vehicle.Vehicle
@@ -72,13 +70,9 @@ object TwoIntersections2LanesWithV2X {
             val westEast = laneConnector(roadWest, roadMiddle)
             val southNorth = laneConnector(roadSouthWest, roadNorthWest)
 
-//            roadSideUnit {
-//                protocol = intersectionManagement {
-//                    policy = transparentIntersectionManager {
-//
-//                    }
-//                }
-//            }
+            roadSideUnit {
+                protocol = transparentIntersectionManager(communicationUnit, this@intersection.laneConnectors)
+            }
         }
 
         intersection {

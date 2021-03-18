@@ -10,7 +10,7 @@ import fr.ciadlab.sim.v2x.V2XMessage
  * @author Alexandre Lombard
  */
 data class TransparentIntersectionManager(
-    val laneConnectors: List<LaneConnector>,
+    val laneConnectors: Collection<LaneConnector>,
     val orderList: MutableList<TransparentIntersectionManagerMessage> = arrayListOf(),
     val communicationUnit: V2XCommunicationUnit = V2XCommunicationUnit()
 ) {
@@ -20,7 +20,7 @@ data class TransparentIntersectionManager(
         communicationUnit.onMessageReceived += { id, message -> messageQueue.add(Pair(id, message)) }
     }
 
-    fun execute() {
+    fun execute(deltaTime: Double) {
         // Fetch the pending messages
         val pendingMessages = arrayListOf<Pair<UUID, V2XMessage>>()
         messageQueue.let {
@@ -49,25 +49,19 @@ data class TransparentIntersectionManager(
         // Accept the new ones
         parsedMessages.filter { it.type == MessageType.APPROACH }.forEach { message ->
             if(!orderList.any { it.identifier == message.identifier }) {
-
+                orderList.add(message)
             }
         }
-        // Transmit the authorization list
 
+        // Transmit the authorization list
+        communicationUnit.broadcast(V2XMessage(orderList.map { it.data }.reduce { acc, bytes -> acc + bytes }))
     }
 }
 
-fun transparentIntersectionManager(communicationUnit: V2XCommunicationUnit, laneConnectors: List<LaneConnector>):
+fun transparentIntersectionManager(communicationUnit: V2XCommunicationUnit, laneConnectors: Collection<LaneConnector>):
         (Double)->Unit {
-    val messageQueue = arrayListOf<Pair<UUID, V2XMessage>>()
-    communicationUnit.onMessageReceived += { id, message -> messageQueue.add(Pair(id, message)) }
-
-    val authorizationList = arrayListOf<Pair<UUID, V2XMessage>>()
-
-    return { deltaTime ->
-        // Read the message queue
-
-    }
+    val manager = TransparentIntersectionManager(laneConnectors = laneConnectors, communicationUnit = communicationUnit)
+    return manager::execute
 }
 
 enum class MessageType {

@@ -1,6 +1,7 @@
 package fr.ciadlab.sim.traffic.scenario
 
 import fr.ciadlab.sim.infrastructure.*
+import fr.ciadlab.sim.infrastructure.v2x.roadSideUnit
 import fr.ciadlab.sim.infrastructure.view.basics.basicVehicleBehavior
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
@@ -11,7 +12,6 @@ import fr.ciadlab.sim.traffic.spawner
 import fr.ciadlab.sim.traffic.spawner.TimeAwareGenerationStrategy
 import fr.ciadlab.sim.traffic.strategy
 import fr.ciadlab.sim.traffic.trafficSimulation
-import fr.ciadlab.sim.v2x.intersection.roadSideUnit
 import fr.ciadlab.sim.v2x.intersection.transparentIntersectionManager
 import fr.ciadlab.sim.vehicle.Vehicle
 
@@ -66,22 +66,22 @@ object TwoIntersections2LanesWithV2X {
             backwardLanesCount = 0
         }
 
-        intersection {
-            val westEast = laneConnector(roadWest, roadMiddle)
-            val southNorth = laneConnector(roadSouthWest, roadNorthWest)
-
-            roadSideUnit {
-                protocol = transparentIntersectionManager(communicationUnit, this@intersection.laneConnectors)
-            }
+        val firstIntersection = intersection {
+            laneConnector(roadWest, roadMiddle)
+            laneConnector(roadSouthWest, roadNorthWest)
         }
 
-        intersection {
-            val westEast = laneConnector(roadMiddle, roadEast)
-            val southNorth = laneConnector(roadSouthEast, roadNorthEast)
+        roadSideUnit(firstIntersection) {
+            protocol = transparentIntersectionManager(communicationUnit, intersection.laneConnectors)
+        }
 
-            roadSideUnit {
-                protocol = transparentIntersectionManager(communicationUnit, this@intersection.laneConnectors)
-            }
+        val secondIntersection = intersection {
+            laneConnector(roadMiddle, roadEast)
+            laneConnector(roadSouthEast, roadNorthEast)
+        }
+
+        roadSideUnit(secondIntersection) {
+            protocol = transparentIntersectionManager(communicationUnit, intersection.laneConnectors)
         }
     }
 

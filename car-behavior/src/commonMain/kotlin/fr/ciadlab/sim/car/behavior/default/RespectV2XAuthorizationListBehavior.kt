@@ -111,5 +111,5 @@ class RespectV2XAuthorizationListBehavior(
 
 fun Vehicle.respectV2XAuthorizationListBehavior(
     driverBehavioralState: DriverBehavioralState, perceivedTrafficLights: List<IntersectionTrafficLight>): DriverBehavior {
-    return RespectTrafficLightBehavior(this, driverBehavioralState, perceivedTrafficLights)
+    return RespectV2XAuthorizationListBehavior(this, driverBehavioralState, perceivedTrafficLights)
 }

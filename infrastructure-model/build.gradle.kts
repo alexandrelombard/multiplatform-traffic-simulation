@@ -21,6 +21,7 @@ kotlin {
                 implementation(project(":commons-math"))
                 implementation(project(":commons-utils"))
                 implementation(project(":commons-simulation"))
+                implementation(project(":v2x-simulation"))
             }
         }
         val commonTest by getting {

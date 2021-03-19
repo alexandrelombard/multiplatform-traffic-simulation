@@ -1,22 +1,25 @@
 package fr.ciadlab.sim.car.perception.signals
 
+import fr.ciadlab.sim.infrastructure.Intersection
 import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLight
+import fr.ciadlab.sim.utils.UUID
 
-class TrafficLightPerceptionProvider {
+class IntersectionRsuPerceptionProvider {
     /**
-     * Performs the traffic lights detection and returns the state of these lights associated to the appropriate
-     * lane connector.
+     * Performs the RSU detection.
      */
-    fun performTrafficLightDetection(
+    fun performIntersectionRsuDetection(
         route: List<Road>,
-        trafficLights: Collection<IntersectionTrafficLight>): List<IntersectionTrafficLight> {
+        intersections: Collection<Intersection>): List<UUID> {
         // We check if there is at least two connected roads in the list
         if(route.size < 2)
             return emptyList()
 
         // We then check if there a traffic light managing the connection between route[0] and route[1]
-        return trafficLights.filter {
+        return intersections
+            .filter {  }
+            .filter {
             it.laneConnectors.any {
                 // FIXME This is not optimal
                 var res = false

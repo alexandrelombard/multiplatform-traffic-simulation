@@ -1,12 +1,14 @@
 package fr.ciadlab.sim.infrastructure
 
 import fr.ciadlab.sim.infrastructure.intersection.*
+import fr.ciadlab.sim.infrastructure.v2x.IntersectionRoadSideUnit
 import fr.ciadlab.sim.math.algebra.Vector3D
 
 data class DslRoadNetwork(
     var roads: MutableList<Road> = arrayListOf(),
     var intersections: MutableList<Intersection> = arrayListOf(),
     var trafficLights: MutableList<IntersectionTrafficLights> = arrayListOf(),
+    var intersectionRsu: MutableList<IntersectionRoadSideUnit> = arrayListOf(),
     var trafficType: TrafficType = TrafficType.RIGHT_HAND)
 
 fun roadNetwork(op: DslRoadNetwork.() -> Unit): RoadNetwork {

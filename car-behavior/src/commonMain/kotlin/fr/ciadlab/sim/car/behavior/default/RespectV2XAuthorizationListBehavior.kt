@@ -8,19 +8,29 @@ import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLight
 import fr.ciadlab.sim.utils.UUID
 import fr.ciadlab.sim.v2x.V2XCommunicationUnit
 import fr.ciadlab.sim.v2x.V2XMessage
+import fr.ciadlab.sim.v2x.intersection.TransparentIntersectionManagerMessage
 import fr.ciadlab.sim.vehicle.Vehicle
 
-class RespectTransparentIntersectionManagerBehavior(
+data class AuthorizationMessage(
+    val
+)
+
+class RespectV2XAuthorizationListBehavior(
     val vehicle: Vehicle,
     val communicationUnit: V2XCommunicationUnit,
-    val pendingMessages: MutableList<Pair<UUID, V2XMessage>>,
+    val authorizationList: MutableList<Pair<UUID, V2XMessage>>,
     val driverBehavioralState: DriverBehavioralState,
     val closestRoadSideUnit: UUID?,
-    val longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, distanceToTrafficLight: Double) -> Double = Companion::idmLongitudinalControl,
+    val longitudinalControl: (DriverBehavioralState, Vehicle, Double) -> Double = Companion::idmLongitudinalControl,
 ) : DriverBehavior {
     override fun apply(deltaTime: Double): DriverBehavioralAction {
         if(closestRoadSideUnit != null) {
-
+            val authorizations = authorizationList.map { TransparentIntersectionManagerMessage.parse(it.second.data) }
+            if(authorizations.any { it.identifier == communicationUnit.identifier }) {
+                // If we are in the authorization list
+            } else {
+                // If we aren't in the authorization list
+            }
         }
 
         return DriverBehavioralAction(Double.POSITIVE_INFINITY, 0.0)
@@ -37,7 +47,7 @@ class RespectTransparentIntersectionManagerBehavior(
     }
 }
 
-fun Vehicle.respectTransparentIntersectionManagerBehavior(
+fun Vehicle.respectV2XAuthorizationListBehavior(
     driverBehavioralState: DriverBehavioralState, perceivedTrafficLights: List<IntersectionTrafficLight>): DriverBehavior {
     return RespectTrafficLightBehavior(this, driverBehavioralState, perceivedTrafficLights)
 }

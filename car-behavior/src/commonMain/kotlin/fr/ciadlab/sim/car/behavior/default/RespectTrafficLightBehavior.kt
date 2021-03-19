@@ -12,7 +12,7 @@ class RespectTrafficLightBehavior(
     val vehicle: Vehicle,
     val driverBehavioralState: DriverBehavioralState,
     val perceivedTrafficLights: List<IntersectionTrafficLight>,
-    val longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, distanceToTrafficLight: Double) -> Double = Companion::idmLongitudinalControl
+    val longitudinalControl: (DriverBehavioralState, Vehicle, Double) -> Double = Companion::idmLongitudinalControl
 ) : DriverBehavior {
     override fun apply(deltaTime: Double): DriverBehavioralAction {
         // TODO Optimize

@@ -16,8 +16,8 @@ import kotlin.math.sqrt
 class ReachGoalBehavior(
     val vehicle: Vehicle,
     val driverBehavioralState: DriverBehavioralState,
-    val longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = Companion::idmLongitudinalControl,
-    val lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = Companion::curvatureFollowingLateralControl)
+    val longitudinalControl: (DriverBehavioralState, Vehicle) -> Double = Companion::idmLongitudinalControl,
+    val lateralControl: (DriverBehavioralState, Vehicle) -> Double = Companion::curvatureFollowingLateralControl)
     : DriverBehavior {
 
     /**

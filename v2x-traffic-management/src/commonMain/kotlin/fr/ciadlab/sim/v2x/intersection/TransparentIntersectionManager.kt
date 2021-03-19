@@ -28,12 +28,7 @@ data class TransparentIntersectionManager(
             it.clear()
         }
         val parsedMessages = pendingMessages.map {
-            val splitMessage = it.second.data.decodeToString().split(" ")
-            TransparentIntersectionManagerMessage(
-                MessageType.valueOf(splitMessage[0]),
-                UUID.fromString(splitMessage[1]),
-                splitMessage[2].toDouble(),
-                splitMessage[3].toDouble())
+            TransparentIntersectionManagerMessage.parse(it.second.data)
         }
         // Remove the ones who left the intersection
         parsedMessages.filter { it.type == MessageType.EXIT }.forEach { message ->
@@ -72,4 +67,15 @@ enum class MessageType {
 
 data class TransparentIntersectionManagerMessage(
     val type: MessageType, val identifier: UUID, val distance: Double, val speed: Double)
-    : V2XMessage("${type.name} $identifier $distance $speed".encodeToByteArray())
+    : V2XMessage("${type.name} $identifier $distance $speed".encodeToByteArray()) {
+    companion object {
+        fun parse(byteArray: ByteArray): TransparentIntersectionManagerMessage {
+            val splitMessage = byteArray.decodeToString().split(" ")
+            return TransparentIntersectionManagerMessage(
+                MessageType.valueOf(splitMessage[0]),
+                UUID.fromString(splitMessage[1]),
+                splitMessage[2].toDouble(),
+                splitMessage[3].toDouble())
+        }
+    }
+}

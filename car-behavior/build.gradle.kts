@@ -25,6 +25,7 @@ kotlin {
                 implementation(project(":commons-simulation"))
                 implementation(project(":car-model"))
                 implementation(project(":infrastructure-model"))
+                implementation(project(":v2x-simulation"))
             }
         }
         val commonTest by getting {

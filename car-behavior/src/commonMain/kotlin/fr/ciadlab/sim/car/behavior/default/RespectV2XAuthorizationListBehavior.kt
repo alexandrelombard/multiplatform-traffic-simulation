@@ -4,7 +4,6 @@ import fr.ciadlab.sim.car.behavior.DriverBehavior
 import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
 import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
-import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLight
 import fr.ciadlab.sim.utils.UUID
 import fr.ciadlab.sim.v2x.V2XCommunicationUnit
 import fr.ciadlab.sim.v2x.V2XMessage
@@ -110,6 +109,19 @@ class RespectV2XAuthorizationListBehavior(
 }
 
 fun Vehicle.respectV2XAuthorizationListBehavior(
-    driverBehavioralState: DriverBehavioralState, perceivedTrafficLights: List<IntersectionTrafficLight>): DriverBehavior {
-    return RespectV2XAuthorizationListBehavior(this, driverBehavioralState, perceivedTrafficLights)
+    vehicle: Vehicle,
+    communicationUnit: V2XCommunicationUnit,
+    authorizationList: MutableList<Pair<UUID, V2XMessage>>,
+    closestRoadSideUnit: UUID?,
+    distanceToIntersectionEntrance: Double,
+    distanceToIntersectionExit: Double,
+    driverBehavioralState: DriverBehavioralState): DriverBehavior {
+    return RespectV2XAuthorizationListBehavior(
+        vehicle,
+        communicationUnit,
+        authorizationList,
+        driverBehavioralState,
+        closestRoadSideUnit,
+        distanceToIntersectionEntrance,
+        distanceToIntersectionExit)
 }

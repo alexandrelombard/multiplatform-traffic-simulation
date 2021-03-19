@@ -46,7 +46,7 @@ fun TrafficSimulation<Vehicle>.generateTrafficLightPerceptions(route: List<Pair<
  */
 fun TrafficSimulation<Vehicle>.generateIntersectionRsuPerceptions(
     route: List<Pair<Road, Boolean>>?, vehicle: Vehicle) : List<UUID> {
-    TODO()
+
 }
 
 /**

@@ -36,6 +36,11 @@ data class Vehicle(
     val yaw: Double by lazy { atan2(direction.y, direction.x) }
 
     /**
+     * The speed of the vehicle
+     */
+    val speed: Double by lazy { velocity.norm }
+
+    /**
      * Updates the vehicle with the given vehicle command
      * @param vehicleCommand the vehicle command
      * @param deltaTime the delta of time for the update

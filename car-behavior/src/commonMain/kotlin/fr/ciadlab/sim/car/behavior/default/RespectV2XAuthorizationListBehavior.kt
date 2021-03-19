@@ -11,10 +11,7 @@ import fr.ciadlab.sim.v2x.V2XMessage
 import fr.ciadlab.sim.v2x.intersection.MessageType
 import fr.ciadlab.sim.v2x.intersection.TransparentIntersectionManagerMessage
 import fr.ciadlab.sim.vehicle.Vehicle
-
-data class AuthorizationMessage(
-    val
-)
+import kotlin.math.max
 
 class RespectV2XAuthorizationListBehavior(
     val vehicle: Vehicle,
@@ -24,14 +21,52 @@ class RespectV2XAuthorizationListBehavior(
     val closestRoadSideUnit: UUID?,
     val distanceToIntersectionEntrance: Double,
     val distanceToIntersectionExit: Double,
-    val longitudinalControl: (DriverBehavioralState, Vehicle, Double) -> Double = Companion::idmLongitudinalControl,
+    val longitudinalControl: (DriverBehavioralState, Double, Double, Double) -> Double = Companion::idmLongitudinalControl,
 ) : DriverBehavior {
     override fun apply(deltaTime: Double): DriverBehavioralAction {
         if(closestRoadSideUnit != null) {
             val authorizations = authorizationList.map { TransparentIntersectionManagerMessage.parse(it.second.data) }
-            if(authorizations.any { it.identifier == communicationUnit.identifier }) {
+            val position = authorizations.indexOfFirst { it.identifier == communicationUnit.identifier }
+            if(position >= 0) {
                 // If we are in the authorization list, check the position
+                if(distanceToIntersectionExit > 0) {
+                    // Still in the intersection, we send an update message
+                    communicationUnit.unicast(
+                        closestRoadSideUnit,
+                        TransparentIntersectionManagerMessage(
+                            MessageType.UPDATE,
+                            communicationUnit.identifier,
+                            distanceToIntersectionEntrance,
+                            vehicle.speed))
 
+                    // Depending on the position in the list, we adjust the speed accordingly
+                    // TODO Consider lane connectors to optimize the movement
+                    if(position == 0) {
+                        // Free speed
+                        return DriverBehavioralAction(Double.POSITIVE_INFINITY, 0.0)
+                    } else {
+                        // Ajust speed according to leader
+                        val leader = authorizations[position - 1]
+                        return DriverBehavioralAction(
+                            longitudinalControl(
+                                driverBehavioralState,
+                                vehicle.speed,
+                                vehicle.speed - leader.speed,
+                                max(0.0, leader.distance) + distanceToIntersectionEntrance),    // TODO Check this
+                            0.0)
+                    }
+                } else  {
+                    // Leaving the intersection, we send an exit message
+                    communicationUnit.unicast(
+                        closestRoadSideUnit,
+                        TransparentIntersectionManagerMessage(
+                            MessageType.UPDATE,
+                            communicationUnit.identifier,
+                            distanceToIntersectionEntrance,
+                            vehicle.speed))
+                    // And we are free
+                    return DriverBehavioralAction(Double.POSITIVE_INFINITY, 0.0)
+                }
             } else {
                 // If we aren't in the authorization list
                 if(distanceToIntersectionEntrance > 0) {
@@ -43,9 +78,9 @@ class RespectV2XAuthorizationListBehavior(
                             communicationUnit.identifier,
                             distanceToIntersectionEntrance,
                             vehicle.speed))
-                    // Adjust the speed
+                    // Adjust the speed (full stop at intersection entrance)
                     return DriverBehavioralAction(
-                        longitudinalControl(driverBehavioralState, vehicle, distanceToIntersectionEntrance), 0.0)
+                        longitudinalControl(driverBehavioralState, vehicle.speed, vehicle.speed, distanceToIntersectionEntrance), 0.0)
                 } else {
                     // Free speed: we have left the intersection
                     return DriverBehavioralAction(Double.POSITIVE_INFINITY, 0.0)
@@ -57,11 +92,13 @@ class RespectV2XAuthorizationListBehavior(
     }
 
     companion object {
-        fun idmLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, distance: Double): Double {
+        fun idmLongitudinalControl(
+            driverBehavioralState: DriverBehavioralState,
+            vehicleSpeed: Double, relativeLeaderSpeed: Double, distance: Double): Double {
             return intelligentDriverModelControl(
                 distance,
-                vehicle.velocity.norm,
-                vehicle.velocity.norm,
+                vehicleSpeed,
+                relativeLeaderSpeed,
                 driverBehavioralState.maximumSpeed)
         }
     }

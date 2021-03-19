@@ -20,7 +20,7 @@ import fr.ciadlab.sim.physics.Units.KilometersPerHour
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit
 import fr.ciadlab.sim.traffic.exitArea
-import fr.ciadlab.sim.traffic.scenario.TwoIntersections2LanesWithTrafficLights
+import fr.ciadlab.sim.traffic.scenario.TwoIntersections2LanesWithV2X
 import fr.ciadlab.sim.traffic.spawner
 import fr.ciadlab.sim.traffic.trafficSimulation
 import fr.ciadlab.sim.vehicle.Vehicle
@@ -165,8 +165,10 @@ class SimulationView : View() {
 //    private val roadNetworkModel = simpleIntersectionRoadNetworkModel
 //    private val simulation = SimpleIntersection2LanesWithTrafficLights.simulation
 //    private val roadNetworkModel = SimpleIntersection2LanesWithTrafficLights.network
-    private val simulation = TwoIntersections2LanesWithTrafficLights.simulation
-    private val roadNetworkModel = TwoIntersections2LanesWithTrafficLights.network
+//    private val simulation = TwoIntersections2LanesWithTrafficLights.simulation
+//    private val roadNetworkModel = TwoIntersections2LanesWithTrafficLights.network
+    private val simulation = TwoIntersections2LanesWithV2X.simulation
+    private val roadNetworkModel = TwoIntersections2LanesWithV2X.network
 
     init {
         // Close when the main stage is closed

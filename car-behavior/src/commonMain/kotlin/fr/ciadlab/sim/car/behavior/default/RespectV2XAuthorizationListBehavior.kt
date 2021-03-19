@@ -13,6 +13,11 @@ import fr.ciadlab.sim.v2x.intersection.TransparentIntersectionManagerMessage
 import fr.ciadlab.sim.vehicle.Vehicle
 import kotlin.math.max
 
+/**
+ * Implementation of a driver behavior regarding the interaction with RSU units for intersection management.
+ * It relies on the Transparent Intersection Manager protocol.
+ * @author Alexandre Lombard
+ */
 class RespectV2XAuthorizationListBehavior(
     val vehicle: Vehicle,
     val communicationUnit: V2XCommunicationUnit,

@@ -12,6 +12,7 @@ import fr.ciadlab.sim.traffic.spawner
 import fr.ciadlab.sim.traffic.spawner.TimeAwareGenerationStrategy
 import fr.ciadlab.sim.traffic.strategy
 import fr.ciadlab.sim.traffic.trafficSimulation
+import fr.ciadlab.sim.v2x.V2XCommunicationUnit
 import fr.ciadlab.sim.v2x.intersection.transparentIntersectionManager
 import fr.ciadlab.sim.vehicle.Vehicle
 
@@ -92,9 +93,13 @@ object TwoIntersections2LanesWithV2X {
         /** Store the routes of the vehicles */
         val routes = hashMapOf<Vehicle, List<Pair<Road, Boolean>>?>()
 
+        /** Store the communication units of the vehicles */
+        val onBoardUnits = hashMapOf<Vehicle, V2XCommunicationUnit>()
+
         roadNetwork = network
 
-        onSpawn.add { v, _ -> basicOnSpawn(v, routes) }
+        onSpawn += { v, _ -> basicOnSpawn(v, routes) }
+        onDestroy += { onBoardUnits.remove(it) }
 
         vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(routes, vehicle, deltaTime) }
 
@@ -104,7 +109,9 @@ object TwoIntersections2LanesWithV2X {
             position = Vector2D(-100.0, 0.0)
             direction = Vector2D(1.0, 0.0)
             generation = {
-                Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
+                val vehicle = Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
+                onBoardUnits[vehicle] = V2XCommunicationUnit()
+                vehicle
             }
             strategy(TimeAwareGenerationStrategy(this@trafficSimulation))
         }
@@ -113,7 +120,9 @@ object TwoIntersections2LanesWithV2X {
             position = Vector2D(0.0, -100.0)
             direction = Vector2D(0.0, 1.0)
             generation = {
-                Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
+                val vehicle = Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
+                onBoardUnits[vehicle] = V2XCommunicationUnit()
+                vehicle
             }
             strategy(TimeAwareGenerationStrategy(this@trafficSimulation))
         }
@@ -122,7 +131,9 @@ object TwoIntersections2LanesWithV2X {
             position = Vector2D(100.0, -100.0)
             direction = Vector2D(0.0, 1.0)
             generation = {
-                Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
+                val vehicle = Vehicle(position, Vector2D(0.0, 0.0), 0.0, direction, 0.0, wheelBase, length)
+                onBoardUnits[vehicle] = V2XCommunicationUnit()
+                vehicle
             }
             strategy(TimeAwareGenerationStrategy(this@trafficSimulation))
         }

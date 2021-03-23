@@ -17,6 +17,13 @@ data class V2XCommunicationUnit(
     }
 
     /**
+     * Discard a V2X communication unit
+     */
+    fun discard() {
+        environment.discardUnit(this)
+    }
+
+    /**
      * Send a message
      * @param uuid the destination
      * @param message the message to send

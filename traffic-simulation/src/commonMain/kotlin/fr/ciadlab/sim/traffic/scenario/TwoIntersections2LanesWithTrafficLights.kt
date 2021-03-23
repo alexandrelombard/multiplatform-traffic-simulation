@@ -131,7 +131,7 @@ object TwoIntersections2LanesWithTrafficLights {
 
         roadNetwork = network
 
-        onSpawn.add { v, _ -> basicOnSpawn(v, routes) }
+        onSpawn += { v, _ -> basicOnSpawn(v, routes) }
 
         vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(routes, vehicle, deltaTime) }
 

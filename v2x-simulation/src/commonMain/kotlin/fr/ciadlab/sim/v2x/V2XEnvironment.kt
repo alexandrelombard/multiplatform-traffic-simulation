@@ -25,6 +25,17 @@ class V2XEnvironment {
     }
 
     /**
+     * Unregister a V2X unit from this environment
+     */
+    fun discardUnit(communicationUnit: V2XCommunicationUnit) {
+        repository.remove(communicationUnit.identifier)
+
+        if(this != GLOBAL_V2X_ENVIRONMENT) {
+            GLOBAL_V2X_ENVIRONMENT.discardUnit(communicationUnit)
+        }
+    }
+
+    /**
      * Sends a message to a single address
      */
     fun unicast(source: UUID, destination: UUID, message: V2XMessage) {

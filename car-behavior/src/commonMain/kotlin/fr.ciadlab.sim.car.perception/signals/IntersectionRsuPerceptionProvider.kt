@@ -2,7 +2,6 @@ package fr.ciadlab.sim.car.perception.signals
 
 import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.v2x.IntersectionRoadSideUnit
-import fr.ciadlab.sim.utils.UUID
 
 class IntersectionRsuPerceptionProvider {
     /**
@@ -10,7 +9,7 @@ class IntersectionRsuPerceptionProvider {
      */
     fun performIntersectionRsuDetection(
         route: List<Road>,
-        roadSideUnits: Collection<IntersectionRoadSideUnit>): List<UUID> {
+        roadSideUnits: Collection<IntersectionRoadSideUnit>): List<IntersectionRoadSideUnit> {
         // We check if there is at least two connected roads in the list
         if(route.size < 2)
             return emptyList()
@@ -31,6 +30,5 @@ class IntersectionRsuPerceptionProvider {
                     res
                 }
             }
-            .map { it.communicationUnit.identifier }
     }
 }

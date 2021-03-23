@@ -20,7 +20,7 @@ import kotlin.math.max
 class RespectV2XAuthorizationListBehavior(
     val vehicle: Vehicle,
     val communicationUnit: V2XCommunicationUnit,
-    val authorizationList: MutableList<Pair<UUID, V2XMessage>>,
+    val authorizationList: List<Pair<UUID, V2XMessage>>,
     val driverBehavioralState: DriverBehavioralState,
     val closestRoadSideUnit: UUID?,
     val distanceToIntersectionEntrance: Double,
@@ -109,15 +109,14 @@ class RespectV2XAuthorizationListBehavior(
 }
 
 fun Vehicle.respectV2XAuthorizationListBehavior(
-    vehicle: Vehicle,
     communicationUnit: V2XCommunicationUnit,
-    authorizationList: MutableList<Pair<UUID, V2XMessage>>,
+    authorizationList: List<Pair<UUID, V2XMessage>>,
     closestRoadSideUnit: UUID?,
     distanceToIntersectionEntrance: Double,
     distanceToIntersectionExit: Double,
     driverBehavioralState: DriverBehavioralState): DriverBehavior {
     return RespectV2XAuthorizationListBehavior(
-        vehicle,
+        this,
         communicationUnit,
         authorizationList,
         driverBehavioralState,

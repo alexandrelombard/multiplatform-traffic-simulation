@@ -15,7 +15,11 @@ fun roadNetwork(op: DslRoadNetwork.() -> Unit): RoadNetwork {
     val dslRoadNetwork = DslRoadNetwork()
     op.invoke(dslRoadNetwork)
     return RoadNetwork(
-        dslRoadNetwork.roads, dslRoadNetwork.intersections, dslRoadNetwork.trafficLights, dslRoadNetwork.trafficType)
+        dslRoadNetwork.roads,
+        dslRoadNetwork.intersections,
+        dslRoadNetwork.trafficLights,
+        dslRoadNetwork.intersectionRsu,
+        dslRoadNetwork.trafficType)
 }
 
 data class DslRoad(

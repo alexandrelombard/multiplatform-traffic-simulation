@@ -13,7 +13,7 @@ class TrafficSimulation<VehicleType : Position2D>(
     var roadNetwork: RoadNetwork = RoadNetwork(),
     /** The vehicle behavior */
     var vehicleBehavior: (VehicleType, Double)->DriverBehavioralAction = { _, _ -> DriverBehavioralAction(0.0, 0.0) },
-    /** The function called to update a vehicle */
+    /** The function called to update a vehicle (the physical representation of the vehicle) */
     var vehicleUpdate: (VehicleType, DriverBehavioralAction, Double)->VehicleType = { v, _, _ -> v },
     /** The function called when a vehicle is spawned */
     val onSpawn: MutableList<(VehicleType, Spawner<VehicleType>)->Unit> = arrayListOf(),

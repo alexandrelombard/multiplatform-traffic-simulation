@@ -2,7 +2,7 @@ package fr.ciadlab.sim.traffic.scenario
 
 import fr.ciadlab.sim.infrastructure.*
 import fr.ciadlab.sim.infrastructure.v2x.roadSideUnit
-import fr.ciadlab.sim.infrastructure.view.basics.basicVehicleBehavior
+import fr.ciadlab.sim.infrastructure.view.basics.basicV2XVehicleBehavior
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
 import fr.ciadlab.sim.traffic.basics.basicOnSpawn
@@ -12,6 +12,7 @@ import fr.ciadlab.sim.traffic.spawner
 import fr.ciadlab.sim.traffic.spawner.TimeAwareGenerationStrategy
 import fr.ciadlab.sim.traffic.strategy
 import fr.ciadlab.sim.traffic.trafficSimulation
+import fr.ciadlab.sim.v2x.V2XCommunicationUnit
 import fr.ciadlab.sim.v2x.intersection.transparentIntersectionManager
 import fr.ciadlab.sim.vehicle.Vehicle
 
@@ -62,11 +63,20 @@ object SimpleIntersection2LanesWithV2X {
         /** Store the routes of the vehicles */
         val routes = hashMapOf<Vehicle, List<Pair<Road, Boolean>>?>()
 
+        /** Store the communication units of vehicles */
+        val onBoardUnits = hashMapOf<Vehicle, V2XCommunicationUnit>()
+
         roadNetwork = network
 
-        onSpawn.add { v, _ -> basicOnSpawn(v, routes) }
+        onSpawn.add { v, _ ->
+            basicOnSpawn(v, routes)
+            onBoardUnits[v] = V2XCommunicationUnit()
+        }
+        onDestroy += { onBoardUnits.remove(it) }
 
-        vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(routes, vehicle, deltaTime) }
+        vehicleBehavior = {vehicle, deltaTime ->
+            basicV2XVehicleBehavior(routes, vehicle, onBoardUnits[vehicle]!!, deltaTime)
+        }
 
         vehicleUpdate = { vehicle, action, deltaTime -> basicVehicleUpdate(vehicle, action, deltaTime) }
 

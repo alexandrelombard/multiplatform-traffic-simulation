@@ -2,7 +2,7 @@ package fr.ciadlab.sim.traffic.scenario
 
 import fr.ciadlab.sim.infrastructure.*
 import fr.ciadlab.sim.infrastructure.v2x.roadSideUnit
-import fr.ciadlab.sim.infrastructure.view.basics.basicVehicleBehavior
+import fr.ciadlab.sim.infrastructure.view.basics.basicV2XVehicleBehavior
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
 import fr.ciadlab.sim.traffic.basics.basicOnSpawn
@@ -98,10 +98,15 @@ object TwoIntersections2LanesWithV2X {
 
         roadNetwork = network
 
-        onSpawn += { v, _ -> basicOnSpawn(v, routes) }
+        onSpawn += { v, _ ->
+            basicOnSpawn(v, routes)
+            onBoardUnits[v] = V2XCommunicationUnit()
+        }
         onDestroy += { onBoardUnits.remove(it) }
 
-        vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(routes, vehicle, deltaTime) }
+        vehicleBehavior = {vehicle, deltaTime ->
+            basicV2XVehicleBehavior(routes, vehicle, onBoardUnits[vehicle]!!, deltaTime)
+        }
 
         vehicleUpdate = { vehicle, action, deltaTime -> basicVehicleUpdate(vehicle, action, deltaTime) }
 

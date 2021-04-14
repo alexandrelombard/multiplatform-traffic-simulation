@@ -49,7 +49,9 @@ data class TransparentIntersectionManager(
         }
 
         // Transmit the authorization list
-        communicationUnit.broadcast(V2XMessage(orderList.map { it.data }.reduce { acc, bytes -> acc + bytes }))
+        if(orderList.isNotEmpty()) {
+            communicationUnit.broadcast(V2XMessage(orderList.map { it.data }.reduce { acc, bytes -> acc + bytes }))
+        }
     }
 }
 

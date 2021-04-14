@@ -1,6 +1,7 @@
 package fr.ciadlab.sim.traffic.scenario
 
 import fr.ciadlab.sim.infrastructure.*
+import fr.ciadlab.sim.infrastructure.v2x.roadSideUnit
 import fr.ciadlab.sim.infrastructure.view.basics.basicVehicleBehavior
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
@@ -11,6 +12,7 @@ import fr.ciadlab.sim.traffic.spawner
 import fr.ciadlab.sim.traffic.spawner.TimeAwareGenerationStrategy
 import fr.ciadlab.sim.traffic.strategy
 import fr.ciadlab.sim.traffic.trafficSimulation
+import fr.ciadlab.sim.v2x.intersection.transparentIntersectionManager
 import fr.ciadlab.sim.vehicle.Vehicle
 
 object SimpleIntersection2LanesWithV2X {
@@ -43,11 +45,13 @@ object SimpleIntersection2LanesWithV2X {
             backwardLanesCount = 0
         }
 
-        intersection {
+        val singleIntersection = intersection {
             val westEast = laneConnector(roadWest, roadEast)
             val southNorth = laneConnector(roadSouth, roadNorth)
+        }
 
-
+        roadSideUnit(singleIntersection) {
+            protocol = transparentIntersectionManager(communicationUnit, intersection.laneConnectors)
         }
     }
 

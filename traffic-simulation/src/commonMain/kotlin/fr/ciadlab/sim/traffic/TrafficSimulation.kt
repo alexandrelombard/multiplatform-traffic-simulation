@@ -48,6 +48,7 @@ class TrafficSimulation<VehicleType : Position2D>(
 
         // Update the infrastructure
         roadNetwork.trafficLights.forEach {
+            // Update the state of each traffic light
             val policy = it.policy
             val updatedTrafficLights = it.trafficLights.map {
                 it.changeState(policy.currentState(it.laneConnectors.first(), simulationTime))
@@ -56,6 +57,11 @@ class TrafficSimulation<VehicleType : Position2D>(
                 clear()
                 addAll(updatedTrafficLights)
             }
+        }
+
+        roadNetwork.roadSideUnits.forEach {
+            // Invoke the execution of the protocol of each roadside unit
+            it.protocol.invoke(deltaTime)
         }
 
         // Run the behaviors and update the vehicles

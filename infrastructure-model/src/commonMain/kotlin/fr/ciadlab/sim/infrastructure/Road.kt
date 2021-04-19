@@ -9,7 +9,10 @@ data class Road(
     val oneWay: Boolean,
     val forwardLanesCount: Int,
     val backwardLanesCount: Int,
-    val lanesWidth: List<Double> = MutableList(forwardLanesCount + backwardLanesCount) { 3.5 }) {
+    val lanesWidth: List<Double> = List(forwardLanesCount + backwardLanesCount) { 3.5 }) {
+
+    /** Private cache for lanes computation */
+    private val laneCache = hashMapOf<Int, List<Vector3D>>()
 
     init {
         if(points.size < 2) {
@@ -56,8 +59,17 @@ data class Road(
      */
     @JsName("lane")
     fun lane(laneIndex: Int): List<Vector3D> {
+        val cachedValue = laneCache[laneIndex]
+        if(cachedValue != null) {
+            return cachedValue
+        }
+
         val laneOffset = laneOffset(laneIndex) * lanesWidth.subList(0, laneIndex).sum()
-        return this.points.offset(laneOffset)
+        val lane = this.points.offset(laneOffset)
+
+        laneCache[laneIndex] = lane
+
+        return lane
     }
 
     fun begin() = points.first()

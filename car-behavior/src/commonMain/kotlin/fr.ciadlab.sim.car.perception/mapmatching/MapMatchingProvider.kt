@@ -42,8 +42,7 @@ class MapMatchingProvider(
         var laneIndex = 0
         var minLaneDistance = Double.POSITIVE_INFINITY
         for(lane in 0 until closestRoad.totalLanesCount) {
-            // FIXME Externalize lane width
-            val laneProjection = closestRoad.lane(lane).project(closestRoadPoint.toVector3D())
+            val laneProjection = closestRoad.lane(lane).project(position.toVector3D())
 
             if(laneProjection.distance < minLaneDistance) {
                 minLaneDistance = laneProjection.distance

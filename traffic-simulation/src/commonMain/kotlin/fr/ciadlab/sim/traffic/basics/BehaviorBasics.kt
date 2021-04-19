@@ -73,7 +73,7 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
     // Execute the behavior
     val driverBehavioralState = DriverBehavioralState(
         mapPosition.road,
-        0,      // FIXME
+        1,      // FIXME
         forward ?: true,
         obstacleData,
         maximumSpeed,

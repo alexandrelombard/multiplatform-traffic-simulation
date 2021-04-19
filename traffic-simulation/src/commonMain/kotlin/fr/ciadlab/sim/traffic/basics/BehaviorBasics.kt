@@ -58,7 +58,8 @@ fun TrafficSimulation<Vehicle>.generateIntersectionRsuPerceptions(route: List<Ro
 fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
     routes: Map<Vehicle, List<Pair<Road, Boolean>>?>,   // TODO Avoid having a route for all vehicles here
     vehicle: Vehicle,
-    deltaTime: Double): DriverBehavioralAction {
+    deltaTime: Double,
+    maximumSpeed: Double = 50.0 unit Units.KilometersPerHour): DriverBehavioralAction {
     // Retrieve the computed route and the current road
     val route = routes[vehicle]
     val mapMatcher = MapMatchingProvider(roadNetwork)
@@ -75,7 +76,7 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
         0,      // FIXME
         forward ?: true,
         obstacleData,
-        50.0 unit Units.KilometersPerHour,
+        maximumSpeed,
         route?.last()?.first?.end() ?: this.roadNetwork.roads[0].end())
 
     return vehicle.reachGoalBehavior(driverBehavioralState)
@@ -90,7 +91,8 @@ fun TrafficSimulation<Vehicle>.basicV2XVehicleBehavior (
     routes: Map<Vehicle, List<Pair<Road, Boolean>>?>,   // TODO Avoid having a route for all vehicles here
     vehicle: Vehicle,
     communicationUnit: V2XCommunicationUnit,
-    deltaTime: Double): DriverBehavioralAction {
+    deltaTime: Double,
+    maximumSpeed: Double = 50.0 unit Units.KilometersPerHour): DriverBehavioralAction {
     // Retrieve the computed route and the current road
     val route = routes[vehicle]
     val mapMatcher = MapMatchingProvider(roadNetwork)
@@ -108,7 +110,7 @@ fun TrafficSimulation<Vehicle>.basicV2XVehicleBehavior (
         0,      // FIXME
         forward ?: true,
         obstacleData,
-        50.0 unit Units.KilometersPerHour,
+        maximumSpeed,
         route?.last()?.first?.end() ?: this.roadNetwork.roads[0].end())
 
     return vehicle.reachGoalBehavior(driverBehavioralState)

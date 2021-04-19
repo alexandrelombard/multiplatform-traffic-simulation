@@ -10,6 +10,7 @@ import fr.ciadlab.sim.math.algebra.Vector2D
 data class MapMatchingData(
     val sourcePosition: Vector2D,
     val roadPosition: Vector2D,
-    val road: Road) {
+    val road: Road,
+    val laneIndex: Int) {
     val distance by lazy { roadPosition.distance(sourcePosition) }
 }

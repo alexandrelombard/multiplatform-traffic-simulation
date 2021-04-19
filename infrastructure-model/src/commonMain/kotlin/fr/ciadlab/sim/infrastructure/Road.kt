@@ -8,7 +8,8 @@ data class Road(
     val points: List<Vector3D> = arrayListOf(),
     val oneWay: Boolean,
     val forwardLanesCount: Int,
-    val backwardLanesCount: Int) {
+    val backwardLanesCount: Int,
+    val lanesWidth: List<Double> = MutableList(forwardLanesCount + backwardLanesCount) { 3.5 }) {
 
     init {
         if(points.size < 2) {
@@ -51,12 +52,11 @@ data class Road(
     /**
      * Gets the points of the given lane
      * @param laneIndex the index of the lane (starting from 0 to the totalLanesCount)
-     * @param laneWidth the width of a lane
      * @return the polyline of the lane
      */
     @JsName("lane")
-    fun lane(laneIndex: Int, laneWidth: Double): List<Vector3D> {
-        val laneOffset = laneOffset(laneIndex) * laneWidth
+    fun lane(laneIndex: Int): List<Vector3D> {
+        val laneOffset = laneOffset(laneIndex) * lanesWidth.subList(0, laneIndex).sum()
         return this.points.offset(laneOffset)
     }
 

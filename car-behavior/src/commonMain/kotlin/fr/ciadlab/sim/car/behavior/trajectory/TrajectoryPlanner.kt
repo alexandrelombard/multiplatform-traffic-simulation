@@ -2,7 +2,10 @@ package fr.ciadlab.sim.car.behavior.trajectory
 
 import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.RoadNetwork
-import fr.ciadlab.sim.math.algebra.*
+import fr.ciadlab.sim.math.algebra.ProjectionData
+import fr.ciadlab.sim.math.algebra.Vector3D
+import fr.ciadlab.sim.math.algebra.project
+import fr.ciadlab.sim.math.algebra.toVector3D
 import fr.ciadlab.sim.vehicle.Vehicle
 
 class TrajectoryPlanner(
@@ -46,11 +49,10 @@ class TrajectoryPlanner(
         // Compute the trajectory parts including each road and the intersection connections
         val trajectoryParts = sequence {
             for(i in currentRoadIndex until route.size) {
-                // FIXME Lane width parameter
                 // FIXME Dynamic lane index using lane connectors
                 if(forward[i]) {
                     // Add the road
-                    yield(route[i].lane(route[i].forwardLaneIndex, 3.5))
+                    yield(route[i].lane(route[i].forwardLaneIndex))
                     // Add the intersection to next road
                     val intersection = roadNetwork.getEndIntersection(route[i])
                     if(intersection != null && i < route.size - 1) {
@@ -58,7 +60,7 @@ class TrajectoryPlanner(
                     }
                 } else {
                     // Add the road
-                    yield(route[i].lane(0, 3.5).reversed())
+                    yield(route[i].lane(0).reversed())
                     // Add the intersection to next road
                     val intersection = roadNetwork.getBeginIntersection(route[i])
                     if(intersection != null && i < route.size - 1) {

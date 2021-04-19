@@ -60,7 +60,7 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
     vehicle: Vehicle,
     deltaTime: Double,
     maximumSpeed: Double = 50.0 unit Units.KilometersPerHour): DriverBehavioralAction {
-    // Retrieve the computed route and the current road
+    // Retrieve the computed route and the current road/lane
     val route = routes[vehicle]
     val mapMatcher = MapMatchingProvider(roadNetwork)
     val mapPosition = mapMatcher.mapMatching(vehicle.position)

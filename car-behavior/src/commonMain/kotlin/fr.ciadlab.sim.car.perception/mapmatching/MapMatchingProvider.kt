@@ -5,6 +5,7 @@ import fr.ciadlab.sim.infrastructure.RoadNetwork
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
 import fr.ciadlab.sim.math.algebra.project
+import fr.ciadlab.sim.math.algebra.toVector3D
 
 /**
  * Simple implementation of a map-matching provider, not relying on any optimization
@@ -24,6 +25,7 @@ class MapMatchingProvider(
     fun mapMatching(position: Vector2D): MapMatchingData {
         val candidateRoads = filterRoads(roadNetwork, position)
 
+        // Find the road
         var minDistance = Double.MAX_VALUE
         var closestRoad = candidateRoads[0]
         var closestRoadPoint = closestRoad.begin().xy
@@ -35,7 +37,21 @@ class MapMatchingProvider(
                 closestRoadPoint = projectionData.projection.xy
             }
         }
-        return MapMatchingData(position, closestRoadPoint, closestRoad)
+
+        // Find the lane
+        var laneIndex = 0
+        var minLaneDistance = Double.POSITIVE_INFINITY
+        for(lane in 0 until closestRoad.totalLanesCount) {
+            // FIXME Externalize lane width
+            val laneProjection = closestRoad.lane(lane).project(closestRoadPoint.toVector3D())
+
+            if(laneProjection.distance < minLaneDistance) {
+                minLaneDistance = laneProjection.distance
+                laneIndex = lane
+            }
+        }
+
+        return MapMatchingData(position, closestRoadPoint, closestRoad, laneIndex)
     }
 
 }

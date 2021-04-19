@@ -3,6 +3,14 @@ package fr.ciadlab.sim.car.behavior.lanechange
 import fr.ciadlab.sim.car.perception.obstacles.ObstacleData
 import kotlin.math.abs
 
+fun isLaneChangeSafe(currentLaneIndex: Int, targetLaneIndex: Int): Boolean {
+    TODO("Not yet implemented")
+}
+
+fun isLaneChangeProfitable(): Boolean {
+    TODO("Not yet implemented")
+}
+
 /**
  * MOBIL-like lane change model
  * @param currentSpeed
@@ -15,14 +23,15 @@ import kotlin.math.abs
 fun mobilLaneChange(
     currentSpeed: Double,
     freeSpeed: Double,
-    currentLeader: ObstacleData,
+    currentLeader: ObstacleData?,
     targetLanePerceivedVehicles: List<ObstacleData>,
     curryiedCarFollowingModel: (ObstacleData)->Double): Boolean {
 
     if(currentSpeed < freeSpeed) {
         // If the current speed is below the free speed, and if we can accelerate in the new lane without making someone
         // brake, we do it
-        val currentLeaderRelatedAcceleration = curryiedCarFollowingModel(currentLeader)
+        val currentLeaderRelatedAcceleration =
+            if(currentLeader == null) Double.POSITIVE_INFINITY else curryiedCarFollowingModel(currentLeader)
 
         val newLeader = targetLanePerceivedVehicles
             .filter { it.obstacleRelativePosition.x >= 0 }.minByOrNull { it.obstacleRelativePosition.x }

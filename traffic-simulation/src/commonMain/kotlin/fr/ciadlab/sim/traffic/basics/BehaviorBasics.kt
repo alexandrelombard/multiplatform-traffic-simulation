@@ -5,6 +5,7 @@ import fr.ciadlab.sim.car.behavior.DriverBehavioralState
 import fr.ciadlab.sim.car.behavior.default.reachGoalBehavior
 import fr.ciadlab.sim.car.behavior.default.respectTrafficLightBehavior
 import fr.ciadlab.sim.car.behavior.default.respectV2XAuthorizationListBehavior
+import fr.ciadlab.sim.car.behavior.lanechange.mobilLaneChange
 import fr.ciadlab.sim.car.perception.mapmatching.MapMatchingProvider
 import fr.ciadlab.sim.car.perception.obstacles.ObstacleData
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider
@@ -18,6 +19,7 @@ import fr.ciadlab.sim.physics.unit
 import fr.ciadlab.sim.traffic.TrafficSimulation
 import fr.ciadlab.sim.v2x.V2XCommunicationUnit
 import fr.ciadlab.sim.vehicle.Vehicle
+import kotlin.math.abs
 
 /**
  * Simple functions that can be used as default behaviors.
@@ -64,20 +66,33 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
     val route = routes[vehicle]
     val mapMatcher = MapMatchingProvider(roadNetwork)
     val mapPosition = mapMatcher.mapMatching(vehicle.position)
-    val forward = route?.find { it.first == mapPosition.road }?.second
+    val forward = route?.find { it.first == mapPosition.road }?.second!!
 
     // Compute perceptions   // TODO Externalize perceptions
     val obstacleData = generateObstaclePerceptions(vehicle)
     val trafficLights = generateTrafficLightPerceptions(route, vehicle)
 
+    // TODO Externalize these computations
+    val leaders = obstacleData.filter { it.obstacleRelativePosition.x > 0 && abs(it.obstacleRelativePosition.y) < 1.0 }
+    val leader = leaders.minByOrNull { it.obstacleRelativePosition.x }
+    val targetLaneLeaders = obstacleData.filter { it.obstacleRelativePosition.y <= -1.0  }
+
+    // TODO Externalize lane-change model
+    val laneChangeModel = mobilLaneChange(
+        vehicle.speed,
+        maximumSpeed,
+        leader,
+    )
+
     // Execute the behavior
     val driverBehavioralState = DriverBehavioralState(
         mapPosition.road,
         0,      // FIXME
-        forward ?: true,
-        obstacleData,
+        forward,
+        leaders,
         maximumSpeed,
-        route?.last()?.first?.end() ?: this.roadNetwork.roads[0].end())
+        route.last().first.end()
+    )
 
     return vehicle.reachGoalBehavior(driverBehavioralState)
         .and(vehicle.respectTrafficLightBehavior(driverBehavioralState, trafficLights))

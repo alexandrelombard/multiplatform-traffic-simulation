@@ -76,17 +76,17 @@ data class Road(
      * Given a lane index, return the corresponding left lane index, or null if there is no correspond left lane
      */
     fun leftLaneIndex(laneIndex: Int): Int? {
-        if(this.isForwardLane(laneIndex)) {
+        return if(this.isForwardLane(laneIndex)) {
             if(laneIndex == this.forwardLaneIndex) {
-                return null
+                null
             } else {
-                return laneIndex - 1
+                laneIndex - 1
             }
         } else {
             if(laneIndex == this.backwardLanesCount - 1) {
-                return null
+                null
             } else {
-                return laneIndex + 1
+                laneIndex + 1
             }
         }
     }
@@ -95,17 +95,17 @@ data class Road(
      * Given a lane index, return the corresponding right lane index, or null if there is no correspond left lane
      */
     fun rightLaneIndex(laneIndex: Int): Int? {
-        if(this.isForwardLane(laneIndex)) {
+        return if(this.isForwardLane(laneIndex)) {
             if(laneIndex < this.totalLanesCount - 1) {
-                return null
+                null
             } else {
-                return laneIndex + 1
+                laneIndex + 1
             }
         } else {
             if(laneIndex == 0) {
-                return null
+                null
             } else {
-                return laneIndex - 1
+                laneIndex - 1
             }
         }
     }

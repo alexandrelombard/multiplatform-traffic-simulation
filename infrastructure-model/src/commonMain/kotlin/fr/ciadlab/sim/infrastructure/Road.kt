@@ -72,6 +72,44 @@ data class Road(
         return lane
     }
 
+    /**
+     * Given a lane index, return the corresponding left lane index, or null if there is no correspond left lane
+     */
+    fun leftLaneIndex(laneIndex: Int): Int? {
+        if(this.isForwardLane(laneIndex)) {
+            if(laneIndex == this.forwardLaneIndex) {
+                return null
+            } else {
+                return laneIndex - 1
+            }
+        } else {
+            if(laneIndex == this.backwardLanesCount - 1) {
+                return null
+            } else {
+                return laneIndex + 1
+            }
+        }
+    }
+
+    /**
+     * Given a lane index, return the corresponding right lane index, or null if there is no correspond left lane
+     */
+    fun rightLaneIndex(laneIndex: Int): Int? {
+        if(this.isForwardLane(laneIndex)) {
+            if(laneIndex < this.totalLanesCount - 1) {
+                return null
+            } else {
+                return laneIndex + 1
+            }
+        } else {
+            if(laneIndex == 0) {
+                return null
+            } else {
+                return laneIndex - 1
+            }
+        }
+    }
+
     fun begin() = points.first()
     fun beginDirection(): Vector3D = (points[1] - points[0]).normalize()
     fun beginNormal(): Vector3D {

@@ -11,7 +11,7 @@ class TrafficSimulation<VehicleType : Position2D>(
     val exitAreas: MutableList<ExitArea> = arrayListOf(),
     /** The road network */
     var roadNetwork: RoadNetwork = RoadNetwork(),
-    /** The vehicle behavior */
+    /** The vehicle behavior (this function is invoked at every step) */
     var vehicleBehavior: (VehicleType, Double)->DriverBehavioralAction = { _, _ -> DriverBehavioralAction(0.0, 0.0) },
     /** The function called to update a vehicle (the physical representation of the vehicle) */
     var vehicleUpdate: (VehicleType, DriverBehavioralAction, Double)->VehicleType = { v, _, _ -> v },

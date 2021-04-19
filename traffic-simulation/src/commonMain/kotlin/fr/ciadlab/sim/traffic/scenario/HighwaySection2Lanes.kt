@@ -35,7 +35,7 @@ object HighwaySection2Lanes {
 
         onSpawn.add { v, _ -> basicOnSpawn(v, routes) }
 
-        vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(routes, vehicle, deltaTime) }
+        vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(routes, vehicle, deltaTime, maximumSpeed = 20.0) }
 
         vehicleUpdate = { vehicle, action, deltaTime -> basicVehicleUpdate(vehicle, action, deltaTime) }
 

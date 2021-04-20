@@ -47,6 +47,21 @@ data class MobilState(
         return targetLaneAcceleration - currentLaneAcceleration > accelerationThreshold
     }
 
+    /**
+     * Determines whether or not a lane-change should be performed according to MOBIL
+     * @param carFollowingModel a curryied car-following model giving the acceleration as a function of the inter-
+     *          vehicular distance and the relative speed
+     * @param accelerationThreshold the minimum acceleration difference expected to consider the lane-change as
+     *          profitable
+     * @param decelerationThreshold the maximal accepted deceleration for the new follower (usually a value <= 0)
+     */
+    fun shouldLaneChangeBePerformed(
+        carFollowingModel: (Double, Double) -> Double,
+        decelerationThreshold: Double = 0.0,
+        accelerationThreshold: Double = 0.0): Boolean {
+        return isLaneChangeSafe(carFollowingModel, decelerationThreshold) && isLaneChangeProfitable(carFollowingModel, accelerationThreshold)
+    }
+
 }
 
 /**

@@ -35,7 +35,7 @@ class RadarPerceptionProvider(
             abs((it.position - sourcePosition).angle(direction)) < fieldOfView
         }.map {
             // Convert to radar data
-            val xAxis = Vector2D(direction.y, -direction.x)
+            val xAxis = Vector2D(direction.y, direction.x)
             val vectorSpace = VectorSpace2D(xAxis, direction)
             val affineSpace = AffineSpace2D(sourcePosition, xAxis, direction)
 

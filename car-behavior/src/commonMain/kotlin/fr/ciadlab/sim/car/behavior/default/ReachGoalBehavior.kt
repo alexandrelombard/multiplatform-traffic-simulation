@@ -26,9 +26,16 @@ class ReachGoalBehavior(
      * @param deltaTime the simulation step time
      */
     override fun apply(deltaTime: Double): DriverBehavioralAction {
-        val targetAcceleration = longitudinalControl(driverBehavioralState, vehicle)
-        val targetLane = laneChangeStrategy(driverBehavioralState, vehicle)
-        val targetWheelAngle = lateralControl(driverBehavioralState, vehicle)
+        var effectiveBehavioralState = driverBehavioralState
+
+        // Apply the longitudinal model for acceleration
+        val targetAcceleration = longitudinalControl(effectiveBehavioralState, vehicle)
+
+        // Apply the MOBIL model
+        val targetLane = laneChangeStrategy(effectiveBehavioralState, vehicle)
+        effectiveBehavioralState = effectiveBehavioralState.copy(currentLaneIndex = targetLane)
+
+        val targetWheelAngle = lateralControl(effectiveBehavioralState, vehicle)
 
         return DriverBehavioralAction(targetAcceleration, targetWheelAngle)
     }

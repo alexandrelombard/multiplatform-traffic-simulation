@@ -97,9 +97,9 @@ data class Road(
     fun rightLaneIndex(laneIndex: Int): Int? {
         return if(this.isForwardLane(laneIndex)) {
             if(laneIndex < this.totalLanesCount - 1) {
-                null
-            } else {
                 laneIndex + 1
+            } else {
+                null
             }
         } else {
             if(laneIndex == 0) {

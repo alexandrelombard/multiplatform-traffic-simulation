@@ -45,7 +45,7 @@ object HighwaySection2Lanes {
             generation = {
                 Vehicle(position, Vector2D(Random.nextDouble(10.0, 20.0), 0.0), 0.0, direction, 0.0, wheelBase, length)
             }
-            strategy = { if(Random.nextFloat() < 0.1 * it) { spawn() } }
+            strategy = { if(Random.nextFloat() < 0.3 * it) { spawn() } }
         }
 
         exitArea {

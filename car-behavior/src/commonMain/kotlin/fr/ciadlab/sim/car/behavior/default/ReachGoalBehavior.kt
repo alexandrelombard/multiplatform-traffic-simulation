@@ -159,21 +159,21 @@ class ReachGoalBehavior(
 
             if(leftLaneIndex != null) {
                 // It is possible to pass
-                val leaders = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.x > 0.0 }
-                val followers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.x <= 0.0 }
+                val leaders = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y > 0.0 }
+                val followers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y <= 0.0 }
 
-                val newLeader = leaders.filter { it.obstacleRelativePosition.y < -1.0 }.minByOrNull { it.obstacleRelativePosition.x }
-                val currentLeader = leaders.filter { abs(it.obstacleRelativePosition.y) < 1.0 }.minByOrNull { it.obstacleRelativePosition.x }
-                val newFollower = followers.filter { it.obstacleRelativePosition.y < -1.0 }.maxByOrNull { it.obstacleRelativePosition.x }
+                val newLeader = leaders.filter { it.obstacleRelativePosition.x < -1.0 }.minByOrNull { it.obstacleRelativePosition.y }
+                val currentLeader = leaders.filter { abs(it.obstacleRelativePosition.x) < 1.0 }.minByOrNull { it.obstacleRelativePosition.y }
+                val newFollower = followers.filter { it.obstacleRelativePosition.x < -1.0 }.maxByOrNull { it.obstacleRelativePosition.y }
 
                 val mobilState = MobilState(
                     vehicle.speed,
-                    if(newFollower == null) Double.POSITIVE_INFINITY else -newFollower.obstacleRelativePosition.x,
-                    if(newFollower == null) 0.0 else -newFollower.obstacleRelativeVelocity.x,
-                    newLeader?.obstacleRelativePosition?.x ?: Double.POSITIVE_INFINITY,
-                    newLeader?.obstacleRelativeVelocity?.x ?: 0.0,
-                    currentLeader?.obstacleRelativePosition?.x ?: Double.POSITIVE_INFINITY,
-                    currentLeader?.obstacleRelativeVelocity?.x ?: 0.0)
+                    if(newFollower == null) Double.POSITIVE_INFINITY else -newFollower.obstacleRelativePosition.y,
+                    if(newFollower == null) 0.0 else -newFollower.obstacleRelativeVelocity.y,
+                    newLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
+                    newLeader?.obstacleRelativeVelocity?.y ?: 0.0,
+                    currentLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
+                    currentLeader?.obstacleRelativeVelocity?.y ?: 0.0)
 
                 if(mobilState.shouldLaneChangeBePerformed(carFollowingModel = { distance, relativeSpeed, speed ->
                         intelligentDriverModelControl(
@@ -183,21 +183,21 @@ class ReachGoalBehavior(
                 }
             } else if (rightLaneIndex != null) {
                 // Check if we can go back to the right lane
-                val leaders = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.x > 0.0 }
-                val followers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.x <= 0.0 }
+                val leaders = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y > 0.0 }
+                val followers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y <= 0.0 }
 
-                val newLeader = leaders.filter { it.obstacleRelativePosition.y > 1.0 }.minByOrNull { it.obstacleRelativePosition.x }
-                val currentLeader = leaders.filter { abs(it.obstacleRelativePosition.y) < 1.0 }.minByOrNull { it.obstacleRelativePosition.x }
-                val newFollower = followers.filter { it.obstacleRelativePosition.y > 1.0 }.maxByOrNull { it.obstacleRelativePosition.x }
+                val newLeader = leaders.filter { it.obstacleRelativePosition.x > 1.0 }.minByOrNull { it.obstacleRelativePosition.y }
+                val currentLeader = leaders.filter { abs(it.obstacleRelativePosition.x) < 1.0 }.minByOrNull { it.obstacleRelativePosition.y }
+                val newFollower = followers.filter { it.obstacleRelativePosition.x > 1.0 }.maxByOrNull { it.obstacleRelativePosition.y }
 
                 val mobilState = MobilState(
                     vehicle.speed,
-                    if(newFollower == null) Double.POSITIVE_INFINITY else -newFollower.obstacleRelativePosition.x,
-                    if(newFollower == null) 0.0 else -newFollower.obstacleRelativeVelocity.x,
-                    newLeader?.obstacleRelativePosition?.x ?: Double.POSITIVE_INFINITY,
-                    newLeader?.obstacleRelativeVelocity?.x ?: 0.0,
-                    currentLeader?.obstacleRelativePosition?.x ?: Double.POSITIVE_INFINITY,
-                    currentLeader?.obstacleRelativeVelocity?.x ?: 0.0)
+                    if(newFollower == null) Double.POSITIVE_INFINITY else -newFollower.obstacleRelativePosition.y,
+                    if(newFollower == null) 0.0 else -newFollower.obstacleRelativeVelocity.y,
+                    newLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
+                    newLeader?.obstacleRelativeVelocity?.y ?: 0.0,
+                    currentLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
+                    currentLeader?.obstacleRelativeVelocity?.y ?: 0.0)
 
                 if((currentLeader == null && newLeader == null) || mobilState.shouldLaneChangeBePerformed(carFollowingModel = { distance, relativeSpeed, speed ->
                         intelligentDriverModelControl(

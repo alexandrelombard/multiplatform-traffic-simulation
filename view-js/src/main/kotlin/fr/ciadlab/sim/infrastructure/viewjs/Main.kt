@@ -195,7 +195,7 @@ fun loadSimViewJs(args: Array<String>) {
             travelForward = true,
             maximumSpeed = 50.0 unit KilometersPerHour,
             goal = eightShapedRoadNetworkModel.roads[0].end(),
-            leaders = arrayListOf())
+            perceivedVehicles = arrayListOf())
 
     var vehicle =
         Vehicle(

@@ -108,7 +108,7 @@ class LongitudinalControlWebviewSimulationController {
                 currentLaneIndex = 0,
                 travelForward = true,
                 maximumSpeed = 50.0 unit Units.KilometersPerHour,
-                leaders = arrayListOf(),
+                perceivedVehicles = arrayListOf(),
                 goal = network.roads[0].end())
 
         var vehicles = (0..10).map {

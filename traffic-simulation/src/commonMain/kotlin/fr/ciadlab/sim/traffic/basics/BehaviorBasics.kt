@@ -18,7 +18,6 @@ import fr.ciadlab.sim.physics.unit
 import fr.ciadlab.sim.traffic.TrafficSimulation
 import fr.ciadlab.sim.v2x.V2XCommunicationUnit
 import fr.ciadlab.sim.vehicle.Vehicle
-import kotlin.math.abs
 
 /**
  * Simple functions that can be used as default behaviors.
@@ -70,14 +69,13 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
     // Compute perceptions   // TODO Externalize perceptions
     val obstacleData = generateObstaclePerceptions(vehicle)
     val trafficLights = generateTrafficLightPerceptions(route, vehicle)
-    val leaders = obstacleData.filter { it.obstacleRelativePosition.x > 0 && abs(it.obstacleRelativePosition.y) < 1.0 }
 
     // Execute the behavior
     val driverBehavioralState = DriverBehavioralState(
         mapPosition.road,
         mapPosition.laneIndex,
         forward,
-        leaders,
+        obstacleData,
         maximumSpeed,
         route.last().first.end()
     )

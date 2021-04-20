@@ -17,7 +17,7 @@ data class DriverBehavioralState(
     /** True if the lane must be travelled in the forward direction, and false for backward */
     val travelForward: Boolean,
     /** The radar data */
-    val leaders: List<ObstacleData>,
+    val perceivedVehicles: List<ObstacleData>,
     /** The max speed according to the road */
     val maximumSpeed: Double,
     /** The position of the goal */

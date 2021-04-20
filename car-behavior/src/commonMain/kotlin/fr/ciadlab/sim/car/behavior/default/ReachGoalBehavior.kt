@@ -132,7 +132,11 @@ class ReachGoalBehavior(
         }
 
         fun idmLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Double {
-            val closestLeader = driverBehavioralState.perceivedVehicles.minByOrNull { it.obstacleRelativePosition.norm }
+            val closestLeader =
+                driverBehavioralState.perceivedVehicles
+                    .filter { it.obstacleRelativePosition.y > 0.0 }         // Ignore vehicles behind
+                    .filter { abs(it.obstacleRelativePosition.x) < 1.0  }   // Ignore vehicles in other lanes
+                    .minByOrNull { it.obstacleRelativePosition.norm }       // Get the closest vehicle
 
             return if (closestLeader == null) {
                 intelligentDriverModelControl(
@@ -153,6 +157,7 @@ class ReachGoalBehavior(
 
         // region Lane-change strategies
         fun mobilLaneSelection(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Int {
+            // FIXME There is an oscillation in the lane-selection
             val laneIndex = driverBehavioralState.currentLaneIndex
             val leftLaneIndex = driverBehavioralState.currentRoad.leftLaneIndex(laneIndex)
             val rightLaneIndex = driverBehavioralState.currentRoad.rightLaneIndex(laneIndex)

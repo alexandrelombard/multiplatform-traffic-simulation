@@ -5,6 +5,8 @@ import kotlin.math.abs
 
 typealias MobilLongitudinalModel = (distance: Double, relativeSpeed: Double, speed: Double)->Double
 
+// TODO Manage the politeness factor
+
 /**
  * Contains all the data required by the MOBIL model to compute whether or not a lane change can be
  * performed

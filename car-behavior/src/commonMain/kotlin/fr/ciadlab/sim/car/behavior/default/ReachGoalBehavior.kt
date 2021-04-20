@@ -3,15 +3,13 @@ package fr.ciadlab.sim.car.behavior.default
 import fr.ciadlab.sim.car.behavior.DriverBehavior
 import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
+import fr.ciadlab.sim.car.behavior.lanechange.MobilState
 import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
 import fr.ciadlab.sim.car.behavior.lateral.purePursuit
 import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
 import fr.ciadlab.sim.math.algebra.*
 import fr.ciadlab.sim.vehicle.Vehicle
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sign
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class ReachGoalBehavior(
     val vehicle: Vehicle,
@@ -141,26 +139,57 @@ class ReachGoalBehavior(
                     Double.MAX_VALUE,
                     vehicle.velocity.norm,
                     0.0,
-                    driverBehavioralState.maximumSpeed
-                )
+                    driverBehavioralState.maximumSpeed)
             } else {
                 intelligentDriverModelControl(
                     closestLeader.obstacleRelativePosition.norm,
                     vehicle.velocity.norm,
                     closestLeader.obstacleRelativeVelocity.norm,
                     driverBehavioralState.maximumSpeed,
-                    minimumSpacing = 5.0
-                )
+                    minimumSpacing = 5.0)
             }
         }
         // endregion
 
-        // region Lane-change strategy
+        // region Lane-change strategies
         fun mobilLaneSelection(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Int {
+            val laneIndex = driverBehavioralState.currentLaneIndex
+            val leftLaneIndex = driverBehavioralState.currentRoad.leftLaneIndex(laneIndex)
+            val rightLaneIndex = driverBehavioralState.currentRoad.rightLaneIndex(laneIndex)
+
+            if(leftLaneIndex != null) {
+                // It is possible to pass
+                val leaders = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.x > 0.0 }
+                val followers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.x <= 0.0 }
+
+                val newLeader = leaders.filter { it.obstacleRelativePosition.y < -1.0 }.minByOrNull { it.obstacleRelativePosition.x }
+                val currentLeader = leaders.filter { abs(it.obstacleRelativePosition.y) < 1.0 }.minByOrNull { it.obstacleRelativePosition.x }
+                val newFollower = followers.filter { it.obstacleRelativePosition.y < -1.0 }.maxByOrNull { it.obstacleRelativePosition.x }
+
+                val mobilState = MobilState(
+                    vehicle.speed,
+                    if(newFollower == null) Double.POSITIVE_INFINITY else -newFollower.obstacleRelativePosition.x,
+                    if(newFollower == null) 0.0 else -newFollower.obstacleRelativeVelocity.x,
+                    newLeader?.obstacleRelativePosition?.x ?: Double.POSITIVE_INFINITY,
+                    newLeader?.obstacleRelativeVelocity?.x ?: 0.0,
+                    currentLeader?.obstacleRelativePosition?.x ?: Double.POSITIVE_INFINITY,
+                    currentLeader?.obstacleRelativeVelocity?.x ?: 0.0)
+
+                if(mobilState.shouldLaneChangeBePerformed(carFollowingModel = { distance, relativeSpeed, speed ->
+                        intelligentDriverModelControl(
+                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
+                    })) {
+                    return leftLaneIndex
+                }
+            } else if (rightLaneIndex != null) {
+                // Check if we can go back to the right lane
+                // TODO
+            }
+
             // TODO
 
-
-            return driverBehavioralState.currentLaneIndex
+            // No change:
+            return laneIndex
         }
         // endregion
     }

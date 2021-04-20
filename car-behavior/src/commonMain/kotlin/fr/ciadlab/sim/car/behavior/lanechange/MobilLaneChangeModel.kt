@@ -3,11 +3,15 @@ package fr.ciadlab.sim.car.behavior.lanechange
 import fr.ciadlab.sim.car.perception.obstacles.ObstacleData
 import kotlin.math.abs
 
+typealias MobilLongitudinalModel = (distance: Double, relativeSpeed: Double, speed: Double)->Double
+
 /**
  * Contains all the data required by the MOBIL model to compute whether or not a lane change can be
  * performed
  */
 data class MobilState(
+    /** The current speed of the current vehicle */
+    val currentSpeed: Double,
     /** The distance between the new follower and the considered vehicle (> 0) */
     val newFollowerDistance: Double,
     /** The relative speed between the new follower and the considered vehicle (followerSpeed - currentSpeed) */
@@ -28,8 +32,8 @@ data class MobilState(
      *          vehicular distance and the relative speed
      * @param decelerationThreshold the maximal accepted deceleration for the new follower (usually a value <= 0)
      */
-    fun isLaneChangeSafe(carFollowingModel: (Double, Double)->Double, decelerationThreshold: Double = 0.0): Boolean {
-        val newFollowerAcceleration = carFollowingModel(newFollowerDistance, newFollowerRelativeSpeed)
+    fun isLaneChangeSafe(carFollowingModel: MobilLongitudinalModel, decelerationThreshold: Double = 0.0): Boolean {
+        val newFollowerAcceleration = carFollowingModel(newFollowerDistance, newFollowerRelativeSpeed, currentSpeed + newFollowerRelativeSpeed)
         return newFollowerAcceleration > decelerationThreshold
     }
 
@@ -41,9 +45,9 @@ data class MobilState(
      * @param accelerationThreshold the minimum acceleration difference expected to consider the lane-change as
      *          profitable
      */
-    fun isLaneChangeProfitable(carFollowingModel: (Double, Double)->Double, accelerationThreshold: Double = 0.0): Boolean {
-        val currentLaneAcceleration = carFollowingModel(currentLeaderDistance, currentLeaderRelativeSpeed)
-        val targetLaneAcceleration = carFollowingModel(newLeaderDistance, newLeaderRelativeSpeed)
+    fun isLaneChangeProfitable(carFollowingModel: MobilLongitudinalModel, accelerationThreshold: Double = 0.0): Boolean {
+        val currentLaneAcceleration = carFollowingModel(currentLeaderDistance, currentLeaderRelativeSpeed, currentSpeed)
+        val targetLaneAcceleration = carFollowingModel(newLeaderDistance, newLeaderRelativeSpeed, currentSpeed)
         return targetLaneAcceleration - currentLaneAcceleration > accelerationThreshold
     }
 
@@ -56,7 +60,7 @@ data class MobilState(
      * @param decelerationThreshold the maximal accepted deceleration for the new follower (usually a value <= 0)
      */
     fun shouldLaneChangeBePerformed(
-        carFollowingModel: (Double, Double) -> Double,
+        carFollowingModel: MobilLongitudinalModel,
         decelerationThreshold: Double = 0.0,
         accelerationThreshold: Double = 0.0): Boolean {
         return isLaneChangeSafe(carFollowingModel, decelerationThreshold) && isLaneChangeProfitable(carFollowingModel, accelerationThreshold)

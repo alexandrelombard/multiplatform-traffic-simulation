@@ -183,12 +183,31 @@ class ReachGoalBehavior(
                 }
             } else if (rightLaneIndex != null) {
                 // Check if we can go back to the right lane
-                // TODO
+                val leaders = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.x > 0.0 }
+                val followers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.x <= 0.0 }
+
+                val newLeader = leaders.filter { it.obstacleRelativePosition.y > 1.0 }.minByOrNull { it.obstacleRelativePosition.x }
+                val currentLeader = leaders.filter { abs(it.obstacleRelativePosition.y) < 1.0 }.minByOrNull { it.obstacleRelativePosition.x }
+                val newFollower = followers.filter { it.obstacleRelativePosition.y > 1.0 }.maxByOrNull { it.obstacleRelativePosition.x }
+
+                val mobilState = MobilState(
+                    vehicle.speed,
+                    if(newFollower == null) Double.POSITIVE_INFINITY else -newFollower.obstacleRelativePosition.x,
+                    if(newFollower == null) 0.0 else -newFollower.obstacleRelativeVelocity.x,
+                    newLeader?.obstacleRelativePosition?.x ?: Double.POSITIVE_INFINITY,
+                    newLeader?.obstacleRelativeVelocity?.x ?: 0.0,
+                    currentLeader?.obstacleRelativePosition?.x ?: Double.POSITIVE_INFINITY,
+                    currentLeader?.obstacleRelativeVelocity?.x ?: 0.0)
+
+                if((currentLeader == null && newLeader == null) || mobilState.shouldLaneChangeBePerformed(carFollowingModel = { distance, relativeSpeed, speed ->
+                        intelligentDriverModelControl(
+                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
+                    })) {
+                    return rightLaneIndex
+                }
             }
 
-            // TODO
-
-            // No change:
+            // No change
             return laneIndex
         }
         // endregion

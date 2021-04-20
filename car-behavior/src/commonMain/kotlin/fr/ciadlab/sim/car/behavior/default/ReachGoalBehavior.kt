@@ -17,7 +17,8 @@ class ReachGoalBehavior(
     val vehicle: Vehicle,
     val driverBehavioralState: DriverBehavioralState,
     val longitudinalControl: (DriverBehavioralState, Vehicle) -> Double = Companion::idmLongitudinalControl,
-    val lateralControl: (DriverBehavioralState, Vehicle) -> Double = Companion::curvatureFollowingLateralControl)
+    val lateralControl: (DriverBehavioralState, Vehicle) -> Double = Companion::curvatureFollowingLateralControl,
+    val laneChangeStrategy: (DriverBehavioralState, Vehicle) -> Int = Companion::mobilLaneSelection)
     : DriverBehavior {
 
     /**
@@ -25,9 +26,10 @@ class ReachGoalBehavior(
      * @param deltaTime the simulation step time
      */
     override fun apply(deltaTime: Double): DriverBehavioralAction {
-        val targetAcceleration = longitudinalControl.invoke(driverBehavioralState, vehicle)
-        val targetWheelAngle = lateralControl.invoke(driverBehavioralState, vehicle)
-        // return vehicle.update(targetAcceleration, targetWheelAngle, deltaTime)
+        val targetAcceleration = longitudinalControl(driverBehavioralState, vehicle)
+        val targetLane = laneChangeStrategy(driverBehavioralState, vehicle)
+        val targetWheelAngle = lateralControl(driverBehavioralState, vehicle)
+
         return DriverBehavioralAction(targetAcceleration, targetWheelAngle)
     }
 
@@ -143,6 +145,15 @@ class ReachGoalBehavior(
                     minimumSpacing = 5.0
                 )
             }
+        }
+        // endregion
+
+        // region Lane-change strategy
+        fun mobilLaneSelection(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Int {
+            // TODO
+
+
+            return driverBehavioralState.currentLaneIndex
         }
         // endregion
     }

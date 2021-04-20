@@ -5,7 +5,6 @@ import fr.ciadlab.sim.car.behavior.DriverBehavioralState
 import fr.ciadlab.sim.car.behavior.default.reachGoalBehavior
 import fr.ciadlab.sim.car.behavior.default.respectTrafficLightBehavior
 import fr.ciadlab.sim.car.behavior.default.respectV2XAuthorizationListBehavior
-import fr.ciadlab.sim.car.behavior.lanechange.mobilLaneChange
 import fr.ciadlab.sim.car.perception.mapmatching.MapMatchingProvider
 import fr.ciadlab.sim.car.perception.obstacles.ObstacleData
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider
@@ -71,23 +70,12 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
     // Compute perceptions   // TODO Externalize perceptions
     val obstacleData = generateObstaclePerceptions(vehicle)
     val trafficLights = generateTrafficLightPerceptions(route, vehicle)
-
-    // TODO Externalize these computations
     val leaders = obstacleData.filter { it.obstacleRelativePosition.x > 0 && abs(it.obstacleRelativePosition.y) < 1.0 }
-    val leader = leaders.minByOrNull { it.obstacleRelativePosition.x }
-    val targetLaneLeaders = obstacleData.filter { it.obstacleRelativePosition.y <= -1.0  }
-
-    // TODO Externalize lane-change model
-    val laneChangeModel = mobilLaneChange(
-        vehicle.speed,
-        maximumSpeed,
-        leader,
-    )
 
     // Execute the behavior
     val driverBehavioralState = DriverBehavioralState(
         mapPosition.road,
-        0,      // FIXME
+        mapPosition.laneIndex,
         forward,
         leaders,
         maximumSpeed,

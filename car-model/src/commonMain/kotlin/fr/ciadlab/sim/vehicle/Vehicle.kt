@@ -43,7 +43,7 @@ data class Vehicle(
     /**
      * True if the acceleration is negative (vehicle braking), below a threshold
      */
-    val brakeLightOn = this.acceleration < -0.2
+    val brakeLightOn = this.lastCommand?.acceleration ?: -0.1 < 0.0
 
     /**
      * Updates the vehicle with the given vehicle command

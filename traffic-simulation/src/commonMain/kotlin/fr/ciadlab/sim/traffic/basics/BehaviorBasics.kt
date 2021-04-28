@@ -64,7 +64,7 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
     val route = routes[vehicle]
     val mapMatcher = MapMatchingProvider(roadNetwork)
     val mapPosition = mapMatcher.mapMatching(vehicle.position)
-    val forward = route?.find { it.first == mapPosition.road }?.second!!
+    val forward = route?.find { it.first == mapPosition.road }?.second ?: true
 
     // Compute perceptions   // TODO Externalize perceptions
     val obstacleData = generateObstaclePerceptions(vehicle)
@@ -77,7 +77,7 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
         forward,
         obstacleData,
         maximumSpeed,
-        route.last().first.end()
+        route!!.last().first.end()
     )
 
     return vehicle.reachGoalBehavior(driverBehavioralState)

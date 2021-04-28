@@ -43,7 +43,7 @@ data class Vehicle(
     /**
      * True if the acceleration is negative (vehicle braking), below a threshold
      */
-    val brakeLightOn: Boolean by lazy { this.acceleration < 0.2 }
+    val brakeLightOn = this.acceleration < -0.2
 
     /**
      * Updates the vehicle with the given vehicle command

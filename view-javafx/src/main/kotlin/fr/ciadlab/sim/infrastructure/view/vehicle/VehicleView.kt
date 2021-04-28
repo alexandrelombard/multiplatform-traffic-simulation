@@ -56,11 +56,11 @@ class VehicleView(var vehicle: Vehicle): Group() {
         rightBrakeLight.centerY = vehicle.position.y + imageView.fitHeight / 2.0
 
         if(vehicle.brakeLightOn) {
-            leftBrakeLight.fill = Color.TRANSPARENT
-            rightBrakeLight.fill = Color.TRANSPARENT
-        } else {
             leftBrakeLight.fill = BRAKE_COLOR
             rightBrakeLight.fill = BRAKE_COLOR
+        } else {
+            leftBrakeLight.fill = Color.TRANSPARENT
+            rightBrakeLight.fill = Color.TRANSPARENT
         }
 
         this.vehicle = vehicle

@@ -14,6 +14,7 @@ import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLight
 import fr.ciadlab.sim.infrastructure.v2x.IntersectionRoadSideUnit
 import fr.ciadlab.sim.physics.Units
+import fr.ciadlab.sim.physics.Units.Degrees
 import fr.ciadlab.sim.physics.unit
 import fr.ciadlab.sim.traffic.TrafficSimulation
 import fr.ciadlab.sim.v2x.V2XCommunicationUnit
@@ -28,8 +29,9 @@ import fr.ciadlab.sim.vehicle.Vehicle
  * Computes the obstacle data
  */
 fun TrafficSimulation<Vehicle>.generateObstaclePerceptions(vehicle: Vehicle): List<ObstacleData> {
-    val radar = RadarPerceptionProvider()
-    val radarData = radar.performRadarDetection(vehicle.position, vehicle.direction, this.vehicles)
+    val radarProvider = RadarPerceptionProvider(fieldOfView = 360.0 unit Degrees)
+    val radarData = radarProvider.performRadarDetection(vehicle.position, vehicle.direction, this.vehicles)
+
     return radarData
 }
 

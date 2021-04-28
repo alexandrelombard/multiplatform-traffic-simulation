@@ -40,7 +40,7 @@ object HighwaySection2Lanes {
         vehicleUpdate = { vehicle, action, deltaTime -> basicVehicleUpdate(vehicle, action, deltaTime) }
 
         spawner {
-            position = Vector2D(0.0, 0.0)
+            position = Vector2D(0.0, 1.725)
             direction = Vector2D(1.0, 0.0)
             generation = {
                 Vehicle(position, Vector2D(Random.nextDouble(10.0, 20.0), 0.0), 0.0, direction, 0.0, wheelBase, length)

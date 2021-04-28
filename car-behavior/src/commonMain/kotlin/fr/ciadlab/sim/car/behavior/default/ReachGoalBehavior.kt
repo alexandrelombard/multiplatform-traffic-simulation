@@ -162,14 +162,16 @@ class ReachGoalBehavior(
             val leftLaneIndex = driverBehavioralState.currentRoad.leftLaneIndex(laneIndex)
             val rightLaneIndex = driverBehavioralState.currentRoad.rightLaneIndex(laneIndex)
 
+            val halfLaneWidth = 3.5 / 2.0   // FIXME Use a computed value
+
             if (rightLaneIndex != null) {
                 // Check if we can go back to the right lane
                 val leaders = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y > 0.0 }
                 val followers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y <= 0.0 }
 
-                val newLeader = leaders.filter { it.obstacleRelativePosition.x > 1.0 }.minByOrNull { it.obstacleRelativePosition.y }
-                val currentLeader = leaders.filter { abs(it.obstacleRelativePosition.x) < 1.0 }.minByOrNull { it.obstacleRelativePosition.y }
-                val newFollower = followers.filter { it.obstacleRelativePosition.x > 1.0 }.maxByOrNull { it.obstacleRelativePosition.y }
+                val newLeader = leaders.filter { it.obstacleRelativePosition.x > halfLaneWidth }.minByOrNull { it.obstacleRelativePosition.y }
+                val currentLeader = leaders.filter { abs(it.obstacleRelativePosition.x) < halfLaneWidth }.minByOrNull { it.obstacleRelativePosition.y }
+                val newFollower = followers.filter { it.obstacleRelativePosition.x > halfLaneWidth }.maxByOrNull { it.obstacleRelativePosition.y }
 
                 val mobilState = MobilState(
                     vehicle.speed,
@@ -180,7 +182,8 @@ class ReachGoalBehavior(
                     currentLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
                     currentLeader?.obstacleRelativeVelocity?.y ?: 0.0)
 
-                if((currentLeader == null && newLeader == null) || mobilState.shouldLaneChangeBePerformed(carFollowingModel = { distance, relativeSpeed, speed ->
+                if((currentLeader == null && newLeader == null) || mobilState.shouldLaneChangeBePerformed(
+                        carFollowingModel = { distance, relativeSpeed, speed ->
                         intelligentDriverModelControl(
                             distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
                     })) {
@@ -191,9 +194,9 @@ class ReachGoalBehavior(
                 val leaders = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y > 0.0 }
                 val followers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y <= 0.0 }
 
-                val newLeader = leaders.filter { it.obstacleRelativePosition.x < -1.0 }.minByOrNull { it.obstacleRelativePosition.y }
-                val currentLeader = leaders.filter { abs(it.obstacleRelativePosition.x) < 1.0 }.minByOrNull { it.obstacleRelativePosition.y }
-                val newFollower = followers.filter { it.obstacleRelativePosition.x < -1.0 }.maxByOrNull { it.obstacleRelativePosition.y }
+                val newLeader = leaders.filter { it.obstacleRelativePosition.x < -halfLaneWidth }.minByOrNull { it.obstacleRelativePosition.y }
+                val currentLeader = leaders.filter { abs(it.obstacleRelativePosition.x) < halfLaneWidth }.minByOrNull { it.obstacleRelativePosition.y }
+                val newFollower = followers.filter { it.obstacleRelativePosition.x < -halfLaneWidth }.maxByOrNull { it.obstacleRelativePosition.y }
 
                 val mobilState = MobilState(
                     vehicle.speed,

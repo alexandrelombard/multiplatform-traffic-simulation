@@ -28,8 +28,8 @@ data class MobilState(
     val currentLeaderRelativeSpeed: Double) {
 
     /**
-     * Determines if a lane-change is safe according to MOBIL: if the computed deceleration is above the deceleration
-     * threshold, it's OK.
+     * Determines if a lane-change is safe according to MOBIL (safety criterion): if the computed deceleration is above
+     * the deceleration threshold, it's OK.
      * @param carFollowingModel a curryied car-following model giving the acceleration as a function of the inter-
      *          vehicular distance and the relative speed
      * @param decelerationThreshold the maximal accepted deceleration for the new follower (usually a value <= 0)
@@ -40,8 +40,8 @@ data class MobilState(
     }
 
     /**
-     * Determines if a lane-change is profitable according to MOBIL: if the expected gain in terms of acceleration
-     * is above a defined threshold
+     * Determines if a lane-change is profitable according to MOBIL (incentive criterion): if the expected gain in terms
+     * of acceleration is above a defined threshold
      * @param carFollowingModel a curryied car-following model giving the acceleration as a function of the inter-
      *          vehicular distance and the relative speed
      * @param accelerationThreshold the minimum acceleration difference expected to consider the lane-change as
@@ -58,13 +58,14 @@ data class MobilState(
      * @param carFollowingModel a curryied car-following model giving the acceleration as a function of the inter-
      *          vehicular distance and the relative speed
      * @param accelerationThreshold the minimum acceleration difference expected to consider the lane-change as
-     *          profitable
+     *          profitable (default value according to https://traffic-simulation.de/info/info_MOBIL.html)
      * @param decelerationThreshold the maximal accepted deceleration for the new follower (usually a value <= 0)
      */
     fun shouldLaneChangeBePerformed(
         carFollowingModel: MobilLongitudinalModel,
         decelerationThreshold: Double = 0.0,
-        accelerationThreshold: Double = 0.0): Boolean {
+        accelerationThreshold: Double = 0.2): Boolean {
+        // TODO We should compare the expected acceleration gain to the imposed acceleration loss of the new follower (https://traffic-simulation.de/info/info_MOBIL.html)
         return isLaneChangeSafe(carFollowingModel, decelerationThreshold) && isLaneChangeProfitable(carFollowingModel, accelerationThreshold)
     }
 

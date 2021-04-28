@@ -41,6 +41,11 @@ data class Vehicle(
     val speed: Double by lazy { velocity.norm }
 
     /**
+     * True if the acceleration is negative (vehicle braking), below a threshold
+     */
+    val brakeLightOn: Boolean by lazy { this.acceleration < 0.2 }
+
+    /**
      * Updates the vehicle with the given vehicle command
      * @param vehicleCommand the vehicle command
      * @param deltaTime the delta of time for the update

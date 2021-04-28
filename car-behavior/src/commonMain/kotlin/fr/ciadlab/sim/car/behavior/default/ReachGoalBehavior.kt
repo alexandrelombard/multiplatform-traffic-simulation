@@ -157,7 +157,7 @@ class ReachGoalBehavior(
 
         // region Lane-change strategies
         fun mobilLaneSelection(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Int {
-            // FIXME There is an oscillation in the lane-selection
+            // FIXME There is an oscillation in the lane-selection, probably due to a poor identification of the follower/leader in the middle of the lane-change
             val laneIndex = driverBehavioralState.currentLaneIndex
             val leftLaneIndex = driverBehavioralState.currentRoad.leftLaneIndex(laneIndex)
             val rightLaneIndex = driverBehavioralState.currentRoad.rightLaneIndex(laneIndex)

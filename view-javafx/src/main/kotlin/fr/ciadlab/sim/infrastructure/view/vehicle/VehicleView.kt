@@ -13,7 +13,7 @@ import tornadofx.circle
 import tornadofx.group
 import tornadofx.imageview
 import tornadofx.opcr
-import java.time.LocalDateTime
+import java.util.*
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -109,7 +109,7 @@ class VehicleView(var vehicle: Vehicle): Group() {
         rightFrontBlinker.centerX = rightBlinkerPosition.x
         rightFrontBlinker.centerY = rightBlinkerPosition.y
 
-        if(LocalDateTime.now().second % 2 == 0) {
+        if(Calendar.getInstance().timeInMillis % 1000 > 500) {
             if(vehicle.lights.leftBlinker == LightState.BLINKING) {
                 leftFrontBlinker.fill = BLINKER_COLOR
             }
@@ -138,13 +138,13 @@ class VehicleView(var vehicle: Vehicle): Group() {
 
     private fun getLeftBlinkerLightPosition() =
         Vector2D(
-            vehicle.position.x + imageView.fitWidth / 2.0 * cos(vehicle.yaw) - sin(vehicle.yaw) * imageView.fitHeight / 3.0,
-            vehicle.position.y + imageView.fitWidth / 2.0 * sin(vehicle.yaw) - cos(vehicle.yaw) * imageView.fitHeight / 3.0)
+            vehicle.position.x + imageView.fitWidth / 2.0 * cos(vehicle.yaw) + sin(vehicle.yaw) * imageView.fitHeight / 3.0,
+            vehicle.position.y + imageView.fitWidth / 2.0 * sin(vehicle.yaw) + cos(vehicle.yaw) * imageView.fitHeight / 3.0)
 
     private fun getRightBlinkerLightPosition() =
         Vector2D(
-            vehicle.position.x + imageView.fitWidth / 2.0 * cos(vehicle.yaw) + sin(vehicle.yaw) * imageView.fitHeight / 3.0,
-            vehicle.position.y + imageView.fitWidth / 2.0 * sin(vehicle.yaw) + cos(vehicle.yaw) * imageView.fitHeight / 3.0)
+            vehicle.position.x + imageView.fitWidth / 2.0 * cos(vehicle.yaw) - sin(vehicle.yaw) * imageView.fitHeight / 3.0,
+            vehicle.position.y + imageView.fitWidth / 2.0 * sin(vehicle.yaw) - cos(vehicle.yaw) * imageView.fitHeight / 3.0)
 }
 
 fun Parent.vehicleView(vehicle: Vehicle, op: VehicleView.() -> Unit = {}): VehicleView =

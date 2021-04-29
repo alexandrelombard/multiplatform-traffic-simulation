@@ -189,7 +189,7 @@ class ReachGoalBehavior(
                         intelligentDriverModelControl(
                             distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
                     })) {
-                    return rightLaneIndex
+//                    return rightLaneIndex
                 }
             } else if(leftLaneIndex != null) {
                 // It is possible to pass

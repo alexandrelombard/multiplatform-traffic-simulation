@@ -31,11 +31,13 @@ class ReachGoalBehavior(
 
         // Apply the MOBIL model
         val targetLane = laneChangeStrategy(effectiveBehavioralState, vehicle)
+        val leftBlinker = targetLane > driverBehavioralState.currentLaneIndex
+        val rightBlinker = targetLane < driverBehavioralState.currentLaneIndex
         effectiveBehavioralState = effectiveBehavioralState.copy(currentLaneIndex = targetLane)
 
         val targetWheelAngle = lateralControl(effectiveBehavioralState, vehicle)
 
-        return DriverBehavioralAction(targetAcceleration, targetWheelAngle)
+        return DriverBehavioralAction(targetAcceleration, targetWheelAngle, leftBlinker, rightBlinker)
     }
 
     companion object {

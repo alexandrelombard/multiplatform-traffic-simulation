@@ -49,7 +49,6 @@ object EightLoop {
             Vehicle(
                 Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), 0.0, Vector2D(1.0, 0.0), 0.0, wheelBase, length))
 
-        // TODO Just create and use a "follow line" behavior
         vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(mapOf(), vehicle, deltaTime) }
 
         vehicleUpdate = { vehicle, action, deltaTime -> basicVehicleUpdate(vehicle, action, deltaTime) }

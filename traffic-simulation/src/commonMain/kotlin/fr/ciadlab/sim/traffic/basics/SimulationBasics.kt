@@ -2,6 +2,7 @@ package fr.ciadlab.sim.traffic.basics
 
 import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.traffic.TrafficSimulation
+import fr.ciadlab.sim.vehicle.LightState
 import fr.ciadlab.sim.vehicle.Vehicle
 
 /**
@@ -13,5 +14,11 @@ import fr.ciadlab.sim.vehicle.Vehicle
  * Update a vehicle
  */
 fun TrafficSimulation<Vehicle>.basicVehicleUpdate(vehicle: Vehicle, action: DriverBehavioralAction, deltaTime: Double): Vehicle {
-    return vehicle.update(action.targetAcceleration, action.targetWheelAngle, deltaTime)
+    return vehicle
+        .update(action.targetAcceleration, action.targetWheelAngle, deltaTime)
+        .changeLights(
+            vehicle.vehicleLights.copy(
+                leftBlinker = if (action.blinkerLeft) LightState.BLINKING else LightState.OFF,
+                rightBlinker = if(action.blinkerRight) LightState.BLINKING else LightState.OFF))
+
 }

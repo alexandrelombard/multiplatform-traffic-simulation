@@ -23,6 +23,7 @@ data class Vehicle(
     val wheelAngle: Double,
     val wheelBase: Double,
     val length: Double,
+    val vehicleLights: VehicleLights = VehicleLights(),
     val wheelAngleLimit: Double = 15.0 unit Degrees,
     val minAcceleration: Double = -8.0,
     val maxAcceleration: Double = 2.0,
@@ -59,6 +60,13 @@ data class Vehicle(
      */
     fun changeSpeed(newSpeed: Double) =
         this.copy(velocity = this.direction.normalize() * newSpeed)
+
+    /**
+     * Change the state of the lights of the vehicle
+     * @param newLights the new lights
+     */
+    fun changeLights(newLights: VehicleLights) =
+        this.copy(vehicleLights = newLights)
 
     /**
      * Updates the vehicle with the given acceleration and the given angle of the wheel

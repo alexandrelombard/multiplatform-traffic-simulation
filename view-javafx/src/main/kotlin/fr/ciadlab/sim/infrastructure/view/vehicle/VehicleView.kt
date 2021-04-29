@@ -120,7 +120,6 @@ class VehicleView(var vehicle: Vehicle): Group() {
             leftFrontBlinker.fill = Color.TRANSPARENT
             rightFrontBlinker.fill = Color.TRANSPARENT
         }
-
         // endregion
 
         this.vehicle = vehicle

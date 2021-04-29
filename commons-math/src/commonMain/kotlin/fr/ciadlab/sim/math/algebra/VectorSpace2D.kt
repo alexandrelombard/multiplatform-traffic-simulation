@@ -16,6 +16,15 @@ class VectorSpace2D(
      * @return the coordinates of v in the local space
      */
     fun fromDefault(v: Vector2D): Vector2D {
+        return matrix.invert() * v
+    }
+
+    /**
+     * Express some coordinates from this basis to the default (1,0), (0,1) basis
+     * @param v the coordinates to convert
+     * @return the coordinates of v in the default space
+     */
+    fun toDefault(v: Vector2D): Vector2D {
         return matrix * v
     }
 }

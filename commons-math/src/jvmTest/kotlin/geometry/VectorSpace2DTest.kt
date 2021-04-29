@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
  * @author Alexandre Lombard
  */
 class VectorSpace2DTest {
-//    @Test
+    @Test
     fun testFromDefault() {
         val v0 = Vector2D(1.0, 1.0)
         val s0 = VectorSpace2D(Vector2D(0.0, 1.0), Vector2D(-1.0, 0.0))
@@ -19,5 +19,16 @@ class VectorSpace2DTest {
 
         assertEquals(1.0, r0.x)
         assertEquals(-1.0, r0.y)
+    }
+
+    @Test
+    fun testToDefault() {
+        val v0 = Vector2D(1.0, -1.0)
+        val s0 = VectorSpace2D(Vector2D(0.0, 1.0), Vector2D(-1.0, 0.0))
+
+        val r0 = s0.toDefault(v0)
+
+        assertEquals(1.0, r0.x)
+        assertEquals(1.0, r0.y)
     }
 }

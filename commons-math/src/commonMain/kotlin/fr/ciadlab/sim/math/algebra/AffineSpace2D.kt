@@ -6,7 +6,7 @@ class AffineSpace2D(
     /** The x-axis (in the default space coordinates) */
     val xAxis: Vector2D,
     /** The y-axis (in the default space coordinates) */
-    val yAxis: Vector2D) {
+    val yAxis: Vector2D = Vector2D(-xAxis.y, xAxis.x)) {
 
     private val matrix by lazy { Matrix2X2(xAxis, yAxis) }
 

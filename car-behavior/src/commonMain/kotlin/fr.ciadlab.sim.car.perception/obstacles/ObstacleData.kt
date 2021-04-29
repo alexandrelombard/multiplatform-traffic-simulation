@@ -13,6 +13,6 @@ data class ObstacleData(
     /** The relative velocity of the obstacle: x is the relative lateral velocity, y is the relative longitudinal velocity */
     val obstacleRelativeVelocity: Vector2D) {
     fun getAbsolutePosition(reference: AffineSpace2D): Vector2D {
-        TODO()
+        return reference.toDefault(obstacleRelativePosition)
     }
 }

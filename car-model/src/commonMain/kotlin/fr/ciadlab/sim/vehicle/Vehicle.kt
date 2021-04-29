@@ -2,6 +2,7 @@ package fr.ciadlab.sim.vehicle
 
 import fr.ciadlab.sim.entity.Identifiable
 import fr.ciadlab.sim.entity.Updatable
+import fr.ciadlab.sim.math.algebra.AffineSpace2D
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.physics.Units.Degrees
 import fr.ciadlab.sim.physics.unit
@@ -40,6 +41,11 @@ data class Vehicle(
      * The speed of the vehicle
      */
     val speed: Double by lazy { velocity.norm }
+
+    /**
+     * The reference frame of the vehicle
+     */
+    val frame: AffineSpace2D by lazy { AffineSpace2D(position, direction) }
 
     /**
      * True if the acceleration is negative (vehicle braking), below a threshold

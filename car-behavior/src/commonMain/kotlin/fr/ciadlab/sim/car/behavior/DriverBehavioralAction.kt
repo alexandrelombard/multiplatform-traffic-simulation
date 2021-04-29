@@ -10,7 +10,11 @@ data class DriverBehavioralAction(
     /** The desired acceleration of the vehicle in m.s-² */
     val targetAcceleration: Double,
     /** The desired wheel angle */
-    val targetWheelAngle: Double) {
+    val targetWheelAngle: Double,
+    /** True if the left blinker should be active */
+    val blinkerLeft: Boolean = false,
+    /** True if the right blinker should be active */
+    val blinkerRight: Boolean = false) {
     /**
      * Composes two driver behavioral action so the acceleration is limited to the minimum and the wheel angle
      * is applied with priority to the original action.
@@ -18,6 +22,10 @@ data class DriverBehavioralAction(
      * @return the composed behavioral action
      */
     fun and(behavioralAction: DriverBehavioralAction): DriverBehavioralAction {
-        return DriverBehavioralAction(min(targetAcceleration, behavioralAction.targetAcceleration), targetWheelAngle)
+        return DriverBehavioralAction(
+            targetAcceleration = min(targetAcceleration, behavioralAction.targetAcceleration),
+            targetWheelAngle = targetWheelAngle,
+            blinkerLeft = blinkerLeft || behavioralAction.blinkerLeft,
+            blinkerRight = blinkerRight || behavioralAction.blinkerRight)
     }
 }

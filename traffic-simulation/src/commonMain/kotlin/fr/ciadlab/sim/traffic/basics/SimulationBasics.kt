@@ -17,7 +17,7 @@ fun TrafficSimulation<Vehicle>.basicVehicleUpdate(vehicle: Vehicle, action: Driv
     return vehicle
         .update(action.targetAcceleration, action.targetWheelAngle, deltaTime)
         .changeLights(
-            vehicle.vehicleLights.copy(
+            vehicle.lights.copy(
                 leftBlinker = if (action.blinkerLeft) LightState.BLINKING else LightState.OFF,
                 rightBlinker = if(action.blinkerRight) LightState.BLINKING else LightState.OFF))
 

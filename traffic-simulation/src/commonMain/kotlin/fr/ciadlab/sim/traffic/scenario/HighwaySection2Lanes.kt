@@ -31,11 +31,19 @@ object HighwaySection2Lanes {
         /** Store the routes of the vehicles */
         val routes = hashMapOf<Vehicle, List<Pair<Road, Boolean>>?>()
 
+        /** Store the maximum speed of the vehicles (for randomization of the traffic flow */
+        val speedLimits = hashMapOf<Vehicle, Double>()
+
         roadNetwork = network
 
-        onSpawn.add { v, _ -> basicOnSpawn(v, routes) }
+        onSpawn.add { v, _ ->
+            basicOnSpawn(v, routes)
+            speedLimits[v] = Random.nextDouble(15.0, 30.0)
+        }
 
-        vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(routes, vehicle, deltaTime, maximumSpeed = 20.0) }
+        onDestroy.add { v -> speedLimits.remove(v) }
+
+        vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(routes, vehicle, deltaTime, maximumSpeed = speedLimits[vehicle] ?: 22.5) }
 
         vehicleUpdate = { vehicle, action, deltaTime -> basicVehicleUpdate(vehicle, action, deltaTime) }
 

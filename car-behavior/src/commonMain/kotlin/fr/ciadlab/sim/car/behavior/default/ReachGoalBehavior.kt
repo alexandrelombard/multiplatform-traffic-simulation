@@ -137,7 +137,7 @@ class ReachGoalBehavior(
             val closestLeader =
                 driverBehavioralState.perceivedVehicles
                     .filter { it.obstacleRelativePosition.y > 0.0 }         // Ignore vehicles behind
-                    .filter { abs(it.obstacleRelativePosition.x) < 1.0  }   // Ignore vehicles in other lanes
+                    .filter { abs(it.obstacleRelativePosition.x) < vehicle.width / 2.0  }   // Ignore vehicles in other lanes
                     .minByOrNull { it.obstacleRelativePosition.norm }       // Get the closest vehicle
 
             return if (closestLeader == null) {
@@ -189,7 +189,7 @@ class ReachGoalBehavior(
                         intelligentDriverModelControl(
                             distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
                     })) {
-//                    return rightLaneIndex
+                    return rightLaneIndex
                 }
             } else if(leftLaneIndex != null) {
                 // It is possible to pass

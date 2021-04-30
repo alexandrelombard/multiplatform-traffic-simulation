@@ -43,19 +43,6 @@ data class Road(
     fun isBackwardLane(laneIndex: Int) = laneIndex < backwardLanesCount
 
     /**
-     * Computes the offset of the lane, related to the middle of the road
-     * @param laneIndex the index of the lane (starting from 0 to the totalLanesCount)
-     * @return the offset of the lane relative to the reference polyline
-     */
-    @JsName("laneOffset")
-    fun laneOffset(laneIndex: Int) =
-            if(totalLanesCount % 2 == 0) {
-                laneIndex - ((totalLanesCount - 1) / 2.0)
-            } else {
-                laneIndex - ((totalLanesCount - 1) / 2.0)
-            }
-
-    /**
      * Gets the points of the given lane
      * @param laneIndex the index of the lane (starting from 0 to the totalLanesCount)
      * @return the polyline of the lane
@@ -67,13 +54,22 @@ data class Road(
             return cachedValue
         }
 
-        val laneOffset = laneOffset(laneIndex) * lanesWidth.subList(0, laneIndex).sum()
-        val lane = this.points.offset(laneOffset)
+        val offset = laneOffset(laneIndex)
+        val widthOffset = offset * lanesWidth.subList(0, laneIndex + 1).sum()
+        val lane = this.points.offset(widthOffset)
 
         laneCache[laneIndex] = lane
 
         return lane
     }
+
+    /**
+     * Computes the offset of the lane, related to the middle of the road
+     * @param laneIndex the index of the lane (starting from 0 to the totalLanesCount)
+     * @return the offset of the lane relative to the reference polyline
+     */
+    @JsName("laneOffset")
+    fun laneOffset(laneIndex: Int) = laneIndex - ((totalLanesCount - 1) / 2.0)
 
     /**
      * Given a lane index, return the corresponding left lane index, or null if there is no correspond left lane
@@ -118,7 +114,7 @@ data class Road(
      */
     fun findLane(v: Vector2D): Int {
         val closestLane =
-            (0..(forwardLanesCount + backwardLanesCount))       // For each lane index
+            (0 until forwardLanesCount + backwardLanesCount)       // For each lane index
                 .map{ Pair(it, lane(it)) }                      // Get lane
                 .minByOrNull { it.second.project(v.toVector3D()).distance }     // Find the lane with the min proj dist
         return closestLane?.first ?: 0

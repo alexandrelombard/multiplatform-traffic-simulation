@@ -1,6 +1,14 @@
 package fr.ciadlab.sim.infrastructure.viewjs.canvas
 
 class Color(private val style: String) {
+    val alpha: Double by lazy {
+        if(style.startsWith("rgba")) {
+            (style.substringAfterLast(",").substringBeforeLast(")").toInt()) / 255.0
+        } else {
+            1.0
+        }
+    }
+
     override fun toString() = style
 
     companion object {

@@ -3,6 +3,7 @@ package fr.ciadlab.sim.infrastructure.viewjs.canvas
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.Image
+import kotlin.math.abs
 
 fun HTMLCanvasElement.context2D() =
     this.getContext("2d") as CanvasRenderingContext2D
@@ -60,15 +61,24 @@ fun CanvasRenderingContext2D.circle(op: Circle.() -> Unit = {}) {
     // Apply style
     this.lineWidth = circle.strokeWidth
     this.fillStyle = circle.fill.toString()
-    this.strokeStyle = circle.stroke.toString()
+
+    if(abs(circle.strokeWidth) < 0.01) {
+        this.strokeStyle = circle.fill.toString()
+    } else {
+        this.strokeStyle = circle.stroke.toString()
+    }
 
     // Draw circle
     this.beginPath()
     this.arc(circle.centerX, circle.centerY, circle.radius, 0.0, kotlin.math.PI * 2.0)
     this.closePath()
     this.stroke()
-    if(circle.fill != Color.TRANSPARENT)
+    if(circle.fill != Color.TRANSPARENT) {
+        val saveGlobalAlpha = this.globalAlpha
+        this.globalAlpha = circle.fill.alpha
         this.fill()
+        this.globalAlpha = saveGlobalAlpha
+    }
 
     this.restore()
 }

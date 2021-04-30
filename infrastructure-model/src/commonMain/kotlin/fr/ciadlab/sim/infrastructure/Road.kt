@@ -1,6 +1,9 @@
 package fr.ciadlab.sim.infrastructure
 
+import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.Vector3D
+import fr.ciadlab.sim.math.algebra.project
+import fr.ciadlab.sim.math.algebra.toVector3D
 import kotlin.js.JsName
 
 
@@ -108,6 +111,17 @@ data class Road(
                 laneIndex - 1
             }
         }
+    }
+
+    /**
+     * Finds the closest lane associated to the given point
+     */
+    fun findLane(v: Vector2D): Int {
+        val closestLane =
+            (0..(forwardLanesCount + backwardLanesCount))       // For each lane index
+                .map{ Pair(it, lane(it)) }                      // Get lane
+                .minByOrNull { it.second.project(v.toVector3D()).distance }     // Find the lane with the min proj dist
+        return closestLane?.first ?: 0
     }
 
     fun begin() = points.first()

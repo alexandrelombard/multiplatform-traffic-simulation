@@ -192,8 +192,8 @@ fun List<Vector3D>.project(p: Vector3D): ProjectionData {
     var projection: Vector3D = this[0]
     var projectionLength = 0.0
     var currentLength = 0.0
-    var segmentBegin: Vector3D = Vector3D(0.0, 0.0, 0.0)
-    var segmentEnd: Vector3D = Vector3D(0.0, 0.0, 0.0)
+    var segmentBegin = Vector3D(0.0, 0.0, 0.0)
+    var segmentEnd = Vector3D(0.0, 0.0, 0.0)
 
     for(i in 0 until this.size - 1) {
         val p0 = this[i]

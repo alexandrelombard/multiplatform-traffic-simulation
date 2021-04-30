@@ -38,17 +38,7 @@ class MapMatchingProvider(
         }
 
         // Find the lane
-        var laneIndex = 0
-//        var minLaneDistance = Double.POSITIVE_INFINITY
-        laneIndex = closestRoad.findLane(position)
-//        for(lane in 0 until closestRoad.totalLanesCount) {
-//            val laneProjection = closestRoad.lane(lane).project(position.toVector3D())
-//
-//            if(laneProjection.distance < minLaneDistance) {
-//                minLaneDistance = laneProjection.distance
-//                laneIndex = lane
-//            }
-//        }
+        val laneIndex = closestRoad.findLane(position)
 
         return MapMatchingData(position, closestRoadPoint, closestRoad, laneIndex)
     }

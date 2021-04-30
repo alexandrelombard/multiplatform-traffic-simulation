@@ -24,6 +24,7 @@ import fr.ciadlab.sim.math.geometry.hermiteSpline
 import fr.ciadlab.sim.physics.Units.KilometersPerHour
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit
+import fr.ciadlab.sim.traffic.scenario.HighwaySection2Lanes
 import fr.ciadlab.sim.traffic.scenario.TwoIntersections2LanesWithTrafficLights
 import fr.ciadlab.sim.vehicle.Vehicle
 import kotlinx.browser.document
@@ -240,19 +241,31 @@ fun loadTwoIntersections(args: Array<String>) {
         context.clear(canvas)
 
         context.trafficSimulationView(simulation)
-
-//        roadNetworkView(roadNetworkModel, canvas) {
-//            background(Color.rgb(230, 230, 230))
-//
-//            roadNetwork.roads.forEach { roadView(it) }
-//            roadNetwork.intersections.forEach { intersectionView(it) }
-//            // TODO roadNetwork.trafficLights.forEach { trafficLightView(it) }
-//        }
     }, 20)
 
     // Simulation loop
     window.setInterval({
-//        vehicle = vehicle.update(0.0, 0.0, 0.01)
+        simulation.step(0.01)
+    }, 10)
+}
+
+@JsName("loadHighwayTwoLanes")
+fun loadHighwayTwoLanes(args: Array<String>) {
+    val canvas = generateBaseCanvas(args)
+    val context = canvas.getContext("2d") as CanvasRenderingContext2D
+
+    val roadNetworkModel = HighwaySection2Lanes.network
+    val simulation = HighwaySection2Lanes.simulation
+
+    // Drawing loop
+    window.setInterval({
+        context.clear(canvas)
+
+        context.trafficSimulationView(simulation)
+    }, 20)
+
+    // Simulation loop
+    window.setInterval({
         simulation.step(0.01)
     }, 10)
 }

@@ -94,23 +94,23 @@ class VehicleView (var vehicle: Vehicle) {
 
     private fun getLeftBrakeLightPosition() =
         Vector2D(
-            vehicle.position.x - fitWidth / 2.0 * cos(vehicle.yaw) - sin(vehicle.yaw) * fitHeight / 3.0,
-            vehicle.position.y - fitWidth / 2.0 * sin(vehicle.yaw) - cos(vehicle.yaw) * fitHeight / 3.0)
+            - fitWidth / 2.0 * cos(vehicle.yaw) - sin(vehicle.yaw) * fitHeight / 3.0,
+            - fitWidth / 2.0 * sin(vehicle.yaw) - cos(vehicle.yaw) * fitHeight / 3.0)
 
     private fun getRightBrakeLightPosition() =
         Vector2D(
-            vehicle.position.x - fitWidth / 2.0 * cos(vehicle.yaw) + sin(vehicle.yaw) * fitHeight / 3.0,
-            vehicle.position.y - fitWidth / 2.0 * sin(vehicle.yaw) + cos(vehicle.yaw) * fitHeight / 3.0)
+            - fitWidth / 2.0 * cos(vehicle.yaw) + sin(vehicle.yaw) * fitHeight / 3.0,
+            - fitWidth / 2.0 * sin(vehicle.yaw) + cos(vehicle.yaw) * fitHeight / 3.0)
 
     private fun getLeftBlinkerLightPosition() =
         Vector2D(
-            vehicle.position.x + fitWidth / 2.0 * cos(vehicle.yaw) + sin(vehicle.yaw) * fitHeight / 3.0,
-            vehicle.position.y + fitWidth / 2.0 * sin(vehicle.yaw) + cos(vehicle.yaw) * fitHeight / 3.0)
+            fitWidth / 2.0 * cos(vehicle.yaw) + sin(vehicle.yaw) * fitHeight / 3.0,
+            fitWidth / 2.0 * sin(vehicle.yaw) + cos(vehicle.yaw) * fitHeight / 3.0)
 
     private fun getRightBlinkerLightPosition() =
         Vector2D(
-            vehicle.position.x + fitWidth / 2.0 * cos(vehicle.yaw) - sin(vehicle.yaw) * fitHeight / 3.0,
-            vehicle.position.y + fitWidth / 2.0 * sin(vehicle.yaw) - cos(vehicle.yaw) * fitHeight / 3.0)
+            fitWidth / 2.0 * cos(vehicle.yaw) - sin(vehicle.yaw) * fitHeight / 3.0,
+            fitWidth / 2.0 * sin(vehicle.yaw) - cos(vehicle.yaw) * fitHeight / 3.0)
 }
 
 fun CanvasRenderingContext2D.vehicleView(vehicle: Vehicle): VehicleView {

@@ -10,8 +10,6 @@ import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.Image
 import kotlin.js.Date
 import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
 
 private var carImage: Image? = null
 
@@ -98,23 +96,23 @@ class VehicleView (var vehicle: Vehicle) {
 
     private fun getLeftBrakeLightPosition() =
         Vector2D(
-            - fitWidth / 2.0 * cos(vehicle.yaw) - sin(vehicle.yaw) * fitHeight / 3.0,
-            - fitWidth / 2.0 * sin(vehicle.yaw) - cos(vehicle.yaw) * fitHeight / 3.0)
+            - fitWidth / 2.0,
+            - fitHeight / 3.0)
 
     private fun getRightBrakeLightPosition() =
         Vector2D(
-            - fitWidth / 2.0 * cos(vehicle.yaw) + sin(vehicle.yaw) * fitHeight / 3.0,
-            - fitWidth / 2.0 * sin(vehicle.yaw) + cos(vehicle.yaw) * fitHeight / 3.0)
+            - fitWidth / 2.0,
+            fitHeight / 3.0)
 
     private fun getLeftBlinkerLightPosition() =
         Vector2D(
-            fitWidth / 2.0 * cos(vehicle.yaw) + sin(vehicle.yaw) * fitHeight / 3.0,
-            fitWidth / 2.0 * sin(vehicle.yaw) + cos(vehicle.yaw) * fitHeight / 3.0)
+            fitWidth / 2.0,
+            fitHeight / 3.0)
 
     private fun getRightBlinkerLightPosition() =
         Vector2D(
-            fitWidth / 2.0 * cos(vehicle.yaw) - sin(vehicle.yaw) * fitHeight / 3.0,
-            fitWidth / 2.0 * sin(vehicle.yaw) - cos(vehicle.yaw) * fitHeight / 3.0)
+            fitWidth / 2.0,
+            -fitHeight / 3.0)
 }
 
 fun CanvasRenderingContext2D.vehicleView(vehicle: Vehicle): VehicleView {

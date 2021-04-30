@@ -138,13 +138,6 @@ class ReachGoalBehavior(
         }
 
         fun idmLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Double {
-            // FIXME Keep find leader
-//            val closestLeader =
-//                driverBehavioralState.perceivedVehicles
-//                    .filter { it.obstacleRelativePosition.y > 0.0 }         // Ignore vehicles behind
-//                    .filter { abs(it.obstacleRelativePosition.x) < vehicle.width / 2.0  }   // Ignore vehicles in other lanes
-//                    .minByOrNull { it.obstacleRelativePosition.norm }       // Get the closest vehicle
-
             val closestLeader = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)
 
             return if (closestLeader == null) {
@@ -166,7 +159,6 @@ class ReachGoalBehavior(
 
         // region Lane-change strategies
         fun mobilLaneSelection(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Int {
-            // FIXME There is an oscillation in the lane-selection, probably due to a poor identification of the follower/leader in the middle of the lane-change
             val laneIndex = driverBehavioralState.currentLaneIndex
             val leftLaneIndex = driverBehavioralState.currentRoad.leftLaneIndex(laneIndex)
             val rightLaneIndex = driverBehavioralState.currentRoad.rightLaneIndex(laneIndex)
@@ -175,13 +167,6 @@ class ReachGoalBehavior(
 
             if (rightLaneIndex != null) {
                 // Check if we can go back to the right lane
-                // FIXME Keep find leader
-//                val leaders = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y > 0.0 }
-//                val followers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y <= 0.0 }
-//
-//                val newLeader = leaders.filter { it.obstacleRelativePosition.x > halfLaneWidth }.minByOrNull { it.obstacleRelativePosition.y }
-//                val currentLeader = leaders.filter { abs(it.obstacleRelativePosition.x) < halfLaneWidth }.minByOrNull { it.obstacleRelativePosition.y }
-//                val newFollower = followers.filter { it.obstacleRelativePosition.x > halfLaneWidth }.maxByOrNull { it.obstacleRelativePosition.y }
                 val newLeader = findLeader(driverBehavioralState, vehicle, rightLaneIndex)
                 val currentLeader = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)
                 val newFollower = findFollower(driverBehavioralState, vehicle, rightLaneIndex)
@@ -203,14 +188,7 @@ class ReachGoalBehavior(
                     return rightLaneIndex
                 }
             } else if(leftLaneIndex != null) {
-                // FIXME Keep find leader
                 // It is possible to pass
-//                val leaders = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y > 0.0 }
-//                val followers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y <= 0.0 }
-//
-//                val newLeader = leaders.filter { it.obstacleRelativePosition.x < -halfLaneWidth }.minByOrNull { it.obstacleRelativePosition.y }
-//                val currentLeader = leaders.filter { abs(it.obstacleRelativePosition.x) < halfLaneWidth }.minByOrNull { it.obstacleRelativePosition.y }
-//                val newFollower = followers.filter { it.obstacleRelativePosition.x < -halfLaneWidth }.maxByOrNull { it.obstacleRelativePosition.y }
                 val newLeader = findLeader(driverBehavioralState, vehicle, leftLaneIndex)
                 val currentLeader = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)
                 val newFollower = findFollower(driverBehavioralState, vehicle, leftLaneIndex)

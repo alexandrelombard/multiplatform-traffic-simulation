@@ -52,7 +52,7 @@ class VehicleView (var vehicle: Vehicle) {
             centerY = leftBrakeLightPosition.y
             radius = fitWidth / 4.0
             fill = if(vehicle.brakeLightOn) BRAKE_COLOR else Color.TRANSPARENT
-            strokeWidth = 0.0
+            strokeWidth = 0.5
         }
 
         val rightBrakeLightPosition = getRightBrakeLightPosition()
@@ -61,7 +61,7 @@ class VehicleView (var vehicle: Vehicle) {
             centerY = rightBrakeLightPosition.y
             radius = fitWidth / 4.0
             fill = if(vehicle.brakeLightOn) BRAKE_COLOR else Color.TRANSPARENT
-            strokeWidth = 0.0
+            strokeWidth = 0.5
         }
         // endregion
 
@@ -72,7 +72,7 @@ class VehicleView (var vehicle: Vehicle) {
             centerY = leftBlinkerPosition.y
             radius = fitWidth / 4.0
             fill = if(vehicle.lights.leftBlinker == LightState.BLINKING && Date().getMilliseconds() % 1000 > 500) BLINKER_COLOR else Color.TRANSPARENT
-            strokeWidth = 0.0
+            strokeWidth = 0.5
         }
 
         val rightBlinkerPosition = getRightBlinkerLightPosition()
@@ -81,7 +81,7 @@ class VehicleView (var vehicle: Vehicle) {
             centerY = rightBlinkerPosition.y
             radius = fitWidth / 4.0
             fill = if(vehicle.lights.rightBlinker == LightState.BLINKING && Date().getMilliseconds() % 1000 > 500) BLINKER_COLOR else Color.TRANSPARENT
-            strokeWidth = 0.0
+            strokeWidth = 0.5
         }
         // endregion
 

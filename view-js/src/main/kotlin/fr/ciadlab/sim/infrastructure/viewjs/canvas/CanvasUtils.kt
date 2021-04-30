@@ -62,17 +62,13 @@ fun CanvasRenderingContext2D.circle(op: Circle.() -> Unit = {}) {
     this.lineWidth = circle.strokeWidth
     this.fillStyle = circle.fill.toString()
 
-    if(abs(circle.strokeWidth) < 0.01) {
-        this.strokeStyle = circle.fill.toString()
-    } else {
-        this.strokeStyle = circle.stroke.toString()
-    }
-
     // Draw circle
     this.beginPath()
     this.arc(circle.centerX, circle.centerY, circle.radius, 0.0, kotlin.math.PI * 2.0)
     this.closePath()
-    withAlpha(circle.stroke.alpha) { this.stroke() }
+    if(abs(circle.strokeWidth) < 0.01) {    // Stroke only if stroke width is != 0.0
+        withAlpha(circle.stroke.alpha) { this.stroke() }
+    }
     if(circle.fill != Color.TRANSPARENT) {
         withAlpha(circle.fill.alpha) { this.fill() }
     }

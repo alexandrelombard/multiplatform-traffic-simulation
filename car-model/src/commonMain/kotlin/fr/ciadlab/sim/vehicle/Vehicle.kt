@@ -44,9 +44,10 @@ data class Vehicle(
     val speed: Double by lazy { velocity.norm }
 
     /**
-     * The reference frame of the vehicle
+     * The reference frame of the vehicle (note: the X is directed to the right of the vehicle, while the Y is directed
+     * in the direction of the front of the vehicle)
      */
-    val frame: AffineSpace2D by lazy { AffineSpace2D(position, direction) }
+    val frame: AffineSpace2D by lazy { AffineSpace2D(position, Vector2D(direction.y, -direction.x)) }
 
     /**
      * True if the acceleration is negative (vehicle braking), below a threshold

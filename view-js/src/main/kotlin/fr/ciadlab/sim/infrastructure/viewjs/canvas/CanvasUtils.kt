@@ -72,12 +72,9 @@ fun CanvasRenderingContext2D.circle(op: Circle.() -> Unit = {}) {
     this.beginPath()
     this.arc(circle.centerX, circle.centerY, circle.radius, 0.0, kotlin.math.PI * 2.0)
     this.closePath()
-    this.stroke()
+    withAlpha(circle.stroke.alpha) { this.stroke() }
     if(circle.fill != Color.TRANSPARENT) {
-        val saveGlobalAlpha = this.globalAlpha
-        this.globalAlpha = circle.fill.alpha
-        this.fill()
-        this.globalAlpha = saveGlobalAlpha
+        withAlpha(circle.fill.alpha) { this.fill() }
     }
 
     this.restore()
@@ -208,3 +205,15 @@ fun CanvasRenderingContext2D.clear(canvas: HTMLCanvasElement) {
     this.restore()
 }
 // endregion
+
+/**
+ * Use a given value for alpha in a limited context
+ * @param alpha the alpha value to use
+ * @param lambda the drawing operations affected by the selected alpha value
+ */
+fun CanvasRenderingContext2D.withAlpha(alpha: Double, lambda: ()->Unit) {
+    val saveGlobalAlpha = this.globalAlpha
+    this.globalAlpha = alpha
+    lambda()
+    this.globalAlpha = saveGlobalAlpha
+}

@@ -49,4 +49,12 @@ class AffineSpace2DTest {
         assertEquals(1.0, r0.x)
         assertEquals(1.0, r0.y)
     }
+
+    @Test
+    fun testCommutativity() {
+        val v0 = Vector2D(1.0, 1.0)
+        val s0 = AffineSpace2D(Vector2D(5.0, -3.0), Vector2D(1.0, 1.0).normalize(), Vector2D(-1.0, 1.0).normalize())
+
+        assertEquals(v0, s0.toDefault(s0.fromDefault(v0)))
+    }
 }

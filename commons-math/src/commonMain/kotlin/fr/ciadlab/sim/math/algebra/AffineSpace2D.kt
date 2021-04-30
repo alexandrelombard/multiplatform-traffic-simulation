@@ -25,7 +25,7 @@ class AffineSpace2D(
      * @return the coordinates of v in the default space
      */
     fun toDefault(v: Vector2D): Vector2D {
-        return matrix * v + origin
+        return (matrix * v) + origin
     }
 
 }

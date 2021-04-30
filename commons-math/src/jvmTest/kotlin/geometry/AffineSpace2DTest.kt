@@ -57,4 +57,13 @@ class AffineSpace2DTest {
 
         assertEquals(v0, s0.toDefault(s0.fromDefault(v0)))
     }
+
+    @Test
+    fun testSimpleFromDefault() {
+        val v0 = Vector2D(2.0, 1.0)
+        val s0 = AffineSpace2D(Vector2D(0.0, 0.0), Vector2D(0.0, 1.0))
+
+        assertEquals(1.0, s0.fromDefault(v0).x)
+        assertEquals(-2.0, s0.fromDefault(v0).y)
+    }
 }

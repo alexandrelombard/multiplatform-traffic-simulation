@@ -10,10 +10,7 @@ import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
 import fr.ciadlab.sim.car.perception.obstacles.ObstacleData
 import fr.ciadlab.sim.math.algebra.*
 import fr.ciadlab.sim.vehicle.Vehicle
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sign
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class ReachGoalBehavior(
     val vehicle: Vehicle,
@@ -37,7 +34,7 @@ class ReachGoalBehavior(
         val targetLane = laneChangeStrategy(effectiveBehavioralState, vehicle)
         val leftBlinker = targetLane > driverBehavioralState.currentLaneIndex
         val rightBlinker = targetLane < driverBehavioralState.currentLaneIndex
-        effectiveBehavioralState = effectiveBehavioralState.copy(currentLaneIndex = targetLane)
+         effectiveBehavioralState = effectiveBehavioralState.copy(currentLaneIndex = targetLane)
 
         val targetWheelAngle = lateralControl(effectiveBehavioralState, vehicle)
 
@@ -150,7 +147,7 @@ class ReachGoalBehavior(
                 intelligentDriverModelControl(
                     closestLeader.obstacleRelativePosition.norm,
                     vehicle.velocity.norm,
-                    closestLeader.obstacleRelativeVelocity.norm,
+                    vehicle.speed - closestLeader.obstacleRelativeVelocity.norm,
                     driverBehavioralState.maximumSpeed,
                     minimumSpacing = 5.0)
             }
@@ -174,11 +171,11 @@ class ReachGoalBehavior(
                 val mobilState = MobilState(
                     vehicle.speed,
                     if(newFollower == null) Double.POSITIVE_INFINITY else -newFollower.obstacleRelativePosition.y,
-                    if(newFollower == null) 0.0 else -newFollower.obstacleRelativeVelocity.y,
+                    if(newFollower == null) 0.0 else newFollower.obstacleRelativeVelocity.norm - vehicle.speed,
                     newLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
-                    newLeader?.obstacleRelativeVelocity?.y ?: 0.0,
+                    vehicle.speed - (newLeader?.obstacleRelativeVelocity?.norm ?: 0.0),
                     currentLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
-                    currentLeader?.obstacleRelativeVelocity?.y ?: 0.0)
+                    vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0))
 
                 if((currentLeader == null && newLeader == null) || mobilState.shouldLaneChangeBePerformed(
                         carFollowingModel = { distance, relativeSpeed, speed ->
@@ -196,11 +193,11 @@ class ReachGoalBehavior(
                 val mobilState = MobilState(
                     vehicle.speed,
                     if(newFollower == null) Double.POSITIVE_INFINITY else -newFollower.obstacleRelativePosition.y,
-                    if(newFollower == null) 0.0 else -newFollower.obstacleRelativeVelocity.y,
+                    if(newFollower == null) 0.0 else newFollower.obstacleRelativeVelocity.norm - vehicle.speed,
                     newLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
-                    newLeader?.obstacleRelativeVelocity?.y ?: 0.0,
+                    vehicle.speed - (newLeader?.obstacleRelativeVelocity?.y ?: 0.0),
                     currentLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
-                    currentLeader?.obstacleRelativeVelocity?.y ?: 0.0)
+                    vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0))
 
                 if(mobilState.shouldLaneChangeBePerformed(carFollowingModel = { distance, relativeSpeed, speed ->
                         intelligentDriverModelControl(
@@ -219,7 +216,9 @@ class ReachGoalBehavior(
          * Finds the follower among the perceived vehicles, in the given lane
          */
         private fun findFollower(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, lane: Int): ObstacleData? {
-            val perceivedFollowers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y < vehicle.length }
+            val perceivedFollowers = driverBehavioralState.perceivedVehicles
+                .filter { it.obstacleRelativePosition.y < vehicle.length }  // Ignore vehicle before
+                .filter { abs(it.obstacleRelativePosition.x) < 10.0 }       // Ignore vehicle far in the lateral direction
             val laneFollowers = perceivedFollowers
                 .filter {
                     driverBehavioralState.currentRoad.findLane(vehicle.frame.toDefault(it.obstacleRelativePosition)) == lane
@@ -232,7 +231,9 @@ class ReachGoalBehavior(
          * Finds the leader among the perceived vehicles, in the given lane
          */
         private fun findLeader(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, lane: Int): ObstacleData? {
-            val perceivedLeaders = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y > 0.0 }
+            val perceivedLeaders = driverBehavioralState.perceivedVehicles
+                .filter { it.obstacleRelativePosition.y > 0.0 }         // Ignore vehicle behind
+                .filter { abs(it.obstacleRelativePosition.x) < 10.0 }   // Ignore vehicle far in the lateral direction
             val laneLeaders = perceivedLeaders
                 .filter {
                     driverBehavioralState.currentRoad.findLane(vehicle.frame.toDefault(it.obstacleRelativePosition)) == lane

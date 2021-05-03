@@ -6,7 +6,7 @@ package fr.ciadlab.sim.math.algebra
  */
 class VectorSpace2D(
     val xAxis: Vector2D,
-    val yAxis: Vector2D) {
+    val yAxis: Vector2D = Vector2D(-xAxis.y, xAxis.x)) {
 
     private val matrix by lazy { Matrix2X2(xAxis, yAxis) }
 

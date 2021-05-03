@@ -3,9 +3,12 @@ package fr.ciadlab.sim.car.behavior.lanechange
 import fr.ciadlab.sim.car.perception.obstacles.ObstacleData
 import kotlin.math.abs
 
+/**
+ * distance is the distance between vehicles
+ * relativeSpeed is the relative speed between the vehicles (follower and leader)
+ * speed is the speed of the follower
+ */
 typealias MobilLongitudinalModel = (distance: Double, relativeSpeed: Double, speed: Double)->Double
-
-// TODO Manage the politeness factor
 
 /**
  * Contains all the data required by the MOBIL model to compute whether or not a lane change can be
@@ -25,7 +28,9 @@ data class MobilState(
     /** The distance between the current leader and the considered vehicle (> 0) */
     val currentLeaderDistance: Double,
     /** The relative speed between the current leader and the considered vehicle (currentSpeed - leaderSpeed) */
-    val currentLeaderRelativeSpeed: Double) {
+    val currentLeaderRelativeSpeed: Double,
+    /** The politeness of the driver (according to MOBIL) */
+    val politeness: Double = 0.25) {
 
     /**
      * Determines if a lane-change is safe according to MOBIL (safety criterion): if the computed deceleration is above
@@ -50,6 +55,8 @@ data class MobilState(
     fun isLaneChangeProfitable(carFollowingModel: MobilLongitudinalModel, accelerationThreshold: Double = 0.0): Boolean {
         val currentLaneAcceleration = carFollowingModel(currentLeaderDistance, currentLeaderRelativeSpeed, currentSpeed)
         val targetLaneAcceleration = carFollowingModel(newLeaderDistance, newLeaderRelativeSpeed, currentSpeed)
+        val imposedFollowerAcceleration = carFollowingModel(newFollowerDistance, newFollowerRelativeSpeed, currentSpeed + newFollowerRelativeSpeed)
+        val currentFollowerAcceleration = carFollowingModel(newFollowerDistance + newLeaderDistance, newLeaderRelativeSpeed - newFollowerRelativeSpeed, currentSpeed + newFollowerRelativeSpeed)
         return targetLaneAcceleration - currentLaneAcceleration > accelerationThreshold
     }
 

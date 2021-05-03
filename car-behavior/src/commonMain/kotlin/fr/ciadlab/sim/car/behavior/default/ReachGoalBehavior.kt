@@ -219,7 +219,7 @@ class ReachGoalBehavior(
          * Finds the follower among the perceived vehicles, in the given lane
          */
         private fun findFollower(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, lane: Int): ObstacleData? {
-            val perceivedFollowers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y < 0.0 }
+            val perceivedFollowers = driverBehavioralState.perceivedVehicles.filter { it.obstacleRelativePosition.y < vehicle.length }
             val laneFollowers = perceivedFollowers
                 .filter {
                     driverBehavioralState.currentRoad.findLane(vehicle.frame.toDefault(it.obstacleRelativePosition)) == lane

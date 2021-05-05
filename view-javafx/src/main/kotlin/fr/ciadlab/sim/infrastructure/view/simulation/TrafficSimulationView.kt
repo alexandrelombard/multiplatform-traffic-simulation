@@ -1,5 +1,6 @@
 package fr.ciadlab.sim.infrastructure.view.simulation
 
+import fr.ciadlab.sim.infrastructure.view.debug.driverDebugView
 import fr.ciadlab.sim.infrastructure.view.network.intersectionView
 import fr.ciadlab.sim.infrastructure.view.network.roadNetworkView
 import fr.ciadlab.sim.infrastructure.view.network.roadView
@@ -79,5 +80,12 @@ fun Parent.trafficSimulationView(
     // Draw the vehicles that are manually created
     trafficSimulation.vehicles.forEach {
         vehicleView(it)
+    }
+
+    // Draw the debug data
+    if(trafficSimulationView.debug) {
+        trafficSimulation.debugData.values.forEach { data ->
+            data?.let { driverDebugView(it) }
+        }
     }
 }

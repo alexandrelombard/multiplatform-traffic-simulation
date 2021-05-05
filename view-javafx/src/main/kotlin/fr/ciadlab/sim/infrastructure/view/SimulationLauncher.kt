@@ -192,7 +192,9 @@ class SimulationView : View() {
         scaleY = 5.0
 
         group {
-            trafficSimulationView(simulation)
+            trafficSimulationView(simulation) {
+                debug = true
+            }
         }
 
         onMousePressed = EventHandler { dragOrigin = Pair(it.x, it.y) }

@@ -7,6 +7,7 @@ import fr.ciadlab.sim.math.algebra.Vector2D
  * @author Alexandre Lombard
  */
 data class DriverBehavioralDebugData(
+    val vehiclePosition: Vector2D? = null,
     val leaderPosition: Vector2D? = null,
     val newLeaderPosition: Vector2D? = null,
     val newFollowerPosition: Vector2D? = null) {
@@ -19,6 +20,7 @@ data class DriverBehavioralDebugData(
             this
         } else {
             DriverBehavioralDebugData(
+                vehiclePosition = debugData.vehiclePosition ?: vehiclePosition,
                 leaderPosition = debugData.leaderPosition ?: leaderPosition,
                 newLeaderPosition = debugData.newLeaderPosition ?: newLeaderPosition,
                 newFollowerPosition = debugData.newFollowerPosition ?: newFollowerPosition)

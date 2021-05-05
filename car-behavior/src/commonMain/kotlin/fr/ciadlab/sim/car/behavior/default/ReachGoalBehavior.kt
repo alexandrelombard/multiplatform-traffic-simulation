@@ -46,6 +46,7 @@ class ReachGoalBehavior(
 
         // Generate debug data (if required)
         val debugData = DriverBehavioralDebugData(
+            vehiclePosition = vehicle.position,
             leaderPosition = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)?.getAbsolutePosition(vehicle.frame),
             newLeaderPosition = if(driverBehavioralState.currentLaneIndex != targetLane) findLeader(driverBehavioralState, vehicle, targetLane)?.getAbsolutePosition(vehicle.frame) else null,
             newFollowerPosition = if(driverBehavioralState.currentLaneIndex != targetLane) findFollower(driverBehavioralState, vehicle, targetLane)?.getAbsolutePosition(vehicle.frame) else null)

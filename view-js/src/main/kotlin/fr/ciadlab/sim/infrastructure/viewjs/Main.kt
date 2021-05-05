@@ -261,7 +261,9 @@ fun loadHighwayTwoLanes(args: Array<String>) {
     window.setInterval({
         context.clear(canvas)
 
-        context.trafficSimulationView(simulation)
+        context.trafficSimulationView(simulation) {
+            debug = true
+        }
     }, 20)
 
     // Simulation loop

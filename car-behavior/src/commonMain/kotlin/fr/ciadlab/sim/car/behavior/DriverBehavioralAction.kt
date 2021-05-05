@@ -14,7 +14,9 @@ data class DriverBehavioralAction(
     /** True if the left blinker should be active */
     val blinkerLeft: Boolean = false,
     /** True if the right blinker should be active */
-    val blinkerRight: Boolean = false) {
+    val blinkerRight: Boolean = false,
+    /** Optional debug data */
+    val debugData: DriverBehavioralDebugData? = null) {
     /**
      * Composes two driver behavioral action so the acceleration is limited to the minimum and the wheel angle
      * is applied with priority to the original action.
@@ -26,6 +28,8 @@ data class DriverBehavioralAction(
             targetAcceleration = min(targetAcceleration, behavioralAction.targetAcceleration),
             targetWheelAngle = targetWheelAngle,
             blinkerLeft = blinkerLeft || behavioralAction.blinkerLeft,
-            blinkerRight = blinkerRight || behavioralAction.blinkerRight)
+            blinkerRight = blinkerRight || behavioralAction.blinkerRight,
+            debugData = debugData?.and(behavioralAction.debugData) ?: behavioralAction.debugData
+        )
     }
 }

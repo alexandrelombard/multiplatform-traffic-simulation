@@ -2,9 +2,11 @@ package fr.ciadlab.sim.infrastructure.view.debug
 
 import fr.ciadlab.sim.car.behavior.DriverBehavioralDebugData
 import javafx.scene.Group
+import javafx.scene.Parent
 import javafx.scene.paint.Color
 import tornadofx.group
 import tornadofx.line
+import tornadofx.opcr
 
 class DriverDebugView(val debugData: DriverBehavioralDebugData): Group() {
 
@@ -46,3 +48,6 @@ class DriverDebugView(val debugData: DriverBehavioralDebugData): Group() {
     }
 
 }
+
+fun Parent.driverDebugView(debugData: DriverBehavioralDebugData, op: DriverDebugView.() -> Unit = {}): DriverDebugView =
+    opcr(this, DriverDebugView(debugData), op)

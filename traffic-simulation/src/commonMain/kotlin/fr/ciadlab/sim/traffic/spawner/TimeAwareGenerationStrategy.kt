@@ -12,7 +12,8 @@ import kotlin.random.Random
 class TimeAwareGenerationStrategy(
     val trafficSimulation: TrafficSimulation<*>,
     val expectedObjectsPerSecond: Double = 0.5,
-    val minimumDelayBetweenGeneration: Double = 4.0) : GenerationStrategy {
+    val minimumDelayBetweenGeneration: Double = 4.0,
+    private val random: Random = Random.Default) : GenerationStrategy {
 
     private var lastGeneration: Double = 0.0
 
@@ -25,7 +26,7 @@ class TimeAwareGenerationStrategy(
         if(trafficSimulation.simulationTime - lastGeneration < minimumDelayBetweenGeneration)
             return false
 
-        val generate = Random.nextDouble() < expectedObjectsPerSecond * deltaTime
+        val generate = random.nextDouble() < expectedObjectsPerSecond * deltaTime
         if(generate) {
             lastGeneration = trafficSimulation.simulationTime
         }

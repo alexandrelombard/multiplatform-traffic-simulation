@@ -30,7 +30,9 @@ class HighwayTwoLanesWebviewSimulationController {
         window.setInterval({
             context.clear(canvas)
 
-            context.trafficSimulationView(simulation)
+            context.trafficSimulationView(simulation) {
+                debug = true
+            }
         }, 20)
 
         // Simulation loop

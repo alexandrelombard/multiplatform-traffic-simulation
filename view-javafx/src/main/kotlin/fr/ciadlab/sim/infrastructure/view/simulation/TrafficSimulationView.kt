@@ -14,12 +14,16 @@ import javafx.scene.Parent
 import tornadofx.removeFromParent
 import java.util.concurrent.ConcurrentHashMap
 
-class TrafficSimulationView(val trafficSimulation: TrafficSimulation<Vehicle>) : Group()
+class TrafficSimulationView(val trafficSimulation: TrafficSimulation<Vehicle>, var debug: Boolean = false) : Group()
 
 fun Parent.trafficSimulationView(
     trafficSimulation: TrafficSimulation<Vehicle>,
     op: TrafficSimulationView.() -> Unit = {}
 ) {
+    // Initialization
+    val trafficSimulationView = TrafficSimulationView(trafficSimulation)
+    op.invoke(trafficSimulationView)
+
     // Collection of elements which are to be visually updated
     val vehicleViews = ConcurrentHashMap<Vehicle, VehicleView>()
     val trafficLightViews = arrayListOf<Group>()

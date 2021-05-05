@@ -183,7 +183,7 @@ class ReachGoalBehavior(
 
                 val mobilState = MobilState(
                     vehicle.speed,
-                    if(newFollower == null) Double.POSITIVE_INFINITY else -newFollower.obstacleRelativePosition.y,
+                    if(newFollower == null) Double.POSITIVE_INFINITY else newFollower.obstacleRelativePosition.norm,
                     if(newFollower == null) 0.0 else newFollower.obstacleRelativeVelocity.norm - vehicle.speed,
                     newLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
                     vehicle.speed - (newLeader?.obstacleRelativeVelocity?.norm ?: 0.0),
@@ -205,7 +205,7 @@ class ReachGoalBehavior(
 
                 val mobilState = MobilState(
                     vehicle.speed,
-                    if(newFollower == null) Double.POSITIVE_INFINITY else -newFollower.obstacleRelativePosition.y,
+                    if(newFollower == null) Double.POSITIVE_INFINITY else newFollower.obstacleRelativePosition.norm,
                     if(newFollower == null) 0.0 else newFollower.obstacleRelativeVelocity.norm - vehicle.speed,
                     newLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
                     vehicle.speed - (newLeader?.obstacleRelativeVelocity?.y ?: 0.0),

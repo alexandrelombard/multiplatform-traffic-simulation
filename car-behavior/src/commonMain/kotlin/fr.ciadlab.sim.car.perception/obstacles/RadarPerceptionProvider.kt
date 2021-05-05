@@ -72,7 +72,7 @@ class RadarPerceptionProvider(
                     driverBehavioralState.currentRoad.findLane(vehicle.frame.toDefault(it.obstacleRelativePosition)) == lane
                 }
 
-            return laneFollowers.minByOrNull { it.obstacleRelativePosition.y }
+            return laneFollowers.maxByOrNull { it.obstacleRelativePosition.y }
         }
     }
 

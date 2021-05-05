@@ -1,5 +1,6 @@
 package fr.ciadlab.sim.infrastructure.view.simulation
 
+import fr.ciadlab.sim.infrastructure.view.debug.DriverDebugView
 import fr.ciadlab.sim.infrastructure.view.debug.driverDebugView
 import fr.ciadlab.sim.infrastructure.view.network.intersectionView
 import fr.ciadlab.sim.infrastructure.view.network.roadNetworkView
@@ -27,21 +28,36 @@ fun Parent.trafficSimulationView(
 
     // Collection of elements which are to be visually updated
     val vehicleViews = ConcurrentHashMap<Vehicle, VehicleView>()
+    val driverDebugViews = ConcurrentHashMap<Vehicle, DriverDebugView>()
     val trafficLightViews = arrayListOf<Group>()
 
     // Register a listener to on spawn to re-create the vehicle views
     trafficSimulation.onSpawn.add { vehicle, _ ->
         Platform.runLater {
-            val view = vehicleView(vehicle)             // Creating a view for the vehicle
+            // Creating a view for the vehicle
+            val view = vehicleView(vehicle)
             vehicleViews[vehicle] = view
+
+            // Eventually create the driver debug view
+            if(trafficSimulationView.debug) {
+                val data = trafficSimulation.debugData[vehicle]
+                if(data != null) {
+                    driverDebugViews[vehicle] = driverDebugView(data)
+                }
+            }
         }
     }
 
     // Register a listener to remove the vehicle views of old vehicles
     trafficSimulation.onDestroy.add { vehicle ->
         Platform.runLater {
-            vehicleViews[vehicle]?.removeFromParent()   // Removing the view for the vehicle
+            // Removing the view for the vehicle
+            vehicleViews[vehicle]?.removeFromParent()
             vehicleViews.remove(vehicle)
+
+            // Removing the debug view of the driver behavior
+            driverDebugViews[vehicle]?.removeFromParent()
+            driverDebugViews.remove(vehicle)
         }
     }
 
@@ -54,7 +70,11 @@ fun Parent.trafficSimulationView(
         val vehicles = hashSetOf(*trafficSimulation.vehicles.toTypedArray())
         Platform.runLater {
             vehicles.forEach {
+                // Update the vehicle
                 vehicleViews[it]?.update(it)
+
+                // Eventually update the debug display
+                driverDebugViews[it]?.update(trafficSimulation.debugData[it])
             }
         }
     }
@@ -80,12 +100,5 @@ fun Parent.trafficSimulationView(
     // Draw the vehicles that are manually created
     trafficSimulation.vehicles.forEach {
         vehicleView(it)
-    }
-
-    // Draw the debug data
-    if(trafficSimulationView.debug) {
-        trafficSimulation.debugData.values.forEach { data ->
-            data?.let { driverDebugView(it) }
-        }
     }
 }

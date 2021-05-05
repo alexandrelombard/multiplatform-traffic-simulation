@@ -1,6 +1,7 @@
 package fr.ciadlab.sim.traffic
 
 import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
+import fr.ciadlab.sim.car.behavior.DriverBehavioralDebugData
 import fr.ciadlab.sim.infrastructure.RoadNetwork
 import fr.ciadlab.sim.vehicle.Position2D
 
@@ -24,7 +25,9 @@ class TrafficSimulation<VehicleType : Position2D>(
     /** Function called after a step is run */
     val onAfterStep: MutableList<(Double)->Unit> = arrayListOf(),
     /** The set of spawned vehicles */
-    var vehicles: MutableSet<VehicleType> = hashSetOf()
+    var vehicles: MutableSet<VehicleType> = hashSetOf(),
+    /** Storage for debug data */
+    val debugData: MutableMap<VehicleType, DriverBehavioralDebugData?> = hashMapOf()
 ) {
     var simulationTime = 0.0
 
@@ -68,6 +71,8 @@ class TrafficSimulation<VehicleType : Position2D>(
         val updatedVehicles = vehicles.map {
             // Compute the action from the behavior
             val action = vehicleBehavior.invoke(it, deltaTime)
+            // Store the debug data
+            debugData[it] = action.debugData
             // Apply the action to get an updated vehicle
             vehicleUpdate.invoke(it, action, deltaTime)
         }

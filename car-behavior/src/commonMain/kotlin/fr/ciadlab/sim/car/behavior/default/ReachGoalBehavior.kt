@@ -2,6 +2,7 @@ package fr.ciadlab.sim.car.behavior.default
 
 import fr.ciadlab.sim.car.behavior.DriverBehavior
 import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
+import fr.ciadlab.sim.car.behavior.DriverBehavioralDebugData
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
 import fr.ciadlab.sim.car.behavior.lanechange.MobilState
 import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
@@ -40,9 +41,16 @@ class ReachGoalBehavior(
         val rightBlinker = targetLane < driverBehavioralState.currentLaneIndex
          effectiveBehavioralState = effectiveBehavioralState.copy(currentLaneIndex = targetLane)
 
+        // Apply the lateral model for control
         val targetWheelAngle = lateralControl(effectiveBehavioralState, vehicle)
 
-        return DriverBehavioralAction(targetAcceleration, targetWheelAngle, leftBlinker, rightBlinker)
+        // Generate debug data (if required)
+        val debugData = DriverBehavioralDebugData(
+            leaderPosition = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)?.getAbsolutePosition(vehicle.frame),
+            newLeaderPosition = if(driverBehavioralState.currentLaneIndex != targetLane) findLeader(driverBehavioralState, vehicle, targetLane)?.getAbsolutePosition(vehicle.frame) else null,
+            newFollowerPosition = if(driverBehavioralState.currentLaneIndex != targetLane) findFollower(driverBehavioralState, vehicle, targetLane)?.getAbsolutePosition(vehicle.frame) else null)
+
+        return DriverBehavioralAction(targetAcceleration, targetWheelAngle, leftBlinker, rightBlinker, debugData)
     }
 
     companion object {

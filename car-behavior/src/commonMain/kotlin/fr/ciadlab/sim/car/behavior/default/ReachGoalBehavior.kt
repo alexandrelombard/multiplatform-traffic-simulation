@@ -8,7 +8,6 @@ import fr.ciadlab.sim.car.behavior.lanechange.MobilState
 import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
 import fr.ciadlab.sim.car.behavior.lateral.purePursuit
 import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
-import fr.ciadlab.sim.car.behavior.longitudinal.reactionTimeAdaptiveCruiseControl
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider.Companion.findFollower
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider.Companion.findLeader
 import fr.ciadlab.sim.math.algebra.*
@@ -191,11 +190,11 @@ class ReachGoalBehavior(
                     currentLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
                     vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0))
 
-                if((currentLeader == null && newLeader == null) || mobilState.shouldLaneChangeBePerformed(
+                if(mobilState.shouldLaneChangeBePerformed(
                         carFollowingModel = { distance, relativeSpeed, speed ->
-//                        intelligentDriverModelControl(
-//                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
-                            reactionTimeAdaptiveCruiseControl(speed, speed + relativeSpeed, distance, tau = 0.5)
+                        intelligentDriverModelControl(
+                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
+//                            reactionTimeAdaptiveCruiseControl(speed, speed + relativeSpeed, distance, tau = 0.5)
 
                     })) {
                     return rightLaneIndex
@@ -216,9 +215,9 @@ class ReachGoalBehavior(
                     vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0))
 
                 if(mobilState.shouldLaneChangeBePerformed(carFollowingModel = { distance, relativeSpeed, speed ->
-//                        intelligentDriverModelControl(
-//                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
-                        reactionTimeAdaptiveCruiseControl(speed, speed + relativeSpeed, distance, tau = 0.5)
+                        intelligentDriverModelControl(
+                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
+//                        reactionTimeAdaptiveCruiseControl(speed, speed + relativeSpeed, distance, tau = 0.5)
                     })) {
                     return leftLaneIndex
                 }

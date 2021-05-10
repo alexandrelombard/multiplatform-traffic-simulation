@@ -21,7 +21,8 @@ import kotlin.math.sqrt
 class ReachGoalBehavior(
     val vehicle: Vehicle,
     val driverBehavioralState: DriverBehavioralState,
-    val longitudinalControl: (DriverBehavioralState, Vehicle) -> Double = Companion::rtAccLongitudinalControl,
+//    val longitudinalControl: (DriverBehavioralState, Vehicle) -> Double = Companion::rtAccLongitudinalControl,
+    val longitudinalControl: (DriverBehavioralState, Vehicle) -> Double = Companion::idmLongitudinalControl,
     val lateralControl: (DriverBehavioralState, Vehicle) -> Double = Companion::curvatureFollowingLateralControl,
     val laneChangeStrategy: (DriverBehavioralState, Vehicle) -> Int = Companion::mobilLaneSelection)
     : DriverBehavior {
@@ -203,9 +204,9 @@ class ReachGoalBehavior(
 
                 if(mobilState.shouldLaneChangeBePerformed(
                         carFollowingModel = { distance, relativeSpeed, speed ->
-//                        intelligentDriverModelControl(
-//                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
-                            reactionTimeAdaptiveCruiseControl(speed, speed + relativeSpeed, distance, tau = 0.5)
+                        intelligentDriverModelControl(
+                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
+//                            reactionTimeAdaptiveCruiseControl(speed, speed + relativeSpeed, distance, tau = 0.5)
 
                     })) {
                     return rightLaneIndex
@@ -226,9 +227,9 @@ class ReachGoalBehavior(
                     vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0))
 
                 if(mobilState.shouldLaneChangeBePerformed(carFollowingModel = { distance, relativeSpeed, speed ->
-//                        intelligentDriverModelControl(
-//                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
-                        reactionTimeAdaptiveCruiseControl(speed, speed + relativeSpeed, distance, tau = 0.5)
+                        intelligentDriverModelControl(
+                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
+//                        reactionTimeAdaptiveCruiseControl(speed, speed + relativeSpeed, distance, tau = 0.5)
                     })) {
                     return leftLaneIndex
                 }

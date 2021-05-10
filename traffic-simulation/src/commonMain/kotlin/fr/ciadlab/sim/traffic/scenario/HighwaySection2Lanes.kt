@@ -38,6 +38,8 @@ object HighwaySection2Lanes {
         val spawningTimes = hashMapOf<Vehicle, Double>()
         val exitTimes = hashMapOf<Vehicle, Double>()
 
+        fun averageTravelTime() = exitTimes.map { it.value - spawningTimes[it.key]!! }.average()
+
         roadNetwork = network
 
         onSpawn.add { v, _ ->
@@ -49,6 +51,8 @@ object HighwaySection2Lanes {
         onDestroy.add { v ->
             speedLimits.remove(v)
             exitTimes[v] = simulationTime
+
+            println(averageTravelTime())
         }
 
         vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(routes, vehicle, deltaTime, maximumSpeed = speedLimits[vehicle] ?: 22.5) }
@@ -56,12 +60,16 @@ object HighwaySection2Lanes {
         vehicleUpdate = { vehicle, action, deltaTime -> basicVehicleUpdate(vehicle, action, deltaTime) }
 
         spawner {
+            /** Random (for spawner) */
+            val randomVelocity = Random(0xff012a17)
+            val randomMoment = Random(0xff012a17)
+
             position = Vector2D(0.0, 1.725)
             direction = Vector2D(1.0, 0.0)
             generation = {
-                Vehicle(position, Vector2D(Random.nextDouble(10.0, 20.0), 0.0), 0.0, direction, 0.0, wheelBase, length)
+                Vehicle(position, Vector2D(randomVelocity.nextDouble(10.0, 20.0), 0.0), 0.0, direction, 0.0, wheelBase, length)
             }
-            strategy = { if(Random.nextFloat() < 0.3 * it) { spawn() } }
+            strategy = { if(randomMoment.nextFloat() < 0.3 * it) { spawn() } }
         }
 
         exitArea {

@@ -34,14 +34,22 @@ object HighwaySection2Lanes {
         /** Store the maximum speed of the vehicles (for randomization of the traffic flow */
         val speedLimits = hashMapOf<Vehicle, Double>()
 
+        /** Store the spawning time and exit time of the vehicle */
+        val spawningTimes = hashMapOf<Vehicle, Double>()
+        val exitTimes = hashMapOf<Vehicle, Double>()
+
         roadNetwork = network
 
         onSpawn.add { v, _ ->
             basicOnSpawn(v, routes)
             speedLimits[v] = Random.nextDouble(15.0, 30.0)
+            spawningTimes[v] = simulationTime
         }
 
-        onDestroy.add { v -> speedLimits.remove(v) }
+        onDestroy.add { v ->
+            speedLimits.remove(v)
+            exitTimes[v] = simulationTime
+        }
 
         vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(routes, vehicle, deltaTime, maximumSpeed = speedLimits[vehicle] ?: 22.5) }
 

@@ -8,6 +8,7 @@ import fr.ciadlab.sim.car.behavior.lanechange.MobilState
 import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
 import fr.ciadlab.sim.car.behavior.lateral.purePursuit
 import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
+import fr.ciadlab.sim.car.behavior.longitudinal.reactionTimeAdaptiveCruiseControl
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider.Companion.findFollower
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider.Companion.findLeader
 import fr.ciadlab.sim.math.algebra.*
@@ -20,7 +21,7 @@ import kotlin.math.sqrt
 class ReachGoalBehavior(
     val vehicle: Vehicle,
     val driverBehavioralState: DriverBehavioralState,
-    val longitudinalControl: (DriverBehavioralState, Vehicle) -> Double = Companion::idmLongitudinalControl,
+    val longitudinalControl: (DriverBehavioralState, Vehicle) -> Double = Companion::rtAccLongitudinalControl,
     val lateralControl: (DriverBehavioralState, Vehicle) -> Double = Companion::curvatureFollowingLateralControl,
     val laneChangeStrategy: (DriverBehavioralState, Vehicle) -> Int = Companion::mobilLaneSelection)
     : DriverBehavior {
@@ -165,6 +166,16 @@ class ReachGoalBehavior(
                     minimumSpacing = 5.0)
             }
         }
+
+        fun rtAccLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Double {
+            val closestLeader = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)
+
+            return if(closestLeader == null) {
+                reactionTimeAdaptiveCruiseControl(vehicle.speed, 0.0, Double.MAX_VALUE)
+            } else {
+                reactionTimeAdaptiveCruiseControl(vehicle.speed, closestLeader.obstacleRelativeVelocity.norm, closestLeader.obstacleRelativePosition.norm)
+            }
+        }
         // endregion
 
         // region Lane-change strategies
@@ -192,9 +203,9 @@ class ReachGoalBehavior(
 
                 if(mobilState.shouldLaneChangeBePerformed(
                         carFollowingModel = { distance, relativeSpeed, speed ->
-                        intelligentDriverModelControl(
-                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
-//                            reactionTimeAdaptiveCruiseControl(speed, speed + relativeSpeed, distance, tau = 0.5)
+//                        intelligentDriverModelControl(
+//                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
+                            reactionTimeAdaptiveCruiseControl(speed, speed + relativeSpeed, distance, tau = 0.5)
 
                     })) {
                     return rightLaneIndex
@@ -215,9 +226,9 @@ class ReachGoalBehavior(
                     vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0))
 
                 if(mobilState.shouldLaneChangeBePerformed(carFollowingModel = { distance, relativeSpeed, speed ->
-                        intelligentDriverModelControl(
-                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
-//                        reactionTimeAdaptiveCruiseControl(speed, speed + relativeSpeed, distance, tau = 0.5)
+//                        intelligentDriverModelControl(
+//                            distance, speed, relativeSpeed, driverBehavioralState.maximumSpeed, minimumSpacing = 5.0)
+                        reactionTimeAdaptiveCruiseControl(speed, speed + relativeSpeed, distance, tau = 0.5)
                     })) {
                     return leftLaneIndex
                 }

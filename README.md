@@ -105,3 +105,16 @@ Then, to produce a runnable JS file, in the *view-js* module, run the following:
 ```
 gradle browserDevelopmentWebpack
 ```
+
+# Cite
+
+```
+@misc{lombard2021mts,
+  author = {Lombard, Alexandre},
+  title = {Multiplatform Traffic Simulation (MTS)},
+  year = {2021},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/alexandrelombard/multiplatform-traffic-simulation}},
+}
+```

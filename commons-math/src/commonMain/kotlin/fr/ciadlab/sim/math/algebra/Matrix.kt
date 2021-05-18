@@ -1,7 +1,7 @@
 package fr.ciadlab.sim.math.algebra
 
 /**
- * Matrix class of any size
+ * Matrix class of doubles of any size
  * @author Alexandre Lombard
  */
 data class Matrix(
@@ -16,20 +16,32 @@ data class Matrix(
                     "(the size must be a multiple of the width)")
     }
 
+    /**
+     * Gets the element in position (x, y)
+     */
     operator fun get(x: Int, y: Int): Double {
         return values[x * width + y]
     }
 
+    /**
+     * Computes the product of two matrices using an iterative algorithm
+     * @param m the other matrix
+     */
     operator fun times(m: Matrix): Matrix {
-        if(this.height != m.width)
+        if(this.width != m.height)
             throw IllegalArgumentException("Invalid dimensions for matrix product")
 
-        val resultWidth = this.width
-        val resultHeight = m.height
+        val resultWidth = m.width
+        val resultHeight = this.height
 
-//        val values = Array<Double>(resultWidth * resultHeight) {
-//
-//        }
+        val values = Array<Double>(resultWidth * resultHeight) {
+            // (x, y) coordinates in the result matrix
+            val x = it / resultWidth
+            val y = it % resultWidth
+
+            0.0 // TODO
+        }
+
         TODO("Not yet implemented")
     }
 

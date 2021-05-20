@@ -1,11 +1,13 @@
 package fr.ciadlab.sim.car.behavior.longitudinal
 
+import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 /**
  * Apply RT-ACC to compute the desired acceleration of the vehicle
  * @param vehicleSpeed the current speed of the vehicle
+ * @param targetSpeed the target speed
  * @param leaderSpeed the current speed of the leader vehicle
  * @param intervehicularDistance the current distance between the two vehicles
  * @param minimumDeceleration the minimum value the car accepts to apply for deceleration (a negative value)
@@ -18,6 +20,7 @@ import kotlin.math.sqrt
  */
 fun reactionTimeAdaptiveCruiseControl(
     vehicleSpeed: Double,
+    targetSpeed: Double,
     leaderSpeed: Double,
     intervehicularDistance: Double,
     minimumDeceleration: Double = -2.0,
@@ -51,5 +54,7 @@ fun reactionTimeAdaptiveCruiseControl(
 
     val aS = sqrt(underSquareRoot)
 
-    return (minimumDeceleration * tau - 2 * vehicleSpeed - 2.0 * minimumDeceleration * aS) / (2.0 * tau)
+    val expectedAcceleration = (minimumDeceleration * tau - 2 * vehicleSpeed - 2.0 * minimumDeceleration * aS) / (2.0 * tau)
+
+    return min(expectedAcceleration, (targetSpeed - vehicleSpeed) / tau)
 }

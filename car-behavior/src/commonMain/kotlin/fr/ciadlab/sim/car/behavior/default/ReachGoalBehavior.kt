@@ -173,9 +173,9 @@ class ReachGoalBehavior(
             val closestLeader = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)
 
             return if(closestLeader == null) {
-                reactionTimeAdaptiveCruiseControl(vehicle.speed, 0.0, Double.MAX_VALUE)
+                reactionTimeAdaptiveCruiseControl(vehicle.speed, driverBehavioralState.maximumSpeed, 0.0, Double.MAX_VALUE)
             } else {
-                reactionTimeAdaptiveCruiseControl(vehicle.speed, closestLeader.obstacleRelativeVelocity.norm, closestLeader.obstacleRelativePosition.norm)
+                reactionTimeAdaptiveCruiseControl(vehicle.speed, driverBehavioralState.maximumSpeed, closestLeader.obstacleRelativeVelocity.norm, closestLeader.obstacleRelativePosition.norm)
             }
         }
 

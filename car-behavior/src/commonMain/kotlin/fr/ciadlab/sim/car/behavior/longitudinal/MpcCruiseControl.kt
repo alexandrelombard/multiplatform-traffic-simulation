@@ -18,27 +18,19 @@ fun mpcCruiseControl(
     tau: Double,                            // Ts
     steps: Int
 ): Double {
-    var dSafe =dDefault + timeGap * velocity
-    val velocityModel = { acc: Double, dt: Double, v: Double -> v + acc * dt  }
-
-    var xl = intervehicularDistance
-    var xe = 0.0
-    var vl = relativeVelocity + velocity
-    var ve = velocity
-    var a = max(minimumDeceleration, min(maximumAcceleration, (targetVelocity - velocity) / tau))
+    val xl = intervehicularDistance
+    val xe = 0.0
+    val vl = relativeVelocity + velocity
+    val ve = velocity
     val dt = tau
-    var dRel = intervehicularDistance
-    for (i in 0 until steps) {
-        // Run the step
-        xl += vl * dt
-        xe += ve * dt
-        ve += a * dt
 
-        dRel = xl - xe
-        dSafe = dDefault + timeGap * ve
+    val effectiveMinA = minimumDeceleration
+    val effectiveMaxA = min(maximumAcceleration, (targetVelocity - velocity) / tau)
 
-        a = max(minimumDeceleration, min(maximumAcceleration, (targetVelocity - velocity) / tau))
-    }
+    val optA = optimalA(xl, vl, xe, ve, timeGap, dt, dDefault)
 
-    TODO("Not yet implemented")
+    return min(max(optA, effectiveMinA), effectiveMaxA)
 }
+
+fun optimalA(xl: Double, vl: Double, xe: Double, ve: Double, tg: Double, dt: Double, dDef: Double) =
+    (vl * dt + xl - ve * dt + xe - dDef - tg * ve) / (tg * dt)

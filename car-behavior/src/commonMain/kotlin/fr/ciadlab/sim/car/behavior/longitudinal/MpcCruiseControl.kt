@@ -4,6 +4,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 // Source: https://fr.mathworks.com/help/mpc/ug/adaptive-cruise-control-using-model-predictive-controller.html
+// Due to the simplicity of the model (v(t+dt) = a(t) * dt + v(t)), we don't use a QP solver
 
 fun mpcCruiseControl(
     velocity: Double,                       // v_ego

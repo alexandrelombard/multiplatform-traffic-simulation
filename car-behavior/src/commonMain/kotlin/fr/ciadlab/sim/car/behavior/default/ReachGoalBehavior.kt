@@ -36,7 +36,7 @@ internal typealias LongitudinalControl = (DriverBehavioralState, Vehicle, Obstac
 class ReachGoalBehavior(
     val vehicle: Vehicle,
     val driverBehavioralState: DriverBehavioralState,
-    val longitudinalControl: LongitudinalControl = Companion::idmLongitudinalControl,
+    val longitudinalControl: LongitudinalControl = Companion::rtAccLongitudinalControl,
     val lateralControl: LateralControl = Companion::curvatureFollowingLateralControl,
     val laneChangeStrategy: (DriverBehavioralState, Vehicle) -> Int = Companion::mobilLaneSelection)
     : DriverBehavior {

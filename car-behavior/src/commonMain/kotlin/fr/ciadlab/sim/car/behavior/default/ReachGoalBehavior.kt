@@ -19,12 +19,15 @@ import kotlin.math.min
 import kotlin.math.sign
 import kotlin.math.sqrt
 
+internal typealias LateralControl = (DriverBehavioralState, Vehicle) -> Double
+internal typealias LongitudinalControl = (DriverBehavioralState, Vehicle) -> Double
+
 class ReachGoalBehavior(
     val vehicle: Vehicle,
     val driverBehavioralState: DriverBehavioralState,
-//    val longitudinalControl: (DriverBehavioralState, Vehicle) -> Double = Companion::rtAccLongitudinalControl,
-    val longitudinalControl: (DriverBehavioralState, Vehicle) -> Double = Companion::idmLongitudinalControl,
-    val lateralControl: (DriverBehavioralState, Vehicle) -> Double = Companion::curvatureFollowingLateralControl,
+//    val longitudinalControl: LongitudinalControl = Companion::rtAccLongitudinalControl,
+    val longitudinalControl: LongitudinalControl = Companion::idmLongitudinalControl,
+    val lateralControl: LateralControl = Companion::curvatureFollowingLateralControl,
     val laneChangeStrategy: (DriverBehavioralState, Vehicle) -> Int = Companion::mobilLaneSelection)
     : DriverBehavior {
 

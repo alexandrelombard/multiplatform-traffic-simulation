@@ -64,7 +64,7 @@ object HighwaySectionSingleLane {
             val randomVelocity = Random(0xff012a17)
             val randomMoment = Random(0xff012a17)
 
-            position = Vector2D(0.0, 1.725)
+            position = Vector2D(0.0, 0.0)
             direction = Vector2D(1.0, 0.0)
             generation = {
                 Vehicle(position, Vector2D(randomVelocity.nextDouble(10.0, 20.0), 0.0), 0.0, direction, 0.0, wheelBase, length)

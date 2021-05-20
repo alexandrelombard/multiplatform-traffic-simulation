@@ -61,8 +61,8 @@ object HighwaySectionSingleLane {
 
         spawner {
             /** Random (for spawner) */
-            val randomVelocity = Random(0xff012a17)
-            val randomMoment = Random(0xff012a17)
+            val randomVelocity = Random(0xff012a16)
+            val randomMoment = Random(0xff012a16)
 
             position = Vector2D(0.0, 0.0)
             direction = Vector2D(1.0, 0.0)

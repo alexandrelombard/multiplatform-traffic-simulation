@@ -8,6 +8,7 @@ import fr.ciadlab.sim.car.behavior.lanechange.MobilState
 import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
 import fr.ciadlab.sim.car.behavior.lateral.purePursuit
 import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
+import fr.ciadlab.sim.car.behavior.longitudinal.mpcCruiseControl
 import fr.ciadlab.sim.car.behavior.longitudinal.reactionTimeAdaptiveCruiseControl
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider.Companion.findFollower
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider.Companion.findLeader
@@ -175,6 +176,22 @@ class ReachGoalBehavior(
                 reactionTimeAdaptiveCruiseControl(vehicle.speed, 0.0, Double.MAX_VALUE)
             } else {
                 reactionTimeAdaptiveCruiseControl(vehicle.speed, closestLeader.obstacleRelativeVelocity.norm, closestLeader.obstacleRelativePosition.norm)
+            }
+        }
+
+        fun mpcAccLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Double {
+            val closestLeader = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)
+
+            return if(closestLeader == null) {
+                mpcCruiseControl(
+                    vehicle.velocity.norm, driverBehavioralState.maximumSpeed, 0.0, -8.0,
+                    Double.MAX_VALUE, -2.0, 2.0, 2.0, 10.0, 0.4)
+            } else {
+                mpcCruiseControl(
+                    vehicle.velocity.norm, driverBehavioralState.maximumSpeed,
+                    vehicle.speed - closestLeader.obstacleRelativeVelocity.norm, -8.0,
+                    closestLeader.obstacleRelativePosition.norm, -2.0, 2.0, 2.0,
+                    10.0, 0.4)
             }
         }
         // endregion

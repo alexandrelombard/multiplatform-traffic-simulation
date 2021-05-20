@@ -17,7 +17,6 @@ fun mpcCruiseControl(
     timeGap: Double,                        // t_gap
     dDefault: Double,                       // Ddefault => minimum safe distance
     tau: Double,                            // Ts
-    steps: Int
 ): Double {
     val xl = intervehicularDistance
     val xe = 0.0

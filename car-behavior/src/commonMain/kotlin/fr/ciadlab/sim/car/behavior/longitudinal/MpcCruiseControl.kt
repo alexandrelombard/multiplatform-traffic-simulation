@@ -7,16 +7,16 @@ import kotlin.math.min
 // Due to the simplicity of the model (v(t+dt) = a(t) * dt + v(t)), we don't use a QP solver
 
 fun mpcCruiseControl(
-    velocity: Double,                       // v_ego
-    targetVelocity: Double,                 // v_set
-    relativeVelocity: Double,               // v_lead - v_ego
-    leaderMaximumDeceleration: Double,      // b_l
-    intervehicularDistance: Double,         // d_rel
-    minimumDeceleration: Double,            // a_min (ego)
-    maximumAcceleration: Double,            // a_max (both)
-    timeGap: Double,                        // t_gap
-    dDefault: Double,                       // Ddefault => minimum safe distance
-    tau: Double,                            // Ts
+    velocity: Double,                           // v_ego
+    targetVelocity: Double,                     // v_set
+    relativeVelocity: Double,                   // v_lead - v_ego
+    intervehicularDistance: Double,             // d_rel
+    leaderMaximumDeceleration: Double = -8.0,   // b_l
+    minimumDeceleration: Double = -2.0,         // a_min (ego)
+    maximumAcceleration: Double = 2.0,          // a_max (both)
+    timeGap: Double = 1.4,                      // t_gap
+    dDefault: Double = 5.0,                     // Ddefault => minimum safe distance
+    tau: Double = 0.5,                          // Ts
 ): Double {
     val xl = intervehicularDistance
     val xe = 0.0

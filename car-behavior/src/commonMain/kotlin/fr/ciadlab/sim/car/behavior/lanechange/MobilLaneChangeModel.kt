@@ -1,11 +1,29 @@
 package fr.ciadlab.sim.car.behavior.lanechange
 
+import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
+import fr.ciadlab.sim.car.behavior.longitudinal.mpcCruiseControl
+import fr.ciadlab.sim.car.behavior.longitudinal.reactionTimeAdaptiveCruiseControl
+
 /**
  * distance is the distance between vehicles
  * relativeSpeed is the relative speed between the vehicles (follower and leader)
  * speed is the speed of the follower
  */
-typealias MobilLongitudinalModel = (distance: Double, relativeSpeed: Double, speed: Double)->Double
+typealias MobilLongitudinalModel = (distance: Double, relativeSpeed: Double, speed: Double, maximumSpeed: Double)->Double
+
+// region Wrapped longitudinal models for MOBIL
+val mobilIdm: MobilLongitudinalModel = { distance, relativeSpeed, speed, maximumSpeed ->
+    intelligentDriverModelControl(distance, speed, relativeSpeed, maximumSpeed, minimumSpacing = 5.0)
+}
+
+val mobilRtAcc: MobilLongitudinalModel = {  distance, relativeSpeed, speed, maximumSpeed ->
+    reactionTimeAdaptiveCruiseControl(speed, maximumSpeed, speed + relativeSpeed, distance, tau = 0.5)
+}
+
+val mobilMpcAcc: MobilLongitudinalModel = {  distance, relativeSpeed, speed, maximumSpeed ->
+    mpcCruiseControl(speed, maximumSpeed, relativeSpeed, distance)
+}
+// endregion
 
 /**
  * Contains all the data required by the MOBIL model to compute whether or not a lane change can be
@@ -14,6 +32,8 @@ typealias MobilLongitudinalModel = (distance: Double, relativeSpeed: Double, spe
 data class MobilState(
     /** The current speed of the current vehicle */
     val currentSpeed: Double,
+    /** The maximum speed of the current vehicle */
+    val maximumSpeed: Double,
     /** The distance between the new follower and the considered vehicle (> 0) */
     val newFollowerDistance: Double,
     /** The relative speed between the new follower and the considered vehicle (followerSpeed - currentSpeed) */
@@ -37,7 +57,7 @@ data class MobilState(
      * @param decelerationThreshold the maximal accepted deceleration for the new follower (usually a value <= 0)
      */
     fun isLaneChangeSafe(carFollowingModel: MobilLongitudinalModel, decelerationThreshold: Double = 0.0): Boolean {
-        val newFollowerAcceleration = carFollowingModel(newFollowerDistance, newFollowerRelativeSpeed, currentSpeed + newFollowerRelativeSpeed)
+        val newFollowerAcceleration = carFollowingModel(newFollowerDistance, newFollowerRelativeSpeed, currentSpeed + newFollowerRelativeSpeed, maximumSpeed)
         return newFollowerAcceleration > decelerationThreshold
     }
 
@@ -50,10 +70,10 @@ data class MobilState(
      *          profitable
      */
     fun isLaneChangeProfitable(carFollowingModel: MobilLongitudinalModel, accelerationThreshold: Double = 0.0): Boolean {
-        val currentLaneAcceleration = carFollowingModel(currentLeaderDistance, currentLeaderRelativeSpeed, currentSpeed)
-        val targetLaneAcceleration = carFollowingModel(newLeaderDistance, newLeaderRelativeSpeed, currentSpeed)
-        val imposedFollowerAcceleration = carFollowingModel(newFollowerDistance, newFollowerRelativeSpeed, currentSpeed + newFollowerRelativeSpeed)
-        val currentFollowerAcceleration = carFollowingModel(newFollowerDistance + newLeaderDistance, newLeaderRelativeSpeed - newFollowerRelativeSpeed, currentSpeed + newFollowerRelativeSpeed)
+        val currentLaneAcceleration = carFollowingModel(currentLeaderDistance, currentLeaderRelativeSpeed, currentSpeed, maximumSpeed)
+        val targetLaneAcceleration = carFollowingModel(newLeaderDistance, newLeaderRelativeSpeed, currentSpeed, maximumSpeed)
+        val imposedFollowerAcceleration = carFollowingModel(newFollowerDistance, newFollowerRelativeSpeed, currentSpeed + newFollowerRelativeSpeed, maximumSpeed)
+        val currentFollowerAcceleration = carFollowingModel(newFollowerDistance + newLeaderDistance, newLeaderRelativeSpeed - newFollowerRelativeSpeed, currentSpeed + newFollowerRelativeSpeed, maximumSpeed)
         return targetLaneAcceleration - currentLaneAcceleration > accelerationThreshold
     }
 

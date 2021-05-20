@@ -1,5 +1,6 @@
 package fr.ciadlab.sim.car.behavior.longitudinal
 
+import kotlin.math.max
 import kotlin.math.min
 
 // Source: https://fr.mathworks.com/help/mpc/ug/adaptive-cruise-control-using-model-predictive-controller.html
@@ -17,32 +18,27 @@ fun mpcCruiseControl(
     tau: Double,                            // Ts
     steps: Int
 ): Double {
-    val dSafe = { vEgo: Double -> dDefault + timeGap * vEgo}
+    var dSafe =dDefault + timeGap * velocity
     val velocityModel = { acc: Double, dt: Double, v: Double -> v + acc * dt  }
 
-    val maxAcceleration = min(maximumAcceleration, maxVelocityConstraint(velocity, targetVelocity, tau))
+    var xl = intervehicularDistance
+    var xe = 0.0
+    var vl = relativeVelocity + velocity
+    var ve = velocity
+    var a = max(minimumDeceleration, min(maximumAcceleration, (targetVelocity - velocity) / tau))
+    val dt = tau
+    var dRel = intervehicularDistance
+    for (i in 0 until steps) {
+        // Run the step
+        xl += vl * dt
+        xe += ve * dt
+        ve += a * dt
 
+        dRel = xl - xe
+        dSafe = dDefault + timeGap * ve
+
+        a = max(minimumDeceleration, min(maximumAcceleration, (targetVelocity - velocity) / tau))
+    }
 
     TODO("Not yet implemented")
-}
-
-fun maxVelocityConstraint(velocity: Double, targetVelocity: Double, deltaTime: Double) =
-    (targetVelocity - velocity) / deltaTime
-
-fun mpc() {
-    var vEgo = 0.0
-    var xEgo = 0.0
-    var vLead = 0.0
-    var xLead = 0.0
-
-    var acc = 0.0
-    var dt = 0.1
-
-    vEgo += acc * dt
-    xEgo += vEgo * dt
-    xLead += vLead * dt
-
-    var dRel = xLead - xEgo
-
-    TODO("Not yet implement")
 }

@@ -15,19 +15,11 @@ class SimulationView : View() {
     private var dragging: Boolean = false
     private var dragOrigin = Pair(0.0, 0.0)
 
-//    private val simulation = simpleIntersectionTrafficSimulation
-//    private val roadNetworkModel = simpleIntersectionRoadNetworkModel
 //    private val simulation = SimpleIntersection2LanesWithTrafficLights.simulation
-//    private val roadNetworkModel = SimpleIntersection2LanesWithTrafficLights.network
 //    private val simulation = SimpleIntersection2LanesWithV2X.simulation
-//    private val roadNetworkModel = SimpleIntersection2LanesWithV2X.network
 //    private val simulation = TwoIntersections2LanesWithTrafficLights.simulation
-//    private val roadNetworkModel = TwoIntersections2LanesWithTrafficLights.network
 //    private val simulation = TwoIntersections2LanesWithV2X.simulation
-//    private val roadNetworkModel = TwoIntersections2LanesWithV2X.network
-    private val roadNetworkModel = HighwaySection2Lanes.network
     private val simulation = HighwaySection2Lanes.simulation
-//    private val roadNetworkModel = HighwaySectionSingleLane.network
 //    private val simulation = HighwaySectionSingleLane.simulation
 
     init {

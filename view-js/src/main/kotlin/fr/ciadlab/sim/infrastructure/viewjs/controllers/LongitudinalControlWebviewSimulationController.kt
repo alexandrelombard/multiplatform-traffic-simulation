@@ -173,11 +173,11 @@ class LongitudinalControlWebviewSimulationController {
                         when(longitudinalControlModel) {
                             LongitudinalControlModel.INTELLIGENT_DRIVER_MODEL ->
                                 perceivedVehicle
-                                    .reachGoalBehavior(driverBehavioralState, longitudinalControl = {a, b -> 0.0}) // FIXME
+                                    .reachGoalBehavior(driverBehavioralState, longitudinalControl = {_, _, _ -> 0.0}) // FIXME
                                     .apply(simulationStepTime)
                             else ->
                                 perceivedVehicle
-                                    .reachGoalBehavior(driverBehavioralState, longitudinalControl = {a, b -> 0.0})  // FIXME
+                                    .reachGoalBehavior(driverBehavioralState, longitudinalControl = {_, _, _ -> 0.0})  // FIXME
                                     .apply(simulationStepTime)
                         }
                 driverAction

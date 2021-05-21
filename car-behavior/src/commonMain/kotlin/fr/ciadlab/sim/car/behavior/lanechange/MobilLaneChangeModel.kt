@@ -1,29 +1,24 @@
 package fr.ciadlab.sim.car.behavior.lanechange
 
+import fr.ciadlab.sim.car.behavior.longitudinal.LongitudinalModel
 import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
 import fr.ciadlab.sim.car.behavior.longitudinal.mpcCruiseControl
 import fr.ciadlab.sim.car.behavior.longitudinal.reactionTimeAdaptiveCruiseControl
 
-/**
- * distance is the distance between vehicles
- * relativeSpeed is the relative speed between the vehicles (follower and leader)
- * speed is the speed of the follower
- */
-typealias MobilLongitudinalModel = (distance: Double, relativeSpeed: Double, speed: Double, maximumSpeed: Double)->Double
-
-// region Wrapped longitudinal models for MOBIL
-val mobilIdm: MobilLongitudinalModel = { distance, relativeSpeed, speed, maximumSpeed ->
+// region Wrapped longitudinal models
+val mobilIdm: LongitudinalModel = { distance, relativeSpeed, speed, maximumSpeed ->
     intelligentDriverModelControl(distance, speed, relativeSpeed, maximumSpeed, minimumSpacing = 5.0)
 }
 
-val mobilRtAcc: MobilLongitudinalModel = {  distance, relativeSpeed, speed, maximumSpeed ->
+val mobilRtAcc: LongitudinalModel = {  distance, relativeSpeed, speed, maximumSpeed ->
     reactionTimeAdaptiveCruiseControl(speed, maximumSpeed, speed + relativeSpeed, distance, tau = 0.5)
 }
 
-val mobilMpcAcc: MobilLongitudinalModel = {  distance, relativeSpeed, speed, maximumSpeed ->
+val mobilMpcAcc: LongitudinalModel = {  distance, relativeSpeed, speed, maximumSpeed ->
     mpcCruiseControl(speed, maximumSpeed, relativeSpeed, distance)
 }
 // endregion
+
 
 /**
  * Contains all the data required by the MOBIL model to compute whether or not a lane change can be
@@ -56,7 +51,7 @@ data class MobilState(
      *          vehicular distance and the relative speed
      * @param decelerationThreshold the maximal accepted deceleration for the new follower (usually a value <= 0)
      */
-    fun isLaneChangeSafe(carFollowingModel: MobilLongitudinalModel, decelerationThreshold: Double = 0.0): Boolean {
+    fun isLaneChangeSafe(carFollowingModel: LongitudinalModel, decelerationThreshold: Double = 0.0): Boolean {
         val newFollowerAcceleration = carFollowingModel(newFollowerDistance, newFollowerRelativeSpeed, currentSpeed + newFollowerRelativeSpeed, maximumSpeed)
         return newFollowerAcceleration > decelerationThreshold
     }
@@ -69,7 +64,7 @@ data class MobilState(
      * @param accelerationThreshold the minimum acceleration difference expected to consider the lane-change as
      *          profitable
      */
-    fun isLaneChangeProfitable(carFollowingModel: MobilLongitudinalModel, accelerationThreshold: Double = 0.0): Boolean {
+    fun isLaneChangeProfitable(carFollowingModel: LongitudinalModel, accelerationThreshold: Double = 0.0): Boolean {
         val currentLaneAcceleration = carFollowingModel(currentLeaderDistance, currentLeaderRelativeSpeed, currentSpeed, maximumSpeed)
         val targetLaneAcceleration = carFollowingModel(newLeaderDistance, newLeaderRelativeSpeed, currentSpeed, maximumSpeed)
         val imposedFollowerAcceleration = carFollowingModel(newFollowerDistance, newFollowerRelativeSpeed, currentSpeed + newFollowerRelativeSpeed, maximumSpeed)
@@ -86,7 +81,7 @@ data class MobilState(
      * @param decelerationThreshold the maximal accepted deceleration for the new follower (usually a value <= 0)
      */
     fun shouldLaneChangeBePerformed(
-        carFollowingModel: MobilLongitudinalModel,
+        carFollowingModel: LongitudinalModel,
         decelerationThreshold: Double = 0.0,
         accelerationThreshold: Double = 0.2): Boolean {
         // TODO We should compare the expected acceleration gain to the imposed acceleration loss of the new follower (https://traffic-simulation.de/info/info_MOBIL.html)

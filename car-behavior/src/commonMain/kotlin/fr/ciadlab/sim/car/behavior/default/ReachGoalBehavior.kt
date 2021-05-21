@@ -201,13 +201,13 @@ class ReachGoalBehavior(
         fun mpcAccLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, closestLeader: ObstacleData?): Double {
             return if(closestLeader == null) {
                 mpcCruiseControl(
-                    vehicle.velocity.norm, driverBehavioralState.maximumSpeed, 0.0, -8.0,
-                    Double.MAX_VALUE, -2.0, 2.0, 2.0, 10.0, 0.4)
+                    vehicle.velocity.norm, driverBehavioralState.maximumSpeed, 0.0, Double.MAX_VALUE,-8.0,
+                    -2.0, 2.0, 2.0, 10.0, 0.4)
             } else {
                 mpcCruiseControl(
                     vehicle.velocity.norm, driverBehavioralState.maximumSpeed,
-                    vehicle.speed - closestLeader.obstacleRelativeVelocity.norm, -8.0,
-                    closestLeader.obstacleRelativePosition.norm, -2.0, 2.0, 2.0,
+                    vehicle.speed - closestLeader.obstacleRelativeVelocity.norm, closestLeader.obstacleRelativePosition.norm,
+                    -8.0, -2.0, 2.0, 2.0,
                     10.0, 0.4)
             }
         }
@@ -271,7 +271,7 @@ class ReachGoalBehavior(
 
 fun Vehicle.reachGoalBehavior(
     driverBehavioralState: DriverBehavioralState,
-    longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, leader: ObstacleData?) -> Double = ReachGoalBehavior.Companion::idmLongitudinalControl,
+    longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, leader: ObstacleData?) -> Double = ReachGoalBehavior.Companion::mpcAccLongitudinalControl,
     lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = ReachGoalBehavior.Companion::curvatureFollowingLateralControl
 ): DriverBehavior {
     return ReachGoalBehavior(this, driverBehavioralState, longitudinalControl, lateralControl)

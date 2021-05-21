@@ -27,6 +27,8 @@ internal typealias LateralControl = (DriverBehavioralState, Vehicle) -> Double
 /** Internal alias for Longitudinal Control */
 internal typealias LongitudinalControl = (DriverBehavioralState, Vehicle, ObstacleData?) -> Double
 
+// TODO Cleanup the code up-there
+
 /**
  * Reach goal behavior: make a vehicle follow the given route, it combines:
  * - A longitudinal control model to avoid collision of the vehicles in the same lane

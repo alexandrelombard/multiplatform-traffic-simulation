@@ -3,7 +3,7 @@ package fr.ciadlab.sim.infrastructure.view
 import fr.ciadlab.sim.infrastructure.view.simulation.trafficSimulationView
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit
-import fr.ciadlab.sim.traffic.scenario.HighwaySectionSingleLane
+import fr.ciadlab.sim.traffic.scenario.HighwaySection2Lanes
 import javafx.application.Platform
 import javafx.event.EventHandler
 import tornadofx.*
@@ -25,10 +25,10 @@ class SimulationView : View() {
 //    private val roadNetworkModel = TwoIntersections2LanesWithTrafficLights.network
 //    private val simulation = TwoIntersections2LanesWithV2X.simulation
 //    private val roadNetworkModel = TwoIntersections2LanesWithV2X.network
-//    private val roadNetworkModel = HighwaySection2Lanes.network
-//    private val simulation = HighwaySection2Lanes.simulation
-    private val roadNetworkModel = HighwaySectionSingleLane.network
-    private val simulation = HighwaySectionSingleLane.simulation
+    private val roadNetworkModel = HighwaySection2Lanes.network
+    private val simulation = HighwaySection2Lanes.simulation
+//    private val roadNetworkModel = HighwaySectionSingleLane.network
+//    private val simulation = HighwaySectionSingleLane.simulation
 
     init {
         // Close when the main stage is closed

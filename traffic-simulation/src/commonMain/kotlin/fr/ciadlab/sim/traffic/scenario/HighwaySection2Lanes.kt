@@ -10,6 +10,8 @@ import fr.ciadlab.sim.traffic.basics.basicOnSpawn
 import fr.ciadlab.sim.traffic.basics.basicVehicleUpdate
 import fr.ciadlab.sim.traffic.exitArea
 import fr.ciadlab.sim.traffic.spawner
+import fr.ciadlab.sim.traffic.spawner.TimeAwareGenerationStrategy
+import fr.ciadlab.sim.traffic.strategy
 import fr.ciadlab.sim.traffic.trafficSimulation
 import fr.ciadlab.sim.vehicle.Vehicle
 import kotlin.random.Random
@@ -69,7 +71,7 @@ object HighwaySection2Lanes {
             generation = {
                 Vehicle(position, Vector2D(randomVelocity.nextDouble(10.0, 20.0), 0.0), 0.0, direction, 0.0, wheelBase, length)
             }
-            strategy = { if(randomMoment.nextFloat() < 0.3 * it) { spawn() } }
+            strategy(TimeAwareGenerationStrategy(this@trafficSimulation))
         }
 
         exitArea {

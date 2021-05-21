@@ -4,6 +4,8 @@ import fr.ciadlab.sim.car.behavior.DriverBehavior
 import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
 import fr.ciadlab.sim.car.behavior.DriverBehavioralDebugData
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
+import fr.ciadlab.sim.car.behavior.lanechange.LaneChangeModel
+import fr.ciadlab.sim.car.behavior.lanechange.LaneChangeStrategy
 import fr.ciadlab.sim.car.behavior.lanechange.MobilState
 import fr.ciadlab.sim.car.behavior.lanechange.mobilIdm
 import fr.ciadlab.sim.car.behavior.lateral.LateralControlModel
@@ -41,7 +43,7 @@ class ReachGoalBehavior(
     val driverBehavioralState: DriverBehavioralState,
     val longitudinalControl: LongitudinalControl = Companion::rtAccLongitudinalControl,
     val lateralControl: LateralControl = Companion::curvatureFollowingLateralControl,
-    val laneChangeStrategy: (DriverBehavioralState, Vehicle) -> Int = Companion::mobilLaneSelection) : DriverBehavior {
+    val laneChangeStrategy: LaneChangeStrategy = Companion::mobilLaneSelection) : DriverBehavior {
 
     /**
      * Computes the action of the driver according the current state and the current behavior
@@ -262,9 +264,10 @@ class ReachGoalBehavior(
 fun Vehicle.reachGoalBehavior(
     driverBehavioralState: DriverBehavioralState,
     longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, leader: ObstacleData?) -> Double = ReachGoalBehavior.Companion::rtAccLongitudinalControl,
-    lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = ReachGoalBehavior.Companion::curvatureFollowingLateralControl
+    lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = ReachGoalBehavior.Companion::curvatureFollowingLateralControl,
+    laneChangeModel: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Int = ReachGoalBehavior.Companion::mobilLaneSelection
 ): DriverBehavior {
-    return ReachGoalBehavior(this, driverBehavioralState, longitudinalControl, lateralControl)
+    return ReachGoalBehavior(this, driverBehavioralState, longitudinalControl, lateralControl, laneChangeModel)
 }
 
 /**
@@ -276,7 +279,8 @@ fun Vehicle.reachGoalBehavior(
 fun Vehicle.reachGoalBehavior(
     driverBehavioralState: DriverBehavioralState,
     longitudinalControlModel: LongitudinalControlModel,
-    lateralControlModel: LateralControlModel) : DriverBehavior {
+    lateralControlModel: LateralControlModel,
+    laneChangeModel: LaneChangeModel) : DriverBehavior {
     val longitudinalControl = when(longitudinalControlModel) {
         LongitudinalControlModel.ENHANCED_IDM -> TODO()
         LongitudinalControlModel.IDM -> ReachGoalBehavior.Companion::idmLongitudinalControl
@@ -290,5 +294,10 @@ fun Vehicle.reachGoalBehavior(
         STANLEY -> ReachGoalBehavior.Companion::stanleyLateralControl
         CURVATURE_BASED -> ReachGoalBehavior.Companion::curvatureFollowingLateralControl
     }
-    return this.reachGoalBehavior(driverBehavioralState, longitudinalControl, lateralControl)
+
+    val laneChangeStrategy = when(laneChangeModel) {
+        LaneChangeModel.MOBIL ->  ReachGoalBehavior.Companion::mobilLaneSelection
+    }
+
+    return this.reachGoalBehavior(driverBehavioralState, longitudinalControl, lateralControl, laneChangeStrategy)
 }

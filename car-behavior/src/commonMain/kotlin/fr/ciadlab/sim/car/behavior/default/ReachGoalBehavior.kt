@@ -271,7 +271,7 @@ class ReachGoalBehavior(
 
 fun Vehicle.reachGoalBehavior(
     driverBehavioralState: DriverBehavioralState,
-    longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, leader: ObstacleData?) -> Double = ReachGoalBehavior.Companion::mpcAccLongitudinalControl,
+    longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, leader: ObstacleData?) -> Double = ReachGoalBehavior.Companion::idmLongitudinalControl,
     lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = ReachGoalBehavior.Companion::curvatureFollowingLateralControl
 ): DriverBehavior {
     return ReachGoalBehavior(this, driverBehavioralState, longitudinalControl, lateralControl)

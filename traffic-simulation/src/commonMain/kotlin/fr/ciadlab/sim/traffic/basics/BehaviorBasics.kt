@@ -5,6 +5,9 @@ import fr.ciadlab.sim.car.behavior.DriverState
 import fr.ciadlab.sim.car.behavior.default.reachGoalBehavior
 import fr.ciadlab.sim.car.behavior.default.respectTrafficLightBehavior
 import fr.ciadlab.sim.car.behavior.default.respectV2XAuthorizationListBehavior
+import fr.ciadlab.sim.car.behavior.lanechange.LaneChangeModel
+import fr.ciadlab.sim.car.behavior.lateral.LateralControlModel
+import fr.ciadlab.sim.car.behavior.longitudinal.LongitudinalControlModel
 import fr.ciadlab.sim.car.perception.mapmatching.MapMatchingProvider
 import fr.ciadlab.sim.car.perception.obstacles.ObstacleData
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider
@@ -38,7 +41,10 @@ fun TrafficSimulation<Vehicle>.generateObstaclePerceptions(vehicle: Vehicle): Li
 /**
  * Computes the traffic light perception
  */
-fun TrafficSimulation<Vehicle>.generateTrafficLightPerceptions(route: List<Pair<Road, Boolean>>?, vehicle: Vehicle) : List<IntersectionTrafficLight> {
+fun TrafficSimulation<Vehicle>.generateTrafficLightPerceptions(
+    route: List<Pair<Road, Boolean>>?,
+    vehicle: Vehicle
+): List<IntersectionTrafficLight> {
     val trafficLights = TrafficLightPerceptionProvider()
     val perceivedTrafficLights = trafficLights.performTrafficLightDetection(
         route?.map { it.first } ?: emptyList(), this.roadNetwork.trafficLights.flatMap { it.trafficLights })
@@ -48,7 +54,7 @@ fun TrafficSimulation<Vehicle>.generateTrafficLightPerceptions(route: List<Pair<
 /**
  * Computes the V2X RSU perception for intersection
  */
-fun TrafficSimulation<Vehicle>.generateIntersectionRsuPerceptions(route: List<Road>) : List<IntersectionRoadSideUnit> {
+fun TrafficSimulation<Vehicle>.generateIntersectionRsuPerceptions(route: List<Road>): List<IntersectionRoadSideUnit> {
     val rsuPerceptionProvider = IntersectionRsuPerceptionProvider()
     val perceivedRsu = rsuPerceptionProvider.performIntersectionRsuDetection(route, this.roadNetwork.roadSideUnits)
     return perceivedRsu
@@ -57,11 +63,12 @@ fun TrafficSimulation<Vehicle>.generateIntersectionRsuPerceptions(route: List<Ro
 /**
  * Basic vehicle behavior
  */
-fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
+fun TrafficSimulation<Vehicle>.basicVehicleBehavior(
     routes: Map<Vehicle, List<Pair<Road, Boolean>>?>,   // TODO Avoid having a route for all vehicles here
     vehicle: Vehicle,
     deltaTime: Double,
-    maximumSpeed: Double = 50.0 unit Units.KilometersPerHour): DriverAction {
+    maximumSpeed: Double = 50.0 unit Units.KilometersPerHour
+): DriverAction {
     // Retrieve the computed route and the current road/lane
     val route = routes[vehicle]
     val mapMatcher = MapMatchingProvider(roadNetwork)
@@ -82,7 +89,12 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
         route?.last()?.first?.end() ?: mapPosition.road.end()
     )
 
-    return vehicle.reachGoalBehavior(driverBehavioralState)
+    return vehicle.reachGoalBehavior(
+        driverBehavioralState,
+        LongitudinalControlModel.RT_ACC,
+        LateralControlModel.CURVATURE_BASED,
+        LaneChangeModel.MOBIL
+    )
         .and(vehicle.respectTrafficLightBehavior(driverBehavioralState, trafficLights))
         .apply(deltaTime)
 }
@@ -90,12 +102,13 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
 /**
  * Basic vehicle behavior with V2X support for intersections
  */
-fun TrafficSimulation<Vehicle>.basicV2XVehicleBehavior (
+fun TrafficSimulation<Vehicle>.basicV2XVehicleBehavior(
     routes: Map<Vehicle, List<Pair<Road, Boolean>>?>,   // TODO Avoid having a route for all vehicles here
     vehicle: Vehicle,
     communicationUnit: V2XCommunicationUnit,
     deltaTime: Double,
-    maximumSpeed: Double = 50.0 unit Units.KilometersPerHour): DriverAction {
+    maximumSpeed: Double = 50.0 unit Units.KilometersPerHour
+): DriverAction {
     // Retrieve the computed route and the current road
     val route = routes[vehicle]
     val mapMatcher = MapMatchingProvider(roadNetwork)
@@ -105,7 +118,8 @@ fun TrafficSimulation<Vehicle>.basicV2XVehicleBehavior (
     // Compute perceptions
     val obstacleData = generateObstaclePerceptions(vehicle)
     val trafficLights = generateTrafficLightPerceptions(route, vehicle)
-    val intersectionRsus = if(route != null) generateIntersectionRsuPerceptions(route.map { it.first }) else emptyList()
+    val intersectionRsus =
+        if (route != null) generateIntersectionRsuPerceptions(route.map { it.first }) else emptyList()
 
     // Execute the behavior
     val driverBehavioralState = DriverState(
@@ -114,16 +128,25 @@ fun TrafficSimulation<Vehicle>.basicV2XVehicleBehavior (
         forward ?: true,
         obstacleData,
         maximumSpeed,
-        route?.last()?.first?.end() ?: this.roadNetwork.roads[0].end())
+        route?.last()?.first?.end() ?: this.roadNetwork.roads[0].end()
+    )
 
-    return vehicle.reachGoalBehavior(driverBehavioralState)
+    return vehicle.reachGoalBehavior(
+        driverBehavioralState,
+        LongitudinalControlModel.RT_ACC,
+        LateralControlModel.CURVATURE_BASED,
+        LaneChangeModel.MOBIL
+    )
         .and(vehicle.respectTrafficLightBehavior(driverBehavioralState, trafficLights))
-        .and(vehicle.respectV2XAuthorizationListBehavior(
-            communicationUnit,
-            emptyList(),                    // TODO
-            null,           // TODO
-            Double.POSITIVE_INFINITY,       // TODO
-            Double.POSITIVE_INFINITY,       // TODO
-            driverBehavioralState))
+        .and(
+            vehicle.respectV2XAuthorizationListBehavior(
+                communicationUnit,
+                emptyList(),                    // TODO
+                null,           // TODO
+                Double.POSITIVE_INFINITY,       // TODO
+                Double.POSITIVE_INFINITY,       // TODO
+                driverBehavioralState
+            )
+        )
         .apply(deltaTime)
 }

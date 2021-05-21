@@ -3,7 +3,7 @@ package fr.ciadlab.sim.infrastructure.view
 import fr.ciadlab.sim.infrastructure.view.simulation.trafficSimulationView
 import fr.ciadlab.sim.physics.Units.Milliseconds
 import fr.ciadlab.sim.physics.unit
-import fr.ciadlab.sim.traffic.scenario.HighwaySection2Lanes
+import fr.ciadlab.sim.traffic.scenario.HighwaySection2LanesWithForcedMerge
 import javafx.application.Platform
 import javafx.event.EventHandler
 import tornadofx.*
@@ -19,8 +19,8 @@ class SimulationView : View() {
 //    private val simulation = SimpleIntersection2LanesWithV2X.simulation
 //    private val simulation = TwoIntersections2LanesWithTrafficLights.simulation
 //    private val simulation = TwoIntersections2LanesWithV2X.simulation
-    private val simulation = HighwaySection2Lanes.simulation
-//    private val simulation = HighwaySection2LanesWithForcedMerge.simulation
+//    private val simulation = HighwaySection2Lanes.simulation
+    private val simulation = HighwaySection2LanesWithForcedMerge.simulation
 //    private val simulation = HighwaySectionSingleLane.simulation
 
     init {

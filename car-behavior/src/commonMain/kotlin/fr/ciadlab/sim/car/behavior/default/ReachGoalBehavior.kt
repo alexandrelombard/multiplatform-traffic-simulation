@@ -230,13 +230,13 @@ class ReachGoalBehavior(
 
                 val mobilState = MobilState(
                     vehicle.speed,
+                    driverBehavioralState.maximumSpeed,
                     if(newFollower == null) Double.POSITIVE_INFINITY else newFollower.obstacleRelativePosition.norm,
                     if(newFollower == null) 0.0 else newFollower.obstacleRelativeVelocity.norm - vehicle.speed,
                     newLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
                     vehicle.speed - (newLeader?.obstacleRelativeVelocity?.norm ?: 0.0),
                     currentLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
-                    vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0),
-                    driverBehavioralState.maximumSpeed)
+                    vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0))
 
                 if(mobilState.shouldLaneChangeBePerformed(carFollowingModel = mobilIdm)) {
                     return rightLaneIndex
@@ -249,13 +249,13 @@ class ReachGoalBehavior(
 
                 val mobilState = MobilState(
                     vehicle.speed,
+                    driverBehavioralState.maximumSpeed,
                     if(newFollower == null) Double.POSITIVE_INFINITY else newFollower.obstacleRelativePosition.norm,
                     if(newFollower == null) 0.0 else newFollower.obstacleRelativeVelocity.norm - vehicle.speed,
                     newLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
                     vehicle.speed - (newLeader?.obstacleRelativeVelocity?.y ?: 0.0),
                     currentLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
-                    vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0),
-                    driverBehavioralState.maximumSpeed)
+                    vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0))
 
                 if(mobilState.shouldLaneChangeBePerformed(carFollowingModel = mobilIdm)) {
                     return leftLaneIndex

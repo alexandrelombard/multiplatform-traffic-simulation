@@ -1,13 +1,13 @@
 package fr.ciadlab.sim.infrastructure.view.debug
 
-import fr.ciadlab.sim.car.behavior.DriverBehavioralDebugData
+import fr.ciadlab.sim.car.behavior.DriverDebugData
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.Color
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.line
 import org.w3c.dom.CanvasRenderingContext2D
 
-class DriverDebugView(var debugData: DriverBehavioralDebugData?) {
+class DriverDebugView(var debugData: DriverDebugData?) {
 
-    fun update(debugData: DriverBehavioralDebugData?) {
+    fun update(debugData: DriverDebugData?) {
         this.debugData = debugData
     }
 
@@ -59,7 +59,7 @@ class DriverDebugView(var debugData: DriverBehavioralDebugData?) {
 
 }
 
-fun CanvasRenderingContext2D.driverDebugView(debugData: DriverBehavioralDebugData?): DriverDebugView {
+fun CanvasRenderingContext2D.driverDebugView(debugData: DriverDebugData?): DriverDebugView {
     val driverDebugView = DriverDebugView(debugData)
     driverDebugView.draw(this)
     return driverDebugView

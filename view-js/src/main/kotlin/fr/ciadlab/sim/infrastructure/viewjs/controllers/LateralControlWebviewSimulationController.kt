@@ -1,7 +1,7 @@
 package fr.ciadlab.sim.infrastructure.viewjs.controllers
 
-import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
-import fr.ciadlab.sim.car.behavior.DriverBehavioralState
+import fr.ciadlab.sim.car.behavior.DriverAction
+import fr.ciadlab.sim.car.behavior.DriverState
 import fr.ciadlab.sim.car.behavior.default.ReachGoalBehavior.Companion.constantSpeedControl
 import fr.ciadlab.sim.car.behavior.default.ReachGoalBehavior.Companion.purePursuitLateralControl
 import fr.ciadlab.sim.car.behavior.default.ReachGoalBehavior.Companion.stanleyLateralControl
@@ -59,10 +59,10 @@ class LateralControlWebviewSimulationController {
     var simulatedLatency = false
     var simulatedLatencyDelay = 400.0 unit Milliseconds
     var forcedSpeed: Double? = null
-    var customCommand: ((vehicle: Vehicle, driverBehavioralState: DriverBehavioralState) -> DriverBehavioralAction)? = null
+    var customCommand: ((vehicle: Vehicle, driverState: DriverState) -> DriverAction)? = null
     // endregion
 
-    private var lastCommand = DriverBehavioralAction(0.0, 0.0)
+    private var lastCommand = DriverAction(0.0, 0.0)
     private var lastCommandTime = 0.0
 
     /**
@@ -113,7 +113,7 @@ class LateralControlWebviewSimulationController {
         val network = eightShapedRoadNetworkModel
 
         val driverBehavioralState =
-            DriverBehavioralState(
+            DriverState(
                 currentRoad = network.roads[0],
                 currentLaneIndex = 0,
                 travelForward = true,

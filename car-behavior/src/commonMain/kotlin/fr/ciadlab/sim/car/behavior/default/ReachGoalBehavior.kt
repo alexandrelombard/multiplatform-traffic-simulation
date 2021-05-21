@@ -1,13 +1,10 @@
 package fr.ciadlab.sim.car.behavior.default
 
+import fr.ciadlab.sim.car.behavior.DriverAction
 import fr.ciadlab.sim.car.behavior.DriverBehavior
-import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
-import fr.ciadlab.sim.car.behavior.DriverBehavioralDebugData
-import fr.ciadlab.sim.car.behavior.DriverBehavioralState
-import fr.ciadlab.sim.car.behavior.lanechange.LaneChangeModel
-import fr.ciadlab.sim.car.behavior.lanechange.LaneChangeStrategy
-import fr.ciadlab.sim.car.behavior.lanechange.MobilState
-import fr.ciadlab.sim.car.behavior.lanechange.mobilIdm
+import fr.ciadlab.sim.car.behavior.DriverDebugData
+import fr.ciadlab.sim.car.behavior.DriverState
+import fr.ciadlab.sim.car.behavior.lanechange.*
 import fr.ciadlab.sim.car.behavior.lateral.LateralControlModel
 import fr.ciadlab.sim.car.behavior.lateral.LateralControlModel.*
 import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
@@ -24,10 +21,10 @@ import kotlin.math.sign
 import kotlin.math.sqrt
 
 /** Internal alias for Lateral Control */
-internal typealias LateralControl = (DriverBehavioralState, Vehicle) -> Double
+internal typealias LateralControl = (DriverState, Vehicle) -> Double
 
 /** Internal alias for Longitudinal Control */
-internal typealias LongitudinalControl = (DriverBehavioralState, Vehicle, ObstacleData?) -> Double
+internal typealias LongitudinalControl = (DriverState, Vehicle, ObstacleData?) -> Double
 
 // TODO Cleanup the code up-there
 
@@ -40,47 +37,47 @@ internal typealias LongitudinalControl = (DriverBehavioralState, Vehicle, Obstac
  */
 class ReachGoalBehavior(
     val vehicle: Vehicle,
-    val driverBehavioralState: DriverBehavioralState,
+    val driverState: DriverState,
     val longitudinalControl: LongitudinalControl = Companion::rtAccLongitudinalControl,
     val lateralControl: LateralControl = Companion::curvatureFollowingLateralControl,
-    val laneChangeStrategy: LaneChangeStrategy = Companion::mobilLaneSelection) : DriverBehavior {
+    val laneChangeStrategy: LaneChangeStrategy = { d: DriverState, v: Vehicle -> mobilLaneSelection(d, v, mobilRtAcc) }) : DriverBehavior {
 
     /**
      * Computes the action of the driver according the current state and the current behavior
      * @param deltaTime the simulation step time
      */
-    override fun apply(deltaTime: Double): DriverBehavioralAction {
-        var effectiveBehavioralState = driverBehavioralState
+    override fun apply(deltaTime: Double): DriverAction {
+        var effectiveBehavioralState = driverState
 
         // Apply the longitudinal model for acceleration
-        val closestLeader = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)
+        val closestLeader = findLeader(driverState, vehicle, driverState.currentLaneIndex)
         val targetAcceleration = longitudinalControl(effectiveBehavioralState, vehicle, closestLeader)
 
         // Apply the MOBIL model
         val targetLane = laneChangeStrategy(effectiveBehavioralState, vehicle)
-        val leftBlinker = targetLane > driverBehavioralState.currentLaneIndex
-        val rightBlinker = targetLane < driverBehavioralState.currentLaneIndex
+        val leftBlinker = targetLane > driverState.currentLaneIndex
+        val rightBlinker = targetLane < driverState.currentLaneIndex
         effectiveBehavioralState = effectiveBehavioralState.copy(currentLaneIndex = targetLane)
 
         // Apply the lateral model for control
         val targetWheelAngle = lateralControl(effectiveBehavioralState, vehicle)
 
         // Generate debug data (if required)
-        val debugData = DriverBehavioralDebugData(
+        val debugData = DriverDebugData(
             vehiclePosition = vehicle.position,
-            leaderPosition = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)?.getAbsolutePosition(vehicle.frame),
-            newLeaderPosition = if(driverBehavioralState.currentLaneIndex != targetLane) findLeader(driverBehavioralState, vehicle, targetLane)?.getAbsolutePosition(vehicle.frame) else null,
-            newFollowerPosition = if(driverBehavioralState.currentLaneIndex != targetLane) findFollower(driverBehavioralState, vehicle, targetLane)?.getAbsolutePosition(vehicle.frame) else null)
+            leaderPosition = findLeader(driverState, vehicle, driverState.currentLaneIndex)?.getAbsolutePosition(vehicle.frame),
+            newLeaderPosition = if(driverState.currentLaneIndex != targetLane) findLeader(driverState, vehicle, targetLane)?.getAbsolutePosition(vehicle.frame) else null,
+            newFollowerPosition = if(driverState.currentLaneIndex != targetLane) findFollower(driverState, vehicle, targetLane)?.getAbsolutePosition(vehicle.frame) else null)
 
-        return DriverBehavioralAction(targetAcceleration, targetWheelAngle, leftBlinker, rightBlinker, debugData)
+        return DriverAction(targetAcceleration, targetWheelAngle, leftBlinker, rightBlinker, debugData)
     }
 
     companion object {
         // region Lateral control solutions
-        fun purePursuitLateralControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Double {
+        fun purePursuitLateralControl(driverState: DriverState, vehicle: Vehicle): Double {
             // We get the lane
             val laneWidth = 3.5
-            val lane = driverBehavioralState.lane(laneWidth)
+            val lane = driverState.lane(laneWidth)
 
             // We compute the parameters
             val projectionData = lane.project(vehicle.position.toVector3D())
@@ -98,10 +95,10 @@ class ReachGoalBehavior(
             )
         }
 
-        fun stanleyLateralControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Double {
+        fun stanleyLateralControl(driverState: DriverState, vehicle: Vehicle): Double {
             // We get the lane
             val laneWidth = 3.5
-            val lane = driverBehavioralState.lane(laneWidth)
+            val lane = driverState.lane(laneWidth)
 
             // We compute the parameters
             val frontAxlePosition =
@@ -124,10 +121,10 @@ class ReachGoalBehavior(
             )
         }
 
-        fun curvatureFollowingLateralControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Double {
+        fun curvatureFollowingLateralControl(driverState: DriverState, vehicle: Vehicle): Double {
             // We get the lane
             val laneWidth = 3.5
-            val lane = driverBehavioralState.lane(laneWidth)
+            val lane = driverState.lane(laneWidth)
 
             // We compute the parameters
             val frontAxlePosition =
@@ -164,51 +161,51 @@ class ReachGoalBehavior(
         // endregion
 
         // region Longitudinal control
-        fun constantSpeedControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Double {
+        fun constantSpeedControl(driverState: DriverState, vehicle: Vehicle): Double {
             return 0.0
         }
 
-        fun idmLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, closestLeader: ObstacleData?): Double {
+        fun idmLongitudinalControl(driverState: DriverState, vehicle: Vehicle, closestLeader: ObstacleData?): Double {
             return if (closestLeader == null) {
                 intelligentDriverModelControl(
                     Double.MAX_VALUE,
                     vehicle.velocity.norm,
                     0.0,
-                    driverBehavioralState.maximumSpeed)
+                    driverState.maximumSpeed)
             } else {
                 intelligentDriverModelControl(
                     closestLeader.obstacleRelativePosition.norm,
                     vehicle.velocity.norm,
                     vehicle.speed - closestLeader.obstacleRelativeVelocity.norm,
-                    driverBehavioralState.maximumSpeed,
+                    driverState.maximumSpeed,
                     minimumSpacing = 5.0)
             }
         }
 
-        fun rtAccLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, closestLeader: ObstacleData?): Double {
+        fun rtAccLongitudinalControl(driverState: DriverState, vehicle: Vehicle, closestLeader: ObstacleData?): Double {
             return if(closestLeader == null) {
-                reactionTimeAdaptiveCruiseControl(vehicle.speed, driverBehavioralState.maximumSpeed, 0.0, Double.MAX_VALUE)
+                reactionTimeAdaptiveCruiseControl(vehicle.speed, driverState.maximumSpeed, 0.0, Double.MAX_VALUE)
             } else {
-                reactionTimeAdaptiveCruiseControl(vehicle.speed, driverBehavioralState.maximumSpeed, closestLeader.obstacleRelativeVelocity.norm, closestLeader.obstacleRelativePosition.norm)
+                reactionTimeAdaptiveCruiseControl(vehicle.speed, driverState.maximumSpeed, closestLeader.obstacleRelativeVelocity.norm, closestLeader.obstacleRelativePosition.norm)
             }
         }
 
-        fun gippsModelLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, closestLeader: ObstacleData?): Double {
+        fun gippsModelLongitudinalControl(driverState: DriverState, vehicle: Vehicle, closestLeader: ObstacleData?): Double {
             return if(closestLeader == null) {
-                gippsModelControl(Double.MAX_VALUE, vehicle.speed, 0.0, driverBehavioralState.maximumSpeed)
+                gippsModelControl(Double.MAX_VALUE, vehicle.speed, 0.0, driverState.maximumSpeed)
             } else {
-                gippsModelControl(closestLeader.obstacleRelativePosition.norm, vehicle.speed, closestLeader.obstacleRelativeVelocity.norm - vehicle.speed, driverBehavioralState.maximumSpeed)
+                gippsModelControl(closestLeader.obstacleRelativePosition.norm, vehicle.speed, closestLeader.obstacleRelativeVelocity.norm - vehicle.speed, driverState.maximumSpeed)
             }
         }
 
-        fun mpcAccLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, closestLeader: ObstacleData?): Double {
+        fun mpcAccLongitudinalControl(driverState: DriverState, vehicle: Vehicle, closestLeader: ObstacleData?): Double {
             return if(closestLeader == null) {
                 mpcCruiseControl(
-                    vehicle.velocity.norm, driverBehavioralState.maximumSpeed, 0.0, Double.MAX_VALUE,-8.0,
+                    vehicle.velocity.norm, driverState.maximumSpeed, 0.0, Double.MAX_VALUE,-8.0,
                     -2.0, 2.0, 2.0, 10.0, 0.4)
             } else {
                 mpcCruiseControl(
-                    vehicle.velocity.norm, driverBehavioralState.maximumSpeed,
+                    vehicle.velocity.norm, driverState.maximumSpeed,
                     vehicle.speed - closestLeader.obstacleRelativeVelocity.norm, closestLeader.obstacleRelativePosition.norm,
                     -8.0, -2.0, 2.0, 2.0,
                     10.0, 0.4)
@@ -218,10 +215,10 @@ class ReachGoalBehavior(
 
         // region Lane-change strategies
         /** Builds a MOBIL longitudinal model from the internal definition of a longitudinal model */
-        fun mobilLaneSelection(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle): Int {
-            val laneIndex = driverBehavioralState.currentLaneIndex
-            val leftLaneIndex = driverBehavioralState.currentRoad.leftLaneIndex(laneIndex)
-            val rightLaneIndex = driverBehavioralState.currentRoad.rightLaneIndex(laneIndex)
+        fun mobilLaneSelection(driverState: DriverState, vehicle: Vehicle, longitudinalModel: LongitudinalModel): Int {
+            val laneIndex = driverState.currentLaneIndex
+            val leftLaneIndex = driverState.currentRoad.leftLaneIndex(laneIndex)
+            val rightLaneIndex = driverState.currentRoad.rightLaneIndex(laneIndex)
 
             val halfLaneWidth = 3.5 / 2.0   // FIXME Use a computed value
 
@@ -229,13 +226,13 @@ class ReachGoalBehavior(
 
             if (selectedLaneIndex != null) {
                 // Check if we can go back to the right lane
-                val newLeader = findLeader(driverBehavioralState, vehicle, selectedLaneIndex)
-                val currentLeader = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)
-                val newFollower = findFollower(driverBehavioralState, vehicle, selectedLaneIndex)
+                val newLeader = findLeader(driverState, vehicle, selectedLaneIndex)
+                val currentLeader = findLeader(driverState, vehicle, driverState.currentLaneIndex)
+                val newFollower = findFollower(driverState, vehicle, selectedLaneIndex)
 
                 val mobilState = MobilState(
                     vehicle.speed,
-                    driverBehavioralState.maximumSpeed,
+                    driverState.maximumSpeed,
                     if(newFollower == null) Double.POSITIVE_INFINITY else newFollower.obstacleRelativePosition.norm,
                     if(newFollower == null) 0.0 else newFollower.obstacleRelativeVelocity.norm - vehicle.speed,
                     newLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
@@ -243,7 +240,7 @@ class ReachGoalBehavior(
                     currentLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
                     vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0))
 
-                if(mobilState.shouldLaneChangeBePerformed(carFollowingModel = mobilIdm)) {
+                if(mobilState.shouldLaneChangeBePerformed(carFollowingModel = longitudinalModel)) {
                     return selectedLaneIndex
                 }
             }
@@ -257,27 +254,33 @@ class ReachGoalBehavior(
 
 /**
  * Returns the "reach goal behavior" with the selected models
- * @param driverBehavioralState the current state of the driver
+ * @param driverState the current state of the driver
  * @param longitudinalControl the longitudinal control model
  * @param lateralControl the lateral control model
+ * @param laneChangeStrategy the lane change strategy model
  */
 fun Vehicle.reachGoalBehavior(
-    driverBehavioralState: DriverBehavioralState,
-    longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, leader: ObstacleData?) -> Double = ReachGoalBehavior.Companion::rtAccLongitudinalControl,
-    lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = ReachGoalBehavior.Companion::curvatureFollowingLateralControl,
-    laneChangeModel: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Int = ReachGoalBehavior.Companion::mobilLaneSelection
+    driverState: DriverState,
+    longitudinalControl: (driverState: DriverState, vehicle: Vehicle, leader: ObstacleData?) -> Double =
+        ReachGoalBehavior.Companion::rtAccLongitudinalControl,
+    lateralControl: (driverState: DriverState, vehicle: Vehicle) -> Double =
+        ReachGoalBehavior.Companion::curvatureFollowingLateralControl,
+    laneChangeStrategy: (driverState: DriverState, vehicle: Vehicle) -> Int = { d, v ->
+        // Curryied lane-change strategy, make sure to match MOBIL longitudinal model with the longitudinal control
+        ReachGoalBehavior.mobilLaneSelection(d, v, mobilRtAcc)
+    }
 ): DriverBehavior {
-    return ReachGoalBehavior(this, driverBehavioralState, longitudinalControl, lateralControl, laneChangeModel)
+    return ReachGoalBehavior(this, driverState, longitudinalControl, lateralControl, laneChangeStrategy)
 }
 
 /**
  * Returns the "reach goal behavior" with the selected models
- * @param driverBehavioralState the current state of the driver
+ * @param driverState the current state of the driver
  * @param longitudinalControlModel the longitudinal control model
  * @param lateralControlModel the lateral control model
  */
 fun Vehicle.reachGoalBehavior(
-    driverBehavioralState: DriverBehavioralState,
+    driverState: DriverState,
     longitudinalControlModel: LongitudinalControlModel,
     lateralControlModel: LateralControlModel,
     laneChangeModel: LaneChangeModel) : DriverBehavior {
@@ -296,8 +299,16 @@ fun Vehicle.reachGoalBehavior(
     }
 
     val laneChangeStrategy = when(laneChangeModel) {
-        LaneChangeModel.MOBIL ->  ReachGoalBehavior.Companion::mobilLaneSelection
+        LaneChangeModel.MOBIL -> {
+            when(longitudinalControlModel) {
+                LongitudinalControlModel.ENHANCED_IDM -> TODO()
+                LongitudinalControlModel.IDM -> { d: DriverState, v: Vehicle -> ReachGoalBehavior.mobilLaneSelection(d, v, mobilIdm) }
+                LongitudinalControlModel.RT_ACC -> { d: DriverState, v: Vehicle -> ReachGoalBehavior.mobilLaneSelection(d, v, mobilRtAcc) }
+                LongitudinalControlModel.MPC -> { d: DriverState, v: Vehicle -> ReachGoalBehavior.mobilLaneSelection(d, v, mobilMpcAcc) }
+                LongitudinalControlModel.GIPPS -> TODO()
+            }
+        }
     }
 
-    return this.reachGoalBehavior(driverBehavioralState, longitudinalControl, lateralControl, laneChangeStrategy)
+    return this.reachGoalBehavior(driverState, longitudinalControl, lateralControl, laneChangeStrategy)
 }

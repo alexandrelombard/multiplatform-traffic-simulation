@@ -1,6 +1,6 @@
 package fr.ciadlab.sim.car.perception.obstacles
 
-import fr.ciadlab.sim.car.behavior.DriverBehavioralState
+import fr.ciadlab.sim.car.behavior.DriverState
 import fr.ciadlab.sim.math.algebra.AffineSpace2D
 import fr.ciadlab.sim.math.algebra.Vector2D
 import fr.ciadlab.sim.math.algebra.VectorSpace2D
@@ -48,13 +48,13 @@ class RadarPerceptionProvider(
         /**
          * Finds the leader among the perceived vehicles, in the given lane
          */
-        fun findLeader(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, lane: Int): ObstacleData? {
-            val perceivedLeaders = driverBehavioralState.perceivedVehicles
+        fun findLeader(driverState: DriverState, vehicle: Vehicle, lane: Int): ObstacleData? {
+            val perceivedLeaders = driverState.perceivedVehicles
                 .filter { it.obstacleRelativePosition.y > 0.0 }         // Ignore vehicle behind
                 .filter { abs(it.obstacleRelativePosition.x) < 10.0 }   // Ignore vehicle far in the lateral direction
             val laneLeaders = perceivedLeaders
                 .filter {
-                    driverBehavioralState.currentRoad.findLane(vehicle.frame.toDefault(it.obstacleRelativePosition)) == lane
+                    driverState.currentRoad.findLane(vehicle.frame.toDefault(it.obstacleRelativePosition)) == lane
                 }
 
             return laneLeaders.minByOrNull { it.obstacleRelativePosition.y }
@@ -63,13 +63,13 @@ class RadarPerceptionProvider(
         /**
          * Finds the follower among the perceived vehicles, in the given lane
          */
-        fun findFollower(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, lane: Int): ObstacleData? {
-            val perceivedFollowers = driverBehavioralState.perceivedVehicles
+        fun findFollower(driverState: DriverState, vehicle: Vehicle, lane: Int): ObstacleData? {
+            val perceivedFollowers = driverState.perceivedVehicles
                 .filter { it.obstacleRelativePosition.y < vehicle.length }  // Ignore vehicle before
                 .filter { abs(it.obstacleRelativePosition.x) < 10.0 }       // Ignore vehicle far in the lateral direction
             val laneFollowers = perceivedFollowers
                 .filter {
-                    driverBehavioralState.currentRoad.findLane(vehicle.frame.toDefault(it.obstacleRelativePosition)) == lane
+                    driverState.currentRoad.findLane(vehicle.frame.toDefault(it.obstacleRelativePosition)) == lane
                 }
 
             return laneFollowers.maxByOrNull { it.obstacleRelativePosition.y }

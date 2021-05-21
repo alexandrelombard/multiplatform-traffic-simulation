@@ -1,6 +1,6 @@
 package fr.ciadlab.sim.infrastructure.view.debug
 
-import fr.ciadlab.sim.car.behavior.DriverBehavioralDebugData
+import fr.ciadlab.sim.car.behavior.DriverDebugData
 import javafx.scene.Group
 import javafx.scene.Parent
 import javafx.scene.paint.Color
@@ -10,7 +10,7 @@ import tornadofx.line
 import tornadofx.opcr
 import tornadofx.removeFromParent
 
-class DriverDebugView(debugData: DriverBehavioralDebugData?): Group() {
+class DriverDebugView(debugData: DriverDebugData?): Group() {
 
     private var leaderLine: Line? = null
     private var newLeaderLine: Line? = null
@@ -32,7 +32,7 @@ class DriverDebugView(debugData: DriverBehavioralDebugData?): Group() {
     /**
      * Update the debug data display on screen
      */
-    fun update(debugData: DriverBehavioralDebugData?) {
+    fun update(debugData: DriverDebugData?) {
         clear()
 
         if(debugData?.vehiclePosition != null) {
@@ -75,5 +75,5 @@ class DriverDebugView(debugData: DriverBehavioralDebugData?): Group() {
 
 }
 
-fun Parent.driverDebugView(debugData: DriverBehavioralDebugData, op: DriverDebugView.() -> Unit = {}): DriverDebugView =
+fun Parent.driverDebugView(debugData: DriverDebugData, op: DriverDebugView.() -> Unit = {}): DriverDebugView =
     opcr(this, DriverDebugView(debugData), op)

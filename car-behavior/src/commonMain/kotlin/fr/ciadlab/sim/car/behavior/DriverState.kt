@@ -9,7 +9,7 @@ import fr.ciadlab.sim.math.algebra.Vector3D
  * Contains all the data required by a vehicle to take a decision
  * @author Alexandre Lombard
  */
-data class DriverBehavioralState(
+data class DriverState(
     /** The current road of the vehicle */
     val currentRoad: Road,
     /** The current lane index */

@@ -1,6 +1,6 @@
 package fr.ciadlab.sim.traffic.basics
 
-import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
+import fr.ciadlab.sim.car.behavior.DriverAction
 import fr.ciadlab.sim.traffic.TrafficSimulation
 import fr.ciadlab.sim.vehicle.LightState
 import fr.ciadlab.sim.vehicle.Vehicle
@@ -13,7 +13,7 @@ import fr.ciadlab.sim.vehicle.Vehicle
 /**
  * Update a vehicle
  */
-fun TrafficSimulation<Vehicle>.basicVehicleUpdate(vehicle: Vehicle, action: DriverBehavioralAction, deltaTime: Double): Vehicle {
+fun TrafficSimulation<Vehicle>.basicVehicleUpdate(vehicle: Vehicle, action: DriverAction, deltaTime: Double): Vehicle {
     return vehicle
         .update(action.targetAcceleration, action.targetWheelAngle, deltaTime)
         .changeLights(

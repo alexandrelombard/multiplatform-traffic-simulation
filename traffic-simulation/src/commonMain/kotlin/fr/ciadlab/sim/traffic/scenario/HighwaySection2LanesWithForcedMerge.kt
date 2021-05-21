@@ -1,6 +1,6 @@
 package fr.ciadlab.sim.traffic.scenario
 
-import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
+import fr.ciadlab.sim.car.behavior.DriverAction
 import fr.ciadlab.sim.infrastructure.Road
 import fr.ciadlab.sim.infrastructure.road
 import fr.ciadlab.sim.infrastructure.roadNetwork
@@ -66,7 +66,7 @@ object HighwaySection2LanesWithForcedMerge {
             if(vehicle != obstacleVehicle)
                 basicVehicleBehavior(routes, vehicle, deltaTime, maximumSpeed = speedLimits[vehicle] ?: 22.5)
             else
-                DriverBehavioralAction(0.0, 0.0)
+                DriverAction(0.0, 0.0)
         }
 
         vehicleUpdate = { vehicle, action, deltaTime -> basicVehicleUpdate(vehicle, action, deltaTime) }

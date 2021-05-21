@@ -1,6 +1,6 @@
 package fr.ciadlab.sim.infrastructure.viewjs
 
-import fr.ciadlab.sim.car.behavior.DriverBehavioralState
+import fr.ciadlab.sim.car.behavior.DriverState
 import fr.ciadlab.sim.car.behavior.default.reachGoalBehavior
 import fr.ciadlab.sim.infrastructure.IntersectionBuilder
 import fr.ciadlab.sim.infrastructure.intersection
@@ -190,7 +190,7 @@ fun loadSimViewJs(args: Array<String>) {
     }
 
     val driverBehavioralState =
-        DriverBehavioralState(
+        DriverState(
             currentRoad = eightShapedRoadNetworkModel.roads[0],
             currentLaneIndex = 0,
             travelForward = true,

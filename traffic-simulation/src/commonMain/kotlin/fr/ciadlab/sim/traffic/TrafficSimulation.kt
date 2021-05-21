@@ -1,7 +1,7 @@
 package fr.ciadlab.sim.traffic
 
-import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
-import fr.ciadlab.sim.car.behavior.DriverBehavioralDebugData
+import fr.ciadlab.sim.car.behavior.DriverAction
+import fr.ciadlab.sim.car.behavior.DriverDebugData
 import fr.ciadlab.sim.infrastructure.RoadNetwork
 import fr.ciadlab.sim.vehicle.Position2D
 
@@ -13,9 +13,9 @@ class TrafficSimulation<VehicleType : Position2D>(
     /** The road network */
     var roadNetwork: RoadNetwork = RoadNetwork(),
     /** The vehicle behavior (this function is invoked at every step) */
-    var vehicleBehavior: (VehicleType, Double)->DriverBehavioralAction = { _, _ -> DriverBehavioralAction(0.0, 0.0) },
+    var vehicleBehavior: (VehicleType, Double)->DriverAction = { _, _ -> DriverAction(0.0, 0.0) },
     /** The function called to update a vehicle (the physical representation of the vehicle) */
-    var vehicleUpdate: (VehicleType, DriverBehavioralAction, Double)->VehicleType = { v, _, _ -> v },
+    var vehicleUpdate: (VehicleType, DriverAction, Double)->VehicleType = { v, _, _ -> v },
     /** The function called when a vehicle is spawned */
     val onSpawn: MutableList<(VehicleType, Spawner<VehicleType>)->Unit> = arrayListOf(),
     /** The function called when a vehicle is destroyed */
@@ -27,7 +27,7 @@ class TrafficSimulation<VehicleType : Position2D>(
     /** The set of spawned vehicles */
     var vehicles: MutableSet<VehicleType> = hashSetOf(),
     /** Storage for debug data */
-    val debugData: MutableMap<VehicleType, DriverBehavioralDebugData?> = hashMapOf()
+    val debugData: MutableMap<VehicleType, DriverDebugData?> = hashMapOf()
 ) {
     var simulationTime = 0.0
 

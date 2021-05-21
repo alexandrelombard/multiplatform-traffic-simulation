@@ -1,7 +1,7 @@
 package fr.ciadlab.sim.infrastructure.viewjs.controllers
 
-import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
-import fr.ciadlab.sim.car.behavior.DriverBehavioralState
+import fr.ciadlab.sim.car.behavior.DriverAction
+import fr.ciadlab.sim.car.behavior.DriverState
 import fr.ciadlab.sim.car.behavior.default.reachGoalBehavior
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.Color
 import fr.ciadlab.sim.infrastructure.viewjs.canvas.clear
@@ -50,7 +50,7 @@ class LongitudinalControlWebviewSimulationController {
     var simulatedDirectionErrorRange = 0.1
     var simulatedLatency = false
     var simulatedLatencyDelay = 400.0 unit Milliseconds
-    var customCommand: ((vehicle: Vehicle, driverBehavioralState: DriverBehavioralState) -> DriverBehavioralAction)? = null
+    var customCommand: ((vehicle: Vehicle, driverState: DriverState) -> DriverAction)? = null
     // endregion
 
     private var lastCommandTime = 0.0
@@ -103,7 +103,7 @@ class LongitudinalControlWebviewSimulationController {
         val network = circleShapedRoadNetworkModel
 
         val driverBehavioralState =
-            DriverBehavioralState(
+            DriverState(
                 currentRoad = network.roads[0],
                 currentLaneIndex = 0,
                 travelForward = true,

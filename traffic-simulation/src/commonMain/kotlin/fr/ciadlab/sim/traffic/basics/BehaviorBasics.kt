@@ -1,7 +1,7 @@
 package fr.ciadlab.sim.infrastructure.view.basics
 
-import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
-import fr.ciadlab.sim.car.behavior.DriverBehavioralState
+import fr.ciadlab.sim.car.behavior.DriverAction
+import fr.ciadlab.sim.car.behavior.DriverState
 import fr.ciadlab.sim.car.behavior.default.reachGoalBehavior
 import fr.ciadlab.sim.car.behavior.default.respectTrafficLightBehavior
 import fr.ciadlab.sim.car.behavior.default.respectV2XAuthorizationListBehavior
@@ -61,7 +61,7 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
     routes: Map<Vehicle, List<Pair<Road, Boolean>>?>,   // TODO Avoid having a route for all vehicles here
     vehicle: Vehicle,
     deltaTime: Double,
-    maximumSpeed: Double = 50.0 unit Units.KilometersPerHour): DriverBehavioralAction {
+    maximumSpeed: Double = 50.0 unit Units.KilometersPerHour): DriverAction {
     // Retrieve the computed route and the current road/lane
     val route = routes[vehicle]
     val mapMatcher = MapMatchingProvider(roadNetwork)
@@ -73,7 +73,7 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
     val trafficLights = generateTrafficLightPerceptions(route, vehicle)
 
     // Execute the behavior
-    val driverBehavioralState = DriverBehavioralState(
+    val driverBehavioralState = DriverState(
         mapPosition.road,
         mapPosition.laneIndex,
         forward,
@@ -95,7 +95,7 @@ fun TrafficSimulation<Vehicle>.basicV2XVehicleBehavior (
     vehicle: Vehicle,
     communicationUnit: V2XCommunicationUnit,
     deltaTime: Double,
-    maximumSpeed: Double = 50.0 unit Units.KilometersPerHour): DriverBehavioralAction {
+    maximumSpeed: Double = 50.0 unit Units.KilometersPerHour): DriverAction {
     // Retrieve the computed route and the current road
     val route = routes[vehicle]
     val mapMatcher = MapMatchingProvider(roadNetwork)
@@ -108,7 +108,7 @@ fun TrafficSimulation<Vehicle>.basicV2XVehicleBehavior (
     val intersectionRsus = if(route != null) generateIntersectionRsuPerceptions(route.map { it.first }) else emptyList()
 
     // Execute the behavior
-    val driverBehavioralState = DriverBehavioralState(
+    val driverBehavioralState = DriverState(
         mapPosition.road,
         0,      // FIXME
         forward ?: true,

@@ -1,8 +1,8 @@
 package fr.ciadlab.sim.car.behavior.default
 
 import fr.ciadlab.sim.car.behavior.DriverBehavior
-import fr.ciadlab.sim.car.behavior.DriverBehavioralAction
-import fr.ciadlab.sim.car.behavior.DriverBehavioralState
+import fr.ciadlab.sim.car.behavior.DriverAction
+import fr.ciadlab.sim.car.behavior.DriverState
 import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
 import fr.ciadlab.sim.infrastructure.intersection.IntersectionTrafficLight
 import fr.ciadlab.sim.infrastructure.intersection.TrafficLightState
@@ -10,11 +10,11 @@ import fr.ciadlab.sim.vehicle.Vehicle
 
 class RespectTrafficLightBehavior(
     val vehicle: Vehicle,
-    val driverBehavioralState: DriverBehavioralState,
+    val driverState: DriverState,
     val perceivedTrafficLights: List<IntersectionTrafficLight>,
-    val longitudinalControl: (DriverBehavioralState, Vehicle, Double) -> Double = Companion::idmLongitudinalControl
+    val longitudinalControl: (DriverState, Vehicle, Double) -> Double = Companion::idmLongitudinalControl
 ) : DriverBehavior {
-    override fun apply(deltaTime: Double): DriverBehavioralAction {
+    override fun apply(deltaTime: Double): DriverAction {
         // TODO Optimize
         // TODO Consider all potential traffic lights
         // TODO Do not consider a traffic light if we are in the intersection
@@ -23,30 +23,30 @@ class RespectTrafficLightBehavior(
         val closestTrafficLight =
             this.perceivedTrafficLights
                 .associateWith {
-                    val laneConnector = it.laneConnectors.firstOrNull { it.sourceRoad == driverBehavioralState.currentRoad }
+                    val laneConnector = it.laneConnectors.firstOrNull { it.sourceRoad == driverState.currentRoad }
                     laneConnector?.sourcePoint?.xy?.distance(vehicle.position) ?: Double.POSITIVE_INFINITY
                 }.minByOrNull { it.value }
 
         if(closestTrafficLight != null && closestTrafficLight.key.state == TrafficLightState.RED) {
             // Adapt acceleration, the traffic light is RED
-            return DriverBehavioralAction(longitudinalControl(driverBehavioralState, vehicle, closestTrafficLight.value), 0.0)
+            return DriverAction(longitudinalControl(driverState, vehicle, closestTrafficLight.value), 0.0)
         }
 
-        return DriverBehavioralAction(Double.POSITIVE_INFINITY, 0.0)
+        return DriverAction(Double.POSITIVE_INFINITY, 0.0)
     }
 
     companion object {
-        fun idmLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, distanceToTrafficLight: Double): Double {
+        fun idmLongitudinalControl(driverState: DriverState, vehicle: Vehicle, distanceToTrafficLight: Double): Double {
             return intelligentDriverModelControl(
                     distanceToTrafficLight,
                     vehicle.velocity.norm,
                     vehicle.velocity.norm,
-                    driverBehavioralState.maximumSpeed)
+                    driverState.maximumSpeed)
         }
     }
 }
 
 fun Vehicle.respectTrafficLightBehavior(
-    driverBehavioralState: DriverBehavioralState, perceivedTrafficLights: List<IntersectionTrafficLight>): DriverBehavior {
-    return RespectTrafficLightBehavior(this, driverBehavioralState, perceivedTrafficLights)
+    driverState: DriverState, perceivedTrafficLights: List<IntersectionTrafficLight>): DriverBehavior {
+    return RespectTrafficLightBehavior(this, driverState, perceivedTrafficLights)
 }

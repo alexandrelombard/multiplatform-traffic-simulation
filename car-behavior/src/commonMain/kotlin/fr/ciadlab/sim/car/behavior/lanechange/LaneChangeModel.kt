@@ -1,6 +1,6 @@
 package fr.ciadlab.sim.car.behavior.lanechange
 
-import fr.ciadlab.sim.car.behavior.DriverBehavioralState
+import fr.ciadlab.sim.car.behavior.DriverState
 import fr.ciadlab.sim.vehicle.Vehicle
 
 /**
@@ -11,4 +11,4 @@ enum class LaneChangeModel {
     MOBIL
 }
 
-typealias LaneChangeStrategy = (DriverBehavioralState, Vehicle) -> Int
+typealias LaneChangeStrategy = (DriverState, Vehicle) -> Int

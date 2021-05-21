@@ -79,7 +79,7 @@ fun TrafficSimulation<Vehicle>.basicVehicleBehavior (
         forward,
         obstacleData,
         maximumSpeed,
-        route!!.last().first.end()
+        route?.last()?.first?.end() ?: mapPosition.road.end()
     )
 
     return vehicle.reachGoalBehavior(driverBehavioralState)

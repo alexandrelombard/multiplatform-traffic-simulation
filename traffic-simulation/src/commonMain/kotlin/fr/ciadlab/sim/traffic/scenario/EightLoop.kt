@@ -47,7 +47,7 @@ object EightLoop {
 
         vehicles.add(
             Vehicle(
-                Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), 0.0, Vector2D(1.0, 0.0), 0.0, wheelBase, length))
+                Vector2D(0.0, 0.0), Vector2D.ZERO, 0.0, Vector2D.I, 0.0, wheelBase, length))
 
         vehicleBehavior = {vehicle, deltaTime -> basicVehicleBehavior(mapOf(), vehicle, deltaTime) }
 

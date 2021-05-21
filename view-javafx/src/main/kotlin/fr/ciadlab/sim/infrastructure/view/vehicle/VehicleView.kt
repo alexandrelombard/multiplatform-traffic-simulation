@@ -34,10 +34,10 @@ class VehicleView(var vehicle: Vehicle): Group() {
         imageView = imageview {
             image = Image("/car_up_right.png")
 
-            x = vehicle.position.x
-            y = vehicle.position.y
             fitWidth = vehicle.length
             fitHeight = 0.5 * vehicle.length
+            x = vehicle.position.x - fitWidth / 2.0
+            y = vehicle.position.y - fitHeight / 2.0
             rotate = Math.toDegrees(vehicle.yaw)
         }
         // endregion

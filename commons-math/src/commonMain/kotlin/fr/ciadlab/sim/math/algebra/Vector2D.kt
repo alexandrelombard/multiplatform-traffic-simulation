@@ -1,6 +1,5 @@
 package fr.ciadlab.sim.math.algebra
 
-import kotlin.math.acos
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -62,4 +61,10 @@ data class Vector2D(val x: Double, val y: Double) {
     operator fun div(l: Double) = Vector2D(x / l, y / l)
 
     operator fun Double.times(v: Vector2D) = v * this
+
+    companion object {
+        val ZERO = Vector2D(0.0, 0.0)
+        val I = Vector2D(1.0, 0.0)
+        val J = Vector2D(0.0, 1.0)
+    }
 }

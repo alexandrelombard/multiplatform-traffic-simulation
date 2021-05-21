@@ -41,8 +41,7 @@ class ReachGoalBehavior(
     val driverBehavioralState: DriverBehavioralState,
     val longitudinalControl: LongitudinalControl = Companion::rtAccLongitudinalControl,
     val lateralControl: LateralControl = Companion::curvatureFollowingLateralControl,
-    val laneChangeStrategy: (DriverBehavioralState, Vehicle) -> Int = Companion::mobilLaneSelection)
-    : DriverBehavior {
+    val laneChangeStrategy: (DriverBehavioralState, Vehicle) -> Int = Companion::mobilLaneSelection) : DriverBehavior {
 
     /**
      * Computes the action of the driver according the current state and the current behavior
@@ -224,11 +223,13 @@ class ReachGoalBehavior(
 
             val halfLaneWidth = 3.5 / 2.0   // FIXME Use a computed value
 
-            if (rightLaneIndex != null) {
+            val selectedLaneIndex = rightLaneIndex ?: leftLaneIndex
+
+            if (selectedLaneIndex != null) {
                 // Check if we can go back to the right lane
-                val newLeader = findLeader(driverBehavioralState, vehicle, rightLaneIndex)
+                val newLeader = findLeader(driverBehavioralState, vehicle, selectedLaneIndex)
                 val currentLeader = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)
-                val newFollower = findFollower(driverBehavioralState, vehicle, rightLaneIndex)
+                val newFollower = findFollower(driverBehavioralState, vehicle, selectedLaneIndex)
 
                 val mobilState = MobilState(
                     vehicle.speed,
@@ -241,26 +242,7 @@ class ReachGoalBehavior(
                     vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0))
 
                 if(mobilState.shouldLaneChangeBePerformed(carFollowingModel = mobilIdm)) {
-                    return rightLaneIndex
-                }
-            } else if(leftLaneIndex != null) {
-                // It is possible to pass
-                val newLeader = findLeader(driverBehavioralState, vehicle, leftLaneIndex)
-                val currentLeader = findLeader(driverBehavioralState, vehicle, driverBehavioralState.currentLaneIndex)
-                val newFollower = findFollower(driverBehavioralState, vehicle, leftLaneIndex)
-
-                val mobilState = MobilState(
-                    vehicle.speed,
-                    driverBehavioralState.maximumSpeed,
-                    if(newFollower == null) Double.POSITIVE_INFINITY else newFollower.obstacleRelativePosition.norm,
-                    if(newFollower == null) 0.0 else newFollower.obstacleRelativeVelocity.norm - vehicle.speed,
-                    newLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
-                    vehicle.speed - (newLeader?.obstacleRelativeVelocity?.y ?: 0.0),
-                    currentLeader?.obstacleRelativePosition?.y ?: Double.POSITIVE_INFINITY,
-                    vehicle.speed - (currentLeader?.obstacleRelativeVelocity?.y ?: 0.0))
-
-                if(mobilState.shouldLaneChangeBePerformed(carFollowingModel = mobilIdm)) {
-                    return leftLaneIndex
+                    return selectedLaneIndex
                 }
             }
 

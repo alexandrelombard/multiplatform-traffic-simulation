@@ -57,7 +57,7 @@ class ReachGoalBehavior(
         val targetLane = laneChangeStrategy(effectiveBehavioralState, vehicle)
         val leftBlinker = targetLane > driverBehavioralState.currentLaneIndex
         val rightBlinker = targetLane < driverBehavioralState.currentLaneIndex
-         effectiveBehavioralState = effectiveBehavioralState.copy(currentLaneIndex = targetLane)
+        effectiveBehavioralState = effectiveBehavioralState.copy(currentLaneIndex = targetLane)
 
         // Apply the lateral model for control
         val targetWheelAngle = lateralControl(effectiveBehavioralState, vehicle)
@@ -271,7 +271,7 @@ class ReachGoalBehavior(
 
 fun Vehicle.reachGoalBehavior(
     driverBehavioralState: DriverBehavioralState,
-    longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, leader: ObstacleData?) -> Double = ReachGoalBehavior.Companion::idmLongitudinalControl,
+    longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, leader: ObstacleData?) -> Double = ReachGoalBehavior.Companion::rtAccLongitudinalControl,
     lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = ReachGoalBehavior.Companion::curvatureFollowingLateralControl
 ): DriverBehavior {
     return ReachGoalBehavior(this, driverBehavioralState, longitudinalControl, lateralControl)

@@ -24,7 +24,7 @@ fun reactionTimeAdaptiveCruiseControl(
     leaderSpeed: Double,
     intervehicularDistance: Double,
     minimumDeceleration: Double = -2.0,
-    minimumSpacing: Double = 2.0,
+    minimumSpacing: Double = 6.0,
     worstCaseSelfDeceleration: Double = -8.0,
     worstCaseLeaderDeceleration: Double = -8.0,
     tau: Double = 2.0

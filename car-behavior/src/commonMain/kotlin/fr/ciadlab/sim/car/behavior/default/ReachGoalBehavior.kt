@@ -6,12 +6,11 @@ import fr.ciadlab.sim.car.behavior.DriverBehavioralDebugData
 import fr.ciadlab.sim.car.behavior.DriverBehavioralState
 import fr.ciadlab.sim.car.behavior.lanechange.MobilState
 import fr.ciadlab.sim.car.behavior.lanechange.mobilIdm
+import fr.ciadlab.sim.car.behavior.lateral.LateralControlModel
+import fr.ciadlab.sim.car.behavior.lateral.LateralControlModel.*
 import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
 import fr.ciadlab.sim.car.behavior.lateral.purePursuit
-import fr.ciadlab.sim.car.behavior.longitudinal.gippsModelControl
-import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
-import fr.ciadlab.sim.car.behavior.longitudinal.mpcCruiseControl
-import fr.ciadlab.sim.car.behavior.longitudinal.reactionTimeAdaptiveCruiseControl
+import fr.ciadlab.sim.car.behavior.longitudinal.*
 import fr.ciadlab.sim.car.perception.obstacles.ObstacleData
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider.Companion.findFollower
 import fr.ciadlab.sim.car.perception.obstacles.RadarPerceptionProvider.Companion.findLeader
@@ -33,6 +32,7 @@ internal typealias LongitudinalControl = (DriverBehavioralState, Vehicle, Obstac
  * - A longitudinal control model to avoid collision of the vehicles in the same lane
  * - A lateral control model to follow the road geometry
  * - A lane-change model to pass slower vehicles
+ * @author Alexandre Lombard
  */
 class ReachGoalBehavior(
     val vehicle: Vehicle,
@@ -269,10 +269,42 @@ class ReachGoalBehavior(
     }
 }
 
+/**
+ * Returns the "reach goal behavior" with the selected models
+ * @param driverBehavioralState the current state of the driver
+ * @param longitudinalControl the longitudinal control model
+ * @param lateralControl the lateral control model
+ */
 fun Vehicle.reachGoalBehavior(
     driverBehavioralState: DriverBehavioralState,
     longitudinalControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, leader: ObstacleData?) -> Double = ReachGoalBehavior.Companion::rtAccLongitudinalControl,
     lateralControl: (driverBehavioralState: DriverBehavioralState, vehicle: Vehicle) -> Double = ReachGoalBehavior.Companion::curvatureFollowingLateralControl
 ): DriverBehavior {
     return ReachGoalBehavior(this, driverBehavioralState, longitudinalControl, lateralControl)
+}
+
+/**
+ * Returns the "reach goal behavior" with the selected models
+ * @param driverBehavioralState the current state of the driver
+ * @param longitudinalControlModel the longitudinal control model
+ * @param lateralControlModel the lateral control model
+ */
+fun Vehicle.reachGoalBehavior(
+    driverBehavioralState: DriverBehavioralState,
+    longitudinalControlModel: LongitudinalControlModel,
+    lateralControlModel: LateralControlModel) : DriverBehavior {
+    val longitudinalControl = when(longitudinalControlModel) {
+        LongitudinalControlModel.ENHANCED_IDM -> TODO()
+        LongitudinalControlModel.IDM -> ReachGoalBehavior.Companion::idmLongitudinalControl
+        LongitudinalControlModel.RT_ACC -> ReachGoalBehavior.Companion::rtAccLongitudinalControl
+        LongitudinalControlModel.MPC -> ReachGoalBehavior.Companion::mpcAccLongitudinalControl
+        LongitudinalControlModel.GIPPS -> TODO()
+    }
+
+    val lateralControl = when(lateralControlModel) {
+        PURE_PURSUIT -> ReachGoalBehavior.Companion::purePursuitLateralControl
+        STANLEY -> ReachGoalBehavior.Companion::stanleyLateralControl
+        CURVATURE_BASED -> ReachGoalBehavior.Companion::curvatureFollowingLateralControl
+    }
+    return this.reachGoalBehavior(driverBehavioralState, longitudinalControl, lateralControl)
 }

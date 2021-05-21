@@ -8,6 +8,7 @@ import fr.ciadlab.sim.car.behavior.lanechange.MobilState
 import fr.ciadlab.sim.car.behavior.lanechange.mobilIdm
 import fr.ciadlab.sim.car.behavior.lateral.lombardLateralControl
 import fr.ciadlab.sim.car.behavior.lateral.purePursuit
+import fr.ciadlab.sim.car.behavior.longitudinal.gippsModelControl
 import fr.ciadlab.sim.car.behavior.longitudinal.intelligentDriverModelControl
 import fr.ciadlab.sim.car.behavior.longitudinal.mpcCruiseControl
 import fr.ciadlab.sim.car.behavior.longitudinal.reactionTimeAdaptiveCruiseControl
@@ -186,6 +187,14 @@ class ReachGoalBehavior(
                 reactionTimeAdaptiveCruiseControl(vehicle.speed, driverBehavioralState.maximumSpeed, 0.0, Double.MAX_VALUE)
             } else {
                 reactionTimeAdaptiveCruiseControl(vehicle.speed, driverBehavioralState.maximumSpeed, closestLeader.obstacleRelativeVelocity.norm, closestLeader.obstacleRelativePosition.norm)
+            }
+        }
+
+        fun gippsModelLongitudinalControl(driverBehavioralState: DriverBehavioralState, vehicle: Vehicle, closestLeader: ObstacleData?): Double {
+            return if(closestLeader == null) {
+                gippsModelControl(Double.MAX_VALUE, vehicle.speed, 0.0, driverBehavioralState.maximumSpeed)
+            } else {
+                gippsModelControl(closestLeader.obstacleRelativePosition.norm, vehicle.speed, closestLeader.obstacleRelativeVelocity.norm - vehicle.speed, driverBehavioralState.maximumSpeed)
             }
         }
 

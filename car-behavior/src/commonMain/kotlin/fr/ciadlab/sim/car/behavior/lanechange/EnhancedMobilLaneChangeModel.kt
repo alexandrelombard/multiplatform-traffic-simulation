@@ -5,11 +5,16 @@ import fr.ciadlab.sim.car.behavior.longitudinal.LongitudinalModel
 /**
  * Contains all the data required by the MOBIL model to compute whether or not a lane change can be
  * performed.
- * Compared to the classical MOBIL model, this one avoid lane-change when the follower is already trying to overpass.
+ * Compared to the classical MOBIL model, this one avoid lane-change when the follower (in the same lane) may
+ * try to overpass.
+ * Also the arrival of a new vehicle behind shouldn't change a previous lane-change decision (once the lane-change is
+ * started, the driver is committed). The commitment is deduced from a positive acceleration.
  */
 data class EnhancedMobilState(
     /** The current speed of the current vehicle */
     val currentSpeed: Double,
+    /** The current acceleration */
+    val currentAcceleration: Double,
     /** The maximum speed of the current vehicle */
     val maximumSpeed: Double,
     /** The distance between the new follower and the considered vehicle (> 0) */
@@ -41,7 +46,7 @@ data class EnhancedMobilState(
     fun isLaneChangeSafe(carFollowingModel: LongitudinalModel, decelerationThreshold: Double = 0.0): Boolean {
         val currentFollowerAcceleration = carFollowingModel(currentFollowerDistance, currentFollowerRelativeSpeed, currentSpeed + currentFollowerRelativeSpeed, maximumSpeed)
         val newFollowerAcceleration = carFollowingModel(newFollowerDistance, newFollowerRelativeSpeed, currentSpeed + newFollowerRelativeSpeed, maximumSpeed)
-        return currentFollowerAcceleration > 0.0 && newFollowerAcceleration > decelerationThreshold
+        return currentAcceleration > 0.0 || (currentFollowerDistance > 20.0 && currentFollowerAcceleration > 0.0 && newFollowerAcceleration > decelerationThreshold)
     }
 
     /**

@@ -49,15 +49,15 @@ class ReachGoalBehavior(
     override fun apply(deltaTime: Double): DriverAction {
         var effectiveBehavioralState = driverState
 
-        // Apply the longitudinal model for acceleration
-        val closestLeader = findLeader(driverState, vehicle, driverState.currentLaneIndex)
-        val targetAcceleration = longitudinalControl(effectiveBehavioralState, vehicle, closestLeader)
-
         // Apply the MOBIL model
         val targetLane = laneChangeStrategy(effectiveBehavioralState, vehicle)
         val leftBlinker = targetLane > driverState.currentLaneIndex
         val rightBlinker = targetLane < driverState.currentLaneIndex
         effectiveBehavioralState = effectiveBehavioralState.copy(currentLaneIndex = targetLane)
+
+        // Apply the longitudinal model for acceleration
+        val closestLeader = findLeader(effectiveBehavioralState, vehicle, effectiveBehavioralState.currentLaneIndex)
+        val targetAcceleration = longitudinalControl(effectiveBehavioralState, vehicle, closestLeader)
 
         // Apply the lateral model for control
         val targetWheelAngle = lateralControl(effectiveBehavioralState, vehicle)

@@ -11,6 +11,7 @@ class ReactionTimeAdaptiveCruiseControlTest {
     fun testBraking() {
         val a = reactionTimeAdaptiveCruiseControl(
             50.0 unit KilometersPerHour,
+            50.0 unit KilometersPerHour,
             40.0 unit KilometersPerHour,
             20.0)
         assertTrue(a < 0)
@@ -21,7 +22,8 @@ class ReactionTimeAdaptiveCruiseControlTest {
         val a = reactionTimeAdaptiveCruiseControl(
             50.0 unit KilometersPerHour,
             80.0 unit KilometersPerHour,
-            30.0,
+            80.0 unit KilometersPerHour,
+            40.0,
             tau = 0.5)
         assertTrue(a > 0)
     }
@@ -31,10 +33,12 @@ class ReactionTimeAdaptiveCruiseControlTest {
         val aTau1 = reactionTimeAdaptiveCruiseControl(
             50.0 unit KilometersPerHour,
             80.0 unit KilometersPerHour,
+            80.0 unit KilometersPerHour,
             30.0,
             tau = 0.5)
         val aTau2 = reactionTimeAdaptiveCruiseControl(
             50.0 unit KilometersPerHour,
+            80.0 unit KilometersPerHour,
             80.0 unit KilometersPerHour,
             30.0,
             tau = 2.0)

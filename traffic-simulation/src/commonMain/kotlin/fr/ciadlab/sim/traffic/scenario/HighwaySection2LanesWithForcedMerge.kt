@@ -15,6 +15,7 @@ import fr.ciadlab.sim.traffic.spawner.TimeAwareGenerationStrategy
 import fr.ciadlab.sim.traffic.strategy
 import fr.ciadlab.sim.traffic.trafficSimulation
 import fr.ciadlab.sim.vehicle.Vehicle
+import kotlin.math.abs
 import kotlin.random.Random
 
 object HighwaySection2LanesWithForcedMerge {
@@ -41,6 +42,13 @@ object HighwaySection2LanesWithForcedMerge {
         val spawningTimes = hashMapOf<Vehicle, Double>()
         val exitTimes = hashMapOf<Vehicle, Double>()
 
+        // region Statistics
+        /** Average acceleration (pair of [samples count, average]) */
+        val averageAcceleration = hashMapOf<Vehicle, Pair<Int, Double>>()
+        /** Absolute difference between the effective speed and the maximum speed */
+        val speedDifference = hashMapOf<Vehicle, Pair<Int, Double>>()
+        // endregion
+
         fun averageTravelTime() = exitTimes.map { it.value - spawningTimes[it.key]!! }.average()
 
         roadNetwork = network
@@ -60,6 +68,31 @@ object HighwaySection2LanesWithForcedMerge {
             exitTimes[v] = simulationTime
 
             println(averageTravelTime())
+        }
+
+        onAfterStep.add {
+            // Compute statistics
+            for(v in vehicles) {
+                if(v != obstacleVehicle) {
+                    // Average acceleration
+                    averageAcceleration[v].let {
+                        if(it != null) {
+                            averageAcceleration[v] = Pair(it.first + 1, (it.second * it.first + v.acceleration) / (it.first + 1))
+                        } else {
+                            averageAcceleration[v] = Pair(1, v.acceleration)
+                        }
+                    }
+
+                    // Speed difference
+                    speedDifference[v].let {
+                        if(it != null) {
+                            speedDifference[v] = Pair(it.first + 1, (it.second * it.first + abs(speedLimits[v]!! - v.speed)) / (it.first + 1))
+                        } else {
+                            speedDifference[v] = Pair(1, speedLimits[v]!! - v.speed)
+                        }
+                    }
+                }
+            }
         }
 
         vehicleBehavior = {vehicle, deltaTime ->

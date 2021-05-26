@@ -161,7 +161,7 @@ class ReachGoalBehavior(
         // endregion
 
         // region Longitudinal control
-        fun constantSpeedControl(driverState: DriverState, vehicle: Vehicle): Double {
+        fun constantSpeedControl(driverState: DriverState, vehicle: Vehicle, closestLeader: ObstacleData?): Double {
             return 0.0
         }
 

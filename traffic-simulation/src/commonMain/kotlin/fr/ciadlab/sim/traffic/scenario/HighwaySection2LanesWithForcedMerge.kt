@@ -66,8 +66,6 @@ object HighwaySection2LanesWithForcedMerge {
         onDestroy.add { v ->
             speedLimits.remove(v)
             exitTimes[v] = simulationTime
-
-            println(averageTravelTime())
         }
 
         onAfterStep.add {
@@ -93,6 +91,9 @@ object HighwaySection2LanesWithForcedMerge {
                     }
                 }
             }
+
+            // Output statistics
+            println("${averageTravelTime()},${averageAcceleration.values.map { it.second }.average()},${speedDifference.values.map { it.second }.average()}")
         }
 
         vehicleBehavior = {vehicle, deltaTime ->
